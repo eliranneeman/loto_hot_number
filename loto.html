@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מחולל מספרי לוטו מתקדם</title>
+    
+    <!-- Google AdSense/AdMob Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"
+         crossorigin="anonymous"></script>
+    
+    <!-- Google Analytics (אופציונלי) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'YOUR_GA_ID');
+    </script>
+    
+    <style>
+        /* הקוד הקיים שלך כאן... */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        /* כל ה-CSS הקיים... */
+        
+        /* סגנון לפרסומות */
+        .ad-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .ad-banner {
+            min-height: 90px;
+            margin: 10px 0;
+        }
+        
+        .ad-rectangle {
+            min-height: 280px;
+            margin: 20px 0;
+        }
+        
+        .ad-mobile {
+            min-height: 50px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 מחולל מספרי לוטו מתקדם 🎲</h1>
+        
+        <!-- פרסומת עליונה -->
+        <div class="ad-container">
+            <ins class="adsbygoogle ad-banner"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                 data-ad-slot="YOUR_TOP_BANNER_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        </div>
+        
+        <!-- התוכן הקיים שלך... -->
+        <div class="stats">
+            <!-- הקוד הקיים של הסטטיסטיקות -->
+        </div>
+        
+        <!-- פרסומת אמצע -->
+        <div class="ad-container">
+            <ins class="adsbygoogle ad-rectangle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                 data-ad-slot="YOUR_MIDDLE_RECTANGLE_SLOT_ID"
+                 data-ad-format="rectangle"></ins>
+        </div>
+        
+        <!-- שאר התוכן... -->
+        
+        <div id="results" class="results"></div>
+        
+        <!-- פרסומת תחתונה -->
+        <div class="ad-container">
+            <ins class="adsbygoogle ad-banner"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                 data-ad-slot="YOUR_BOTTOM_BANNER_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        </div>
+        
+        <!-- פרסומת מובייל (מוסתרת בדסקטופ) -->
+        <div class="ad-container" style="display: none;">
+            <ins class="adsbygoogle ad-mobile"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                 data-ad-slot="YOUR_MOBILE_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        </div>
+    </div>
+
+    <!-- קוד JavaScript קיים + הפעלת פרסומות -->
+    <script>
+        // כל הקוד JavaScript הקיים שלך...
+        
+        // הפעלת פרסומות AdSense
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        
+        // הצגת פרסומת מובייל רק במובייל
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.ad-container')[3].style.display = 'block';
+        }
+    </script>
+</body>
+</html>
