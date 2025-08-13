@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>מחולל צירופי לוטו מתקדם</title>
     
-    <!-- Google AdSense Script for Interstitial Ads -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-2154227955978159"
          crossorigin="anonymous"></script>
     
@@ -232,21 +231,13 @@
             <div class="hot-numbers">
                 <div class="hot-category">
                     <h4>מספרים ראשיים חמים:</h4>
-                    <div class="hot-list">
-                        <span class="hot-number">25 (188)</span>
-                        <span class="hot-number">11 (185)</span>
-                        <span class="hot-number">1 (180)</span>
-                        <span class="hot-number">12 (178)</span>
-                        <span class="hot-number">27 (175)</span>
-                    </div>
+                    <div class="hot-list" id="hot-regular-list">
+                        </div>
                 </div>
                 <div class="hot-category">
                     <h4>מספר חזק חם:</h4>
-                    <div class="hot-list">
-                        <span class="hot-number">6 (157)</span>
-                        <span class="hot-number">5 (148)</span>
-                        <span class="hot-number">3 (147)</span>
-                    </div>
+                    <div class="hot-list" id="hot-strong-list">
+                        </div>
                 </div>
             </div>
         </div>
@@ -401,17 +392,17 @@
             }
         }
 
-        // נתוני הסטטיסטיקות על סמך המידע שקיבלתי מאתר מפעל הפיס בשנת 2005 ועד היום
+        // נתוני הסטטיסטיקות על סמך התמונה שקיבלתי
         const regularStats = {
-            1: 389, 2: 364, 3: 384, 4: 345, 5: 355, 6: 377, 7: 354, 8: 164,
-            9: 167, 10: 164, 11: 185, 12: 178, 13: 170, 14: 141, 15: 152,
-            16: 152, 17: 153, 18: 153, 19: 153, 20: 172, 21: 161, 22: 168,
-            23: 163, 24: 156, 25: 188, 26: 158, 27: 175, 28: 170, 29: 172,
-            30: 157, 31: 154, 32: 148, 33: 168, 34: 167, 35: 162, 36: 149, 37: 166
+            1: 389, 2: 364, 3: 384, 4: 345, 5: 355, 6: 377, 7: 354, 8: 382,
+            9: 358, 10: 381, 11: 408, 12: 394, 13: 361, 14: 338, 15: 355,
+            16: 347, 17: 369, 18: 348, 19: 344, 20: 374, 21: 396, 22: 365,
+            23: 359, 24: 367, 25: 390, 26: 385, 27: 374, 28: 381, 29: 385,
+            30: 370, 31: 356, 32: 347, 33: 367, 34: 373, 35: 315, 36: 280, 37: 297
         };
         
         const strongStats = {
-            1: 144, 2: 136, 3: 147, 4: 124, 5: 148, 6: 157, 7: 144
+            1: 144, 2: 137, 3: 145, 4: 125, 5: 148, 6: 157, 7: 144, 8: 123
         };
         
         // מספרים מסודרים לפי תדירות
@@ -431,6 +422,33 @@
             .sort((a, b) => a[1] - b[1])
             .map(([num]) => parseInt(num));
         
+        // פונקציה לעדכון תצוגת המספרים החמים בדף
+        function updateHotNumbersDisplay() {
+            const hotRegularList = document.getElementById('hot-regular-list');
+            hotRegularList.innerHTML = '';
+            // הצגת 5 המספרים החמים ביותר
+            for (let i = 0; i < 5; i++) {
+                const num = hotRegular[i];
+                const count = regularStats[num];
+                const span = document.createElement('span');
+                span.className = 'hot-number';
+                span.textContent = `${num} (${count})`;
+                hotRegularList.appendChild(span);
+            }
+
+            const hotStrongList = document.getElementById('hot-strong-list');
+            hotStrongList.innerHTML = '';
+            // הצגת 3 המספרים החזקים החמים ביותר
+            for (let i = 0; i < 3; i++) {
+                const num = hotStrong[i];
+                const count = strongStats[num];
+                const span = document.createElement('span');
+                span.className = 'hot-number';
+                span.textContent = `${num} (${count})`;
+                hotStrongList.appendChild(span);
+            }
+        }
+
         // עדכון תצוגת משקל
         document.getElementById('hotWeight').addEventListener('input', function() {
             document.getElementById('hotWeightValue').textContent = this.value + '%';
@@ -546,7 +564,7 @@
         }
         
         function generateRandomStrongNumber() {
-            return Math.floor(Math.random() * 7) + 1;
+            return Math.floor(Math.random() * 8) + 1;
         }
         
         function displayCombination(regularNumbers, strongNumber, index) {
@@ -585,10 +603,9 @@
         
         // יצירת צירוף ראשוני
         document.addEventListener('DOMContentLoaded', function() {
+            updateHotNumbersDisplay(); // עדכון תצוגת הסטטיסטיקות
             generateNumbers();
         });
     </script>
 </body>
 </html>
-
-
