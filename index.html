@@ -227,7 +227,7 @@
         <h1>🎲 מחולל צירופי לוטו מתקדם 🎲</h1>
         
         <div class="stats">
-            <div class="stats-title">📊 המספרים החמים ביותר (על פי הסטטיסטיקות)</div>
+            <div class="stats-title">📊 המספרים החמים ביותר (על פי הסטטיסטיקות - משנת 2005 מאתר מפעל הפיס)</div>
             <div class="hot-numbers">
                 <div class="hot-category">
                     <h4>מספרים ראשיים חמים:</h4>
@@ -284,7 +284,6 @@
         // פונקציה להצגת פרסומת מסך מלא
         function showInterstitialAd() {
             try {
-                // יצירת overlay למסך מלא
                 const overlay = document.createElement('div');
                 overlay.id = 'interstitial-overlay';
                 overlay.style.cssText = `
@@ -302,7 +301,6 @@
                     animation: fadeIn 0.3s ease-in-out;
                 `;
 
-                // יצירת container לפרסומת
                 const adContainer = document.createElement('div');
                 adContainer.style.cssText = `
                     background: white;
@@ -316,7 +314,6 @@
                     text-align: center;
                 `;
 
-                // תוכן הפרסומת (זמני - עד שתוסיף AdSense אמיתי)
                 adContainer.innerHTML = `
                     <h3 style="color: #333; margin-top: 0;">🎯 פרסומת</h3>
                     <div style="background: #f0f0f0; padding: 40px 20px; border-radius: 10px; margin: 20px 0;">
@@ -326,7 +323,6 @@
                     <p style="color: #888; font-size: 12px;">הפרסומת תיסגר אוטומטית בעוד 5 שניות</p>
                 `;
 
-                // כפתור סגירה
                 const closeButton = document.createElement('button');
                 closeButton.innerHTML = '✕';
                 closeButton.style.cssText = `
@@ -356,7 +352,6 @@
                     closeButton.style.transform = 'scale(1)';
                 };
 
-                // פונקציית סגירה
                 const closeAd = () => {
                     overlay.style.animation = 'fadeOut 0.3s ease-in-out';
                     setTimeout(() => {
@@ -367,20 +362,16 @@
                 };
 
                 closeButton.onclick = closeAd;
-
-                // סגירה בלחיצה על הרקע
                 overlay.onclick = (e) => {
                     if (e.target === overlay) {
                         closeAd();
                     }
                 };
 
-                // הוספת האלמנטים
                 adContainer.appendChild(closeButton);
                 overlay.appendChild(adContainer);
                 document.body.appendChild(overlay);
 
-                // סגירה אוטומטית אחרי 5 שניות
                 setTimeout(() => {
                     if (document.getElementById('interstitial-overlay')) {
                         closeAd();
@@ -392,7 +383,7 @@
             }
         }
 
-        // נתוני הסטטיסטיקות על סמך התמונה שקיבלתי
+        // נתוני הסטטיסטיקות
         const regularStats = {
             1: 389, 2: 364, 3: 384, 4: 345, 5: 355, 6: 377, 7: 354, 8: 382,
             9: 358, 10: 381, 11: 408, 12: 394, 13: 361, 14: 338, 15: 355,
@@ -426,7 +417,6 @@
         function updateHotNumbersDisplay() {
             const hotRegularList = document.getElementById('hot-regular-list');
             hotRegularList.innerHTML = '';
-            // הצגת 5 המספרים החמים ביותר
             for (let i = 0; i < 5; i++) {
                 const num = hotRegular[i];
                 const count = regularStats[num];
@@ -438,7 +428,6 @@
 
             const hotStrongList = document.getElementById('hot-strong-list');
             hotStrongList.innerHTML = '';
-            // הצגת 3 המספרים החזקים החמים ביותר
             for (let i = 0; i < 3; i++) {
                 const num = hotStrong[i];
                 const count = strongStats[num];
@@ -454,11 +443,19 @@
             document.getElementById('hotWeightValue').textContent = this.value + '%';
         });
         
+        // פונקציה מרכזית ליצירת 6 מספרים ייחודיים
+        function selectUniqueNumbers(sourceArray, count) {
+            if (count > sourceArray.length) {
+                throw new Error(`Cannot select ${count} unique numbers from array of length ${sourceArray.length}`);
+            }
+            
+            const shuffled = [...sourceArray].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, count);
+        }
+        
         function generateNumbers() {
-            // הצגת פרסומת מסך מלא לפני יצירת המספרים
             showInterstitialAd();
             
-            // המתנה של חצי שנייה ואז יצירת המספרים
             setTimeout(() => {
                 const strategy = document.getElementById('strategy').value;
                 const numCombinations = parseInt(document.getElementById('combinations').value);
@@ -467,10 +464,8 @@
                 const results = document.getElementById('results');
                 results.innerHTML = '';
                 
-                // הוספת הודעת טעינה
                 results.innerHTML = '<div style="text-align: center; padding: 20px; font-size: 18px; color: #667eea;">🎲 יוצר את הצירופים שלך...</div>';
                 
-                // יצירת המספרים עם השהייה קטנה לאפקט
                 setTimeout(() => {
                     results.innerHTML = '';
                     
@@ -497,40 +492,72 @@
                         
                         displayCombination(regularNumbers, strongNumber, i + 1);
                     }
-                }, 800); // השהייה של 0.8 שניות לאפקט חזותי נחמד
-            }, 500); // השהייה של 0.5 שניות לפרסומת
+                }, 800);
+            }, 500);
         }
         
+        // פונקציות מתוקנות למניעת כפילויות
         function generateHotNumbers(weight) {
             const hotCount = Math.floor(6 * weight);
             const remainingCount = 6 - hotCount;
             
-            const numbers = [];
+            let numbers = [];
             
-            // בחירת מספרים חמים
-            const shuffledHot = [...hotRegular.slice(0, 15)].sort(() => Math.random() - 0.5);
-            numbers.push(...shuffledHot.slice(0, hotCount));
+            // בחירת מספרים חמים (מהטופ 15)
+            if (hotCount > 0) {
+                const hotPool = hotRegular.slice(0, Math.min(15, hotRegular.length));
+                numbers.push(...selectUniqueNumbers(hotPool, Math.min(hotCount, hotPool.length)));
+            }
             
             // השלמה עם מספרים אחרים
-            const remaining = hotRegular.slice(15).concat(coldRegular)
-                .filter(num => !numbers.includes(num))
-                .sort(() => Math.random() - 0.5);
-            numbers.push(...remaining.slice(0, remainingCount));
+            if (remainingCount > 0) {
+                const remainingPool = hotRegular.filter(num => !numbers.includes(num));
+                numbers.push(...selectUniqueNumbers(remainingPool, Math.min(remainingCount, remainingPool.length)));
+            }
+            
+            // אם עדיין חסרים מספרים (מקרה קיצוני)
+            while (numbers.length < 6) {
+                const allNumbers = Array.from({length: 37}, (_, i) => i + 1);
+                const available = allNumbers.filter(num => !numbers.includes(num));
+                if (available.length > 0) {
+                    numbers.push(available[Math.floor(Math.random() * available.length)]);
+                }
+            }
             
             return numbers.sort((a, b) => a - b);
         }
         
         function generateHotStrongNumber(weight) {
             return Math.random() < weight 
-                ? hotStrong[Math.floor(Math.random() * 3)]
+                ? hotStrong[Math.floor(Math.random() * Math.min(3, hotStrong.length))]
                 : hotStrong[Math.floor(Math.random() * hotStrong.length)];
         }
         
         function generateBalancedNumbers() {
-            const numbers = [];
-            numbers.push(...hotRegular.slice(0, 10).sort(() => Math.random() - 0.5).slice(0, 3));
-            numbers.push(...hotRegular.slice(10, 27).sort(() => Math.random() - 0.5).slice(0, 2));
-            numbers.push(...hotRegular.slice(27).sort(() => Math.random() - 0.5).slice(0, 1));
+            let numbers = [];
+            
+            // 3 מספרים חמים מהטופ 10
+            const hotPool = hotRegular.slice(0, 10);
+            numbers.push(...selectUniqueNumbers(hotPool, 3));
+            
+            // 2 מספרים בינוניים
+            const mediumPool = hotRegular.slice(10, 27).filter(num => !numbers.includes(num));
+            numbers.push(...selectUniqueNumbers(mediumPool, Math.min(2, mediumPool.length)));
+            
+            // 1 מספר קר
+            const coldPool = hotRegular.slice(27).filter(num => !numbers.includes(num));
+            if (coldPool.length > 0 && numbers.length < 6) {
+                numbers.push(...selectUniqueNumbers(coldPool, Math.min(1, coldPool.length)));
+            }
+            
+            // השלמה במידת הצורך
+            while (numbers.length < 6) {
+                const allNumbers = Array.from({length: 37}, (_, i) => i + 1);
+                const available = allNumbers.filter(num => !numbers.includes(num));
+                if (available.length > 0) {
+                    numbers.push(available[Math.floor(Math.random() * available.length)]);
+                }
+            }
             
             return numbers.sort((a, b) => a - b);
         }
@@ -540,27 +567,35 @@
         }
         
         function generateColdNumbers() {
-            const numbers = [];
-            numbers.push(...coldRegular.slice(0, 10).sort(() => Math.random() - 0.5).slice(0, 4));
-            numbers.push(...hotRegular.slice(0, 15).sort(() => Math.random() - 0.5).slice(0, 2));
+            let numbers = [];
+            
+            // 4 מספרים קרים ביותר
+            const coldPool = coldRegular.slice(0, 10);
+            numbers.push(...selectUniqueNumbers(coldPool, Math.min(4, coldPool.length)));
+            
+            // 2 מספרים חמים לאיזון
+            const hotPool = hotRegular.slice(0, 15).filter(num => !numbers.includes(num));
+            numbers.push(...selectUniqueNumbers(hotPool, Math.min(2, hotPool.length)));
+            
+            // השלמה במידת הצורך
+            while (numbers.length < 6) {
+                const allNumbers = Array.from({length: 37}, (_, i) => i + 1);
+                const available = allNumbers.filter(num => !numbers.includes(num));
+                if (available.length > 0) {
+                    numbers.push(available[Math.floor(Math.random() * available.length)]);
+                }
+            }
             
             return numbers.sort((a, b) => a - b);
         }
         
         function generateColdStrongNumber() {
-            return coldStrong[Math.floor(Math.random() * 3)];
+            return coldStrong[Math.floor(Math.random() * Math.min(3, coldStrong.length))];
         }
         
         function generateRandomNumbers() {
-            const numbers = [];
-            const available = Array.from({length: 37}, (_, i) => i + 1);
-            
-            for (let i = 0; i < 6; i++) {
-                const randomIndex = Math.floor(Math.random() * available.length);
-                numbers.push(available.splice(randomIndex, 1)[0]);
-            }
-            
-            return numbers.sort((a, b) => a - b);
+            const allNumbers = Array.from({length: 37}, (_, i) => i + 1);
+            return selectUniqueNumbers(allNumbers, 6).sort((a, b) => a - b);
         }
         
         function generateRandomStrongNumber() {
@@ -593,7 +628,8 @@
             const infoDiv = document.createElement('div');
             infoDiv.innerHTML = `
                 <strong>צירוף מספר ${index}</strong><br>
-                <small>מספר חזק: ${strongNumber}</small>
+                <small>מספר חזק: ${strongNumber}</small><br>
+                <small style="color: #666;">✓ כל המספרים ייחודיים</small>
             `;
             
             combinationDiv.appendChild(numbersDiv);
@@ -603,7 +639,7 @@
         
         // יצירת צירוף ראשוני
         document.addEventListener('DOMContentLoaded', function() {
-            updateHotNumbersDisplay(); // עדכון תצוגת הסטטיסטיקות
+            updateHotNumbersDisplay();
             generateNumbers();
         });
     </script>
