@@ -18,86 +18,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 	
 	
-	<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-			const firebaseConfig = {
-				apiKey: "AIzaSyDewHgup8jkCbRJOKfcE8qJn96lO5ZPo_I",
-				authDomain: "loto-hot.firebaseapp.com",
-				projectId: "loto-hot",
-				storageBucket: "loto-hot.firebasestorage.app",
-				messagingSenderId: "1078323335501",
-				appId: "1:1078323335501:web:8e34317ea2517d8a7d2704",
-				measurementId: "G-2DQMKCN27W"
-			};
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-
-        
-        // פונקציות Firebase
-        function loadCountersFromFirebase() {
-            return new Promise((resolve) => {
-                database.ref('counters').once('value').then((snapshot) => {
-                    const data = snapshot.val();
-                    if (data) {
-                        visitCount = data.visits || 0;
-                        comboCount = data.combos || 0;
-                    }
-                    updateCountersDisplay();
-                    resolve();
-                }).catch((error) => {
-                    console.log('Firebase read error:', error);
-                    // נסה לטעון מ-localStorage כ-backup
-                    loadCountersFromLocalStorage();
-                    resolve();
-                });
-            });
-        }
-        
-        function incrementVisitInFirebase() {
-            database.ref('counters/visits').transaction((currentVisits) => {
-                return (currentVisits || 0) + 1;
-            }).then((result) => {
-                if (result.committed) {
-                    visitCount = result.snapshot.val();
-                    updateCountersDisplay();
-                    // שמירה גם ב-localStorage כ-backup
-                    localStorage.setItem('lotto-global-visits', JSON.stringify(visitCount));
-                }
-            }).catch((error) => {
-                console.log('Firebase visit increment error:', error);
-                // fallback לשמירה מקומית
-                visitCount++;
-                updateCountersDisplay();
-                saveCountersToLocalStorage();
-            });
-        }
-        
-        function incrementCombosInFirebase(count) {
-            database.ref('counters/combos').transaction((currentCombos) => {
-                return (currentCombos || 0) + count;
-            }).then((result) => {
-                if (result.committed) {
-                    comboCount = result.snapshot.val();
-                    updateCountersDisplay();
-                    // שמירה גם ב-localStorage כ-backup
-                    localStorage.setItem('lotto-global-combos', JSON.stringify(comboCount));
-                }
-            }).catch((error) => {
-                console.log('Firebase combo increment error:', error);
-                // fallback לשמירה מקומית
-                comboCount += count;
-                updateCountersDisplay();
-                saveCountersToLocalStorage();
-            });
-        }
-		
-</script>
     
     
     <style>
@@ -592,6 +513,104 @@
     </div>
 
     <script>
+		       // Firebase Configuration - החלף בפרטי הפרויקט שלך
+			const firebaseConfig = {
+				apiKey: "AIzaSyDewHgup8jkCbRJOKfcE8qJn96lO5ZPo_I",
+				authDomain: "loto-hot.firebaseapp.com",
+				projectId: "loto-hot",
+				storageBucket: "loto-hot.firebasestorage.app",
+				messagingSenderId: "1078323335501",
+				appId: "1:1078323335501:web:8e34317ea2517d8a7d2704",
+				measurementId: "G-2DQMKCN27W"
+			};
+        
+        // אתחול Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // פונקציות Firebase
+        function loadCountersFromFirebase() {
+            return new Promise((resolve) => {
+                database.ref('counters').once('value').then((snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        visitCount = data.visits || 0;
+                        comboCount = data.combos || 0;
+                    }
+                    updateCountersDisplay();
+                    resolve();
+                }).catch((error) => {
+                    console.log('Firebase read error:', error);
+                    // נסה לטעון מ-localStorage כ-backup
+                    loadCountersFromLocalStorage();
+                    resolve();
+                });
+            });
+        }
+        
+        function incrementVisitInFirebase() {
+            database.ref('counters/visits').transaction((currentVisits) => {
+                return (currentVisits || 0) + 1;
+            }).then((result) => {
+                if (result.committed) {
+                    visitCount = result.snapshot.val();
+                    updateCountersDisplay();
+                    // שמירה גם ב-localStorage כ-backup
+                    localStorage.setItem('lotto-global-visits', JSON.stringify(visitCount));
+                }
+            }).catch((error) => {
+                console.log('Firebase visit increment error:', error);
+                // fallback לשמירה מקומית
+                visitCount++;
+                updateCountersDisplay();
+                saveCountersToLocalStorage();
+            });
+        }
+        
+        function incrementCombosInFirebase(count) {
+            database.ref('counters/combos').transaction((currentCombos) => {
+                return (currentCombos || 0) + count;
+            }).then((result) => {
+                if (result.committed) {
+                    comboCount = result.snapshot.val();
+                    updateCountersDisplay();
+                    // שמירה גם ב-localStorage כ-backup
+                    localStorage.setItem('lotto-global-combos', JSON.stringify(comboCount));
+                }
+            }).catch((error) => {
+                console.log('Firebase combo increment error:', error);
+                // fallback לשמירה מקומית
+                comboCount += count;
+                updateCountersDisplay();
+                saveCountersToLocalStorage();
+            });
+        }
+
+        // פונקציות Local Storage כ-backup
+        function loadCountersFromLocalStorage() {
+            const visits = JSON.parse(localStorage.getItem('lotto-global-visits') || '0');
+            const combos = JSON.parse(localStorage.getItem('lotto-global-combos') || '0');
+            const history = JSON.parse(localStorage.getItem('lotto-history') || '[]');
+            
+            visitCount = visits;
+            comboCount = combos;
+            lotteryHistory = history;
+            
+            buildWinningCombinations();
+            updateCountersDisplay();
+        }
+
+        function saveCountersToLocalStorage() {
+            localStorage.setItem('lotto-global-visits', JSON.stringify(visitCount));
+            localStorage.setItem('lotto-global-combos', JSON.stringify(comboCount));
+            localStorage.setItem('lotto-history', JSON.stringify(lotteryHistory));
+        }
+
+
+
+
+
+		
         // משתנים גלובליים
         let visitCount = 0;
         let comboCount = 0;
