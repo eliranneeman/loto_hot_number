@@ -11,15 +11,111 @@
 
 
 
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-	
-	<!-- Firebase App (חובה) -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<!-- הטעינה של Firebase -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getDatabase, ref, get, set, update, child, runTransaction } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 
-<!-- Firebase Database (Realtime Database) -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    // Firebase Configuration - החלף בפרטי הפרויקט שלך
+    const firebaseConfig = {
+        apiKey: "AIzaSyDewHgup8jkCbRJOKfcE8qJn96lO5ZPo_I",
+        authDomain: "loto-hot.firebaseapp.com",
+        databaseURL: "https://loto-hot-default-rtdb.firebaseio.com",
+        projectId: "loto-hot",
+        storageBucket: "loto-hot.firebasestorage.app",
+        messagingSenderId: "1078323335501",
+        appId: "1:1078323335501:web:77f214ff257f14d17d2704",
+        measurementId: "G-FR83RCV8Z8"
+    };
 
+    // אתחול Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    let visitCount = 0;
+    let comboCount = 0;
+    let lotteryHistory = [];
+
+    // פונקציות Firebase
+    async function loadCountersFromFirebase() {
+        try {
+            const snapshot = await get(ref(database, 'counters'));
+            const data = snapshot.val();
+            if (data) {
+                visitCount = data.visits || 0;
+                comboCount = data.combos || 0;
+            }
+            updateCountersDisplay();
+        } catch (error) {
+            console.log('Firebase read error:', error);
+            loadCountersFromLocalStorage();
+        }
+    }
+
+    function incrementVisitInFirebase() {
+        const visitRef = ref(database, 'counters/visits');
+        runTransaction(visitRef, (currentVisits) => {
+            return (currentVisits || 0) + 1;
+        }).then((result) => {
+            if (result.committed) {
+                visitCount = result.snapshot.val();
+                updateCountersDisplay();
+                localStorage.setItem('lotto-global-visits', JSON.stringify(visitCount));
+            }
+        }).catch((error) => {
+            console.log('Firebase visit increment error:', error);
+            visitCount++;
+            updateCountersDisplay();
+            saveCountersToLocalStorage();
+        });
+    }
+
+    function incrementCombosInFirebase(count) {
+        const comboRef = ref(database, 'counters/combos');
+        runTransaction(comboRef, (currentCombos) => {
+            return (currentCombos || 0) + count;
+        }).then((result) => {
+            if (result.committed) {
+                comboCount = result.snapshot.val();
+                updateCountersDisplay();
+                localStorage.setItem('lotto-global-combos', JSON.stringify(comboCount));
+            }
+        }).catch((error) => {
+            console.log('Firebase combo increment error:', error);
+            comboCount += count;
+            updateCountersDisplay();
+            saveCountersToLocalStorage();
+        });
+    }
+
+    // פונקציות Local Storage כ-backup
+    function loadCountersFromLocalStorage() {
+        const visits = JSON.parse(localStorage.getItem('lotto-global-visits') || '0');
+        const combos = JSON.parse(localStorage.getItem('lotto-global-combos') || '0');
+        const history = JSON.parse(localStorage.getItem('lotto-history') || '[]');
+
+        visitCount = visits;
+        comboCount = combos;
+        lotteryHistory = history;
+
+        buildWinningCombinations();
+        updateCountersDisplay();
+    }
+
+    function saveCountersToLocalStorage() {
+        localStorage.setItem('lotto-global-visits', JSON.stringify(visitCount));
+        localStorage.setItem('lotto-global-combos', JSON.stringify(comboCount));
+        localStorage.setItem('lotto-history', JSON.stringify(lotteryHistory));
+    }
+
+    // קריאה ראשונית
+    window.addEventListener("DOMContentLoaded", () => {
+        loadCountersFromFirebase().then(() => {
+            incrementVisitInFirebase();
+        });
+    });
+
+</script>
     
     
     <style>
