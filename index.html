@@ -1256,15 +1256,17 @@ window.addEventListener("load", () => {
             results.appendChild(combinationDiv);
         }
         
-        // אתחול האתר
-        document.addEventListener('DOMContentLoaded', function() {
-            // עלייה במונה הביקורים
-            visitCount++;
-            
-            loadCounters();
-            updateHotNumbersDisplay();
-            generateNumbers();
-        });
+// אתחול האתר
+document.addEventListener('DOMContentLoaded', function() {
+    // טעינת מונים בזמן אמת
+    listenToCounters();   // מאזין לשינויים בפיירבייס
+    
+    // העלאת מונה הביקורים ב-Firebase
+    incrementVisitInFirebase();
+    
+    updateHotNumbersDisplay();
+    generateNumbers();
+});
     </script>
 </body>
 </html>
