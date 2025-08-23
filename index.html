@@ -9,6 +9,8 @@
          crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
+	
+
     
     <style>
         body {
@@ -428,6 +430,24 @@
         }
     }
 
+	function incrementComboInFirebase() {
+    runTransaction(ref(database, 'counters/combos'), (currentCombos) => {
+        return (currentCombos || 0) + 1;
+    }).then((result) => {
+        if (result.committed) {
+            comboCount = result.snapshot.val();
+            updateCountersDisplay();
+            localStorage.setItem('lotto-global-combos', JSON.stringify(comboCount));
+        }
+    }).catch((error) => {
+        console.log('Firebase combo increment error:', error);
+        comboCount++;
+        updateCountersDisplay();
+        saveCountersToLocalStorage();
+    });
+}
+
+
     function incrementVisitInFirebase() {
         runTransaction(ref(database, 'counters/visits'), (currentVisits) => {
             return (currentVisits || 0) + 1;
@@ -483,12 +503,14 @@
         localStorage.setItem('lotto-history', JSON.stringify(lotteryHistory));
     }
 
-    window.addEventListener("DOMContentLoaded", () => {
-        loadCountersFromFirebase().then(() => {
-            incrementVisitInFirebase();
-        });
-    });
+window.addEventListener("load", () => {
+    loadCountersFromFirebase();
+    incrementVisitInFirebase();
+});
+
 </script>
+
+	
 
 </head>
 <body>
@@ -609,6 +631,16 @@
 
 
 <script>
+
+	<span id="visitCount"></span>
+<span id="comboCount"></span>
+
+
+	function updateCountersDisplay() {
+    document.getElementById("visitCount").textContent = visitCount;
+    document.getElementById("comboCount").textContent = comboCount;
+}
+
 
 		
         // משתנים גלובליים
