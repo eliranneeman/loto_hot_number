@@ -394,6 +394,19 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { getDatabase, ref, get, runTransaction } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+	import { onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
+	function listenToCounters() {
+    const countersRef = ref(database, 'counters');
+    onValue(countersRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            visitCount = data.visits || 0;
+            comboCount = data.combos || 0;
+            updateCountersDisplay();
+        }
+    });
+}
 
     // Firebase Configuration
     const firebaseConfig = {
@@ -506,6 +519,7 @@
 window.addEventListener("load", () => {
     loadCountersFromFirebase();
     incrementVisitInFirebase();
+	updateCountersDisplay();
 });
 
 		function updateCountersDisplay() {
