@@ -425,23 +425,38 @@
     const database = getDatabase(app);
 
     let visitCount = 0;
-    let comboCount = 0;
-    let lotteryHistory = [];
+let visitCount = 0;
+let comboCount = 0;
 
-    async function loadCountersFromFirebase() {
-        try {
-            const snapshot = await get(ref(database, 'counters'));
-            const data = snapshot.val();
-            if (data) {
-                visitCount = data.visits || 0;
-                comboCount = data.combos || 0;
-            }
+function listenToCounters() {
+    const countersRef = ref(database, 'counters');
+    onValue(countersRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            visitCount = data.visits || 0;
+            comboCount = data.combos || 0;
             updateCountersDisplay();
-        } catch (error) {
-            console.log('Firebase read error:', error);
-            loadCountersFromLocalStorage();
         }
-    }
+    });
+}
+
+function incrementVisitInFirebase() {
+    runTransaction(ref(database, 'counters/visits'), (current) => (current || 0) + 1);
+}
+
+function incrementComboInFirebase() {
+    runTransaction(ref(database, 'counters/combos'), (current) => (current || 0) + 1);
+}
+
+function updateCountersDisplay() {
+    document.getElementById("visitCount").textContent = visitCount;
+    document.getElementById("comboCount").textContent = comboCount;
+}
+
+window.addEventListener("load", () => {
+    listenToCounters();   // מאזין בזמן אמת
+    incrementVisitInFirebase(); // סופר כניסה
+});
 
 	function incrementComboInFirebase() {
     runTransaction(ref(database, 'counters/combos'), (currentCombos) => {
@@ -516,11 +531,7 @@
         localStorage.setItem('lotto-history', JSON.stringify(lotteryHistory));
     }
 
-window.addEventListener("load", () => {
-    loadCountersFromFirebase();
-    incrementVisitInFirebase();
-	updateCountersDisplay();
-});
+
 
 		function updateCountersDisplay() {
     document.getElementById("visitCount").textContent = visitCount;
