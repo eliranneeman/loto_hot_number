@@ -600,11 +600,11 @@
   			  const db = firebase.database();
 
     		db.ref("counters/visitCount").on("value", (snapshot) => {
-        		document.getElementById("visitcount").innerText = snapshot.val() || 0;
+        		document.getElementById("visitCount").innerText = snapshot.val() || 0;
    			 });
 
     		db.ref("counters/comboCount").on("value", (snapshot) => {
-        		document.getElementById("combocount").innerText = snapshot.val() || 0;
+        		document.getElementById("comboCount").innerText = snapshot.val() || 0;
     		});
 
    			 db.ref("counters/historyCount").on("value", (snapshot) => {
