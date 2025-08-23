@@ -1080,7 +1080,7 @@ window.addEventListener("load", () => {
                         
                         results.innerHTML = `<div style="text-align: center; padding: 20px; font-size: 16px; color: #e17055; line-height: 1.5;">${errorMessage}</div>`;
                     }
-                    
+                    incrementComboInFirebase()
                     updateCountersDisplay();
                     saveCounters();
                 }, 800);
