@@ -393,20 +393,7 @@
 <!-- חיבור לפיירבייס -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-    import { getDatabase, ref, get, runTransaction } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
-	import { onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
-
-	function listenToCounters() {
-    const countersRef = ref(database, 'counters');
-    onValue(countersRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            visitCount = data.visits || 0;
-            comboCount = data.combos || 0;
-            updateCountersDisplay();
-        }
-    });
-}
+    import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 
     // Firebase Configuration
     const firebaseConfig = {
@@ -424,121 +411,61 @@
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
 
+    // משתנים גלובליים
     let visitCount = 0;
-let visitCount = 0;
-let comboCount = 0;
+    let comboCount = 0;
+    let lotteryHistory = [];
 
-function listenToCounters() {
-    const countersRef = ref(database, 'counters');
-    onValue(countersRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            visitCount = data.visits || 0;
-            comboCount = data.combos || 0;
-            updateCountersDisplay();
-        }
-    });
-}
+    // מאזין בזמן אמת לנתונים מהפיירבייס
+    function listenToCounters() {
+        const countersRef = ref(database, 'counters');
+        onValue(countersRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                visitCount = data.visits || 0;
+                comboCount = data.combos || 0;
+                updateCountersDisplay();
+            }
+        });
+    }
 
-function incrementVisitInFirebase() {
-    runTransaction(ref(database, 'counters/visits'), (current) => (current || 0) + 1);
-}
-
-function incrementComboInFirebase() {
-    runTransaction(ref(database, 'counters/combos'), (current) => (current || 0) + 1);
-}
-
-function updateCountersDisplay() {
-    document.getElementById("visitCount").textContent = visitCount;
-    document.getElementById("comboCount").textContent = comboCount;
-}
-
-window.addEventListener("load", () => {
-    listenToCounters();   // מאזין בזמן אמת
-    incrementVisitInFirebase(); // סופר כניסה
-});
-
-	function incrementComboInFirebase() {
-    runTransaction(ref(database, 'counters/combos'), (currentCombos) => {
-        return (currentCombos || 0) + 1;
-    }).then((result) => {
-        if (result.committed) {
-            comboCount = result.snapshot.val();
-            updateCountersDisplay();
-            localStorage.setItem('lotto-global-combos', JSON.stringify(comboCount));
-        }
-    }).catch((error) => {
-        console.log('Firebase combo increment error:', error);
-        comboCount++;
-        updateCountersDisplay();
-        saveCountersToLocalStorage();
-    });
-}
-
-
+    // מגדיל את מונה הביקורים
     function incrementVisitInFirebase() {
-        runTransaction(ref(database, 'counters/visits'), (currentVisits) => {
-            return (currentVisits || 0) + 1;
-        }).then((result) => {
-            if (result.committed) {
-                visitCount = result.snapshot.val();
-                updateCountersDisplay();
-                localStorage.setItem('lotto-global-visits', JSON.stringify(visitCount));
-            }
-        }).catch((error) => {
-            console.log('Firebase visit increment error:', error);
-            visitCount++;
-            updateCountersDisplay();
-            saveCountersToLocalStorage();
-        });
+        runTransaction(ref(database, 'counters/visits'), (current) => (current || 0) + 1)
+            .catch((error) => console.error("❌ visit increment error:", error));
     }
 
+    // מגדיל את מונה הצירופים
+    function incrementComboInFirebase() {
+        runTransaction(ref(database, 'counters/combos'), (current) => (current || 0) + 1)
+            .catch((error) => console.error("❌ combo increment error:", error));
+    }
+
+    // מגדיל צירופים בכמות מסוימת
     function incrementCombosInFirebase(count) {
-        runTransaction(ref(database, 'counters/combos'), (currentCombos) => {
-            return (currentCombos || 0) + count;
-        }).then((result) => {
-            if (result.committed) {
-                comboCount = result.snapshot.val();
-                updateCountersDisplay();
-                localStorage.setItem('lotto-global-combos', JSON.stringify(comboCount));
-            }
-        }).catch((error) => {
-            console.log('Firebase combo increment error:', error);
-            comboCount += count;
-            updateCountersDisplay();
-            saveCountersToLocalStorage();
-        });
+        runTransaction(ref(database, 'counters/combos'), (current) => (current || 0) + count)
+            .catch((error) => console.error("❌ combo increment error:", error));
     }
 
-    function loadCountersFromLocalStorage() {
-        const visits = JSON.parse(localStorage.getItem('lotto-global-visits') || '0');
-        const combos = JSON.parse(localStorage.getItem('lotto-global-combos') || '0');
-        const history = JSON.parse(localStorage.getItem('lotto-history') || '[]');
-
-        visitCount = visits;
-        comboCount = combos;
-        lotteryHistory = history;
-
-        if (typeof buildWinningCombinations === 'function') {
-            buildWinningCombinations();
-        }
-        updateCountersDisplay();
+    // עדכון התצוגה באתר
+    function updateCountersDisplay() {
+        document.getElementById("visitCount").textContent = visitCount;
+        document.getElementById("comboCount").textContent = comboCount;
     }
 
-    function saveCountersToLocalStorage() {
-        localStorage.setItem('lotto-global-visits', JSON.stringify(visitCount));
-        localStorage.setItem('lotto-global-combos', JSON.stringify(comboCount));
-        localStorage.setItem('lotto-history', JSON.stringify(lotteryHistory));
-    }
-
-
-
-		function updateCountersDisplay() {
-    document.getElementById("visitCount").textContent = visitCount;
-    document.getElementById("comboCount").textContent = comboCount;
-}
-
+    // טעינת האתר
+    window.addEventListener("DOMContentLoaded", () => {
+        listenToCounters();      // מאזין למונים בזמן אמת
+        incrementVisitInFirebase(); // סופר כניסה חדשה
+    });
 </script>
+
+<div>
+    ביקורים: <span id="visitCount">0</span><br>
+    צירופים: <span id="comboCount">0</span><br>
+    <button onclick="incrementComboInFirebase()">צור צירוף</button>
+</div>
+
 
 	
 
