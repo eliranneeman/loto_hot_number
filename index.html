@@ -495,31 +495,6 @@
     }
 
 
-    function loadCountersFromLocalStorage() {
-        const visits = JSON.parse(localStorage.getItem('lotto-global-visits') || '0');
-        const combos = JSON.parse(localStorage.getItem('lotto-global-combos') || '0');
-        const history = JSON.parse(localStorage.getItem('lotto-history') || '[]');
-
-
-        visitCount = visits;
-        comboCount = combos;
-        lotteryHistory = history;
-
-
-        if (typeof buildWinningCombinations === 'function') {
-            buildWinningCombinations();
-        }
-        updateCountersDisplay();
-    }
-
-
-    function saveCountersToLocalStorage() {
-        localStorage.setItem('lotto-global-visits', JSON.stringify(visitCount));
-        localStorage.setItem('lotto-global-combos', JSON.stringify(comboCount));
-        localStorage.setItem('lotto-history', JSON.stringify(lotteryHistory));
-    }
-
-
     window.addEventListener("DOMContentLoaded", () => {
         loadCountersFromFirebase().then(() => {
             incrementVisitInFirebase();
