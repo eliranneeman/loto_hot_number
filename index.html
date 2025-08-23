@@ -639,37 +639,6 @@
         let winningCombinations = new Set();
 
 
-        // פונקציה לטעינת נתונים מהזיכרון
-        function loadCounters() {
-            const visits = JSON.parse(sessionStorage.getItem('lotto-visits') || '0');
-            const combos = JSON.parse(sessionStorage.getItem('lotto-combos') || '0');
-            const history = JSON.parse(sessionStorage.getItem('lotto-history') || '[]');
-            
-            visitCount = visits;
-            comboCount = combos;
-            lotteryHistory = history;
-            
-            // בניית רשימת צירופים זוכים
-            buildWinningCombinations();
-            
-            updateCountersDisplay();
-        }
-
-
-        // פונקציה לשמירת נתונים לזיכרון
-        function saveCounters() {
-            sessionStorage.setItem('lotto-visits', JSON.stringify(visitCount));
-            sessionStorage.setItem('lotto-combos', JSON.stringify(comboCount));
-            sessionStorage.setItem('lotto-history', JSON.stringify(lotteryHistory));
-        }
-
-
-        // פונקציה לעדכון תצוגת המונים
-        function updateCountersDisplay() {
-            document.getElementById('visit-counter').textContent = visitCount.toLocaleString('he-IL');
-            document.getElementById('combo-counter').textContent = comboCount.toLocaleString('he-IL');
-            document.getElementById('history-counter').textContent = lotteryHistory.length.toLocaleString('he-IL');
-        }
 
 
         // פונקציה לבניית רשימת צירופים זוכים
@@ -951,7 +920,7 @@
         function updateHotNumbersDisplay() {
             const hotRegularList = document.getElementById('hot-regular-list');
             hotRegularList.innerHTML = '';
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 10; i++) {
                 const num = hotRegular[i];
                 const count = regularStats[num];
                 const span = document.createElement('span');
@@ -1249,7 +1218,7 @@
             // עלייה במונה הביקורים
             visitCount++;
             
-            loadCounters();
+            loadCountersFromFirebase();
             updateHotNumbersDisplay();
             generateNumbers();
         });
