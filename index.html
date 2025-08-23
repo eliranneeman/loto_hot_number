@@ -508,6 +508,11 @@ window.addEventListener("load", () => {
     incrementVisitInFirebase();
 });
 
+		function updateCountersDisplay() {
+    document.getElementById("visitCount").textContent = visitCount;
+    document.getElementById("comboCount").textContent = comboCount;
+}
+
 </script>
 
 	
@@ -632,14 +637,7 @@ window.addEventListener("load", () => {
 
 <script>
 
-	<span id="visitCount"></span>
-<span id="comboCount"></span>
 
-
-	function updateCountersDisplay() {
-    document.getElementById("visitCount").textContent = visitCount;
-    document.getElementById("comboCount").textContent = comboCount;
-}
 
 
 		
