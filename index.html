@@ -626,8 +626,8 @@
 
         // פונקציה לעדכון תצוגת המונים
         function updateCountersDisplay() {
-            document.getElementById('visit-counter').textContent = visitCount.toLocaleString('he-IL');
-            document.getElementById('combo-counter').textContent = comboCount.toLocaleString('he-IL');
+            document.getElementById('visitCount').textContent = visitCount.toLocaleString('he-IL');
+            document.getElementById('comboCount').textContent = comboCount.toLocaleString('he-IL');
             document.getElementById('history-counter').textContent = lotteryHistory.length.toLocaleString('he-IL');
         }
 
@@ -1029,7 +1029,7 @@
                 results.innerHTML = `<div style="text-align: center; padding: 20px; font-size: 16px; color: #e17055; line-height: 1.5;">${errorMessage}</div>`;
             } else {
                 // עדכון מונה הצירופים בפיירבייס רק לפי מה שבאמת נוצר
-                incrementCombosInFirebase(generatedCount);
+                
             }
 
             updateCountersDisplay();
