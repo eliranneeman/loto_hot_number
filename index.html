@@ -424,7 +424,7 @@
             if (data) {
                 visitCount = data.visits || 0;
                 comboCount = data.combos || 0;
-                updateCountersDisplay();
+                updateCountersDisplay()
             }
         });
     }
@@ -445,6 +445,7 @@
     function incrementCombosInFirebase(count) {
         runTransaction(ref(database, 'counters/combos'), (current) => (current || 0) + count)
             .catch((error) => console.error("❌ combo increment error:", error));
+         return;
     }
 
     // עדכון התצוגה באתר
@@ -458,6 +459,7 @@
         listenToCounters();      // מאזין למונים בזמן אמת
         incrementVisitInFirebase(); // סופר כניסה חדשה
     });
+     window.incrementCombosInFirebase = incrementCombosInFirebase;
 </script>
 
 
@@ -612,9 +614,9 @@
     		});
             
             // בניית רשימת צירופים זוכים
-            buildWinningCombinations();
-            
-            updateCountersDisplay();
+            //buildWinningCombinations();
+           
+           // updateCountersDisplay();
         }
 
         // פונקציה לשמירת נתונים לזיכרון
@@ -754,8 +756,8 @@
             });
             
             buildWinningCombinations();
-            updateCountersDisplay();
-            saveCounters();
+            
+            
         }
 
         // פונקציה להצגת פרסומת מסך מלא
@@ -941,14 +943,14 @@
         
      function generateNumbers() {
     showInterstitialAd();
-
+       
     setTimeout(() => {
         const strategy = document.getElementById('strategy').value;
         const numCombinations = parseInt(document.getElementById('combinations').value);
         const hotWeight = parseInt(document.getElementById('hotWeight').value) / 100;
         const allowWinners = document.getElementById('allow-winners').checked;
         const allowNew = document.getElementById('allow-new').checked;
-
+        
         const results = document.getElementById('results');
         results.innerHTML = '';
 
@@ -1008,7 +1010,7 @@
                     generatedCount++;
                 } else if (hasHistory && shouldInclude) {
                     displayCombination(regularNumbers, strongNumber, generatedCount + 1, isWinner);
-                    generatedCount++;
+                    generatedCount++
                 }
             }
 
@@ -1028,14 +1030,12 @@
 
                 results.innerHTML = `<div style="text-align: center; padding: 20px; font-size: 16px; color: #e17055; line-height: 1.5;">${errorMessage}</div>`;
             }
-    // עדכון מונה הצירופים בפיירבייס רק לפי מה שבאמת נוצר
-                incrementCombosInFirebase(generatedCount)
-     
-
-            updateCountersDisplay();
-            saveCounters();
+              else{
+              incrementCombosInFirebase(generatedCount);
+              }
         }, 800);
     }, 500);
+          
 }
 
         // פונקציות מתוקנות למניעת כפילויות
@@ -1187,10 +1187,10 @@
 // אתחול האתר
 document.addEventListener('DOMContentLoaded', function() {
     // טעינת מונים בזמן אמת
-    loadCounters();   // מאזין לשינויים בפיירבייס
+   // loadCounters();   // מאזין לשינויים בפיירבייס
     
     // העלאת מונה הביקורים ב-Firebase
-    incrementVisitInFirebase();
+   // incrementVisitInFirebase();
     
     updateHotNumbersDisplay();
     generateNumbers();
