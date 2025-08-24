@@ -1027,10 +1027,10 @@
                 }
 
                 results.innerHTML = `<div style="text-align: center; padding: 20px; font-size: 16px; color: #e17055; line-height: 1.5;">${errorMessage}</div>`;
-            } else {
-                // עדכון מונה הצירופים בפיירבייס רק לפי מה שבאמת נוצר
-                
             }
+    // עדכון מונה הצירופים בפיירבייס רק לפי מה שבאמת נוצר
+                incrementCombosInFirebase(generatedCount)
+     
 
             updateCountersDisplay();
             saveCounters();
