@@ -609,9 +609,6 @@
         		document.getElementById("comboCount").innerText = snapshot.val() || 0;
     		});
 
-   			 db.ref("counters/historyCount").on("value", (snapshot) => {
-       			 document.getElementById("history-counter").innerText = snapshot.val() || 0;
-    		});
             
             // בניית רשימת צירופים זוכים
             //buildWinningCombinations();
@@ -708,6 +705,10 @@
                     status.className = 'file-status success';
                     status.textContent = `✅ הקובץ נטען בהצלחה! נטענו ${lotteryHistory.length} הגרלות`;
                     
+                     // הוסף את השורה הזו:
+                    document.getElementById('history-counter').textContent = lotteryHistory.length;
+            
+                     
                     document.getElementById('history-filter').style.display = 'flex';
                     
                 } catch (error) {
