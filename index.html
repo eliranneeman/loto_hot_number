@@ -524,6 +524,9 @@
             <label>
                 <input type="checkbox" id="allow-new" checked>
                 אפשר צירופים חדשים
+             </label>
+             <lable>
+input type="checkbox" id="no-sequences"> בלי רצפים של 3 מספרים עוקבים ומעלה
             </label>
         </div>
         
@@ -999,6 +1002,14 @@ const strongStats = {
 
                     isWinner = isCombinationWinner(regularNumbers, strongNumber);
                 }
+
+const noSequences = document.getElementById('no-sequences').checked;
+
+// בדיקה על הצירוף
+if (noSequences && hasSequenceOfThree(regularNumbers)) {
+    continue; // דילוג על הצירוף הזה
+}
+
 
                 // בדיקה אם הצירוף מתאים להעדפות המשתמש
                 const shouldInclude = (isWinner && allowWinners) || (!isWinner && allowNew);
