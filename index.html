@@ -1188,35 +1188,42 @@ const strongStats = {
 
      const excelUrl = "https://github.com/eliranneeman/loto_hot_number/raw/refs/heads/main/Lotto.xlsx";
     fetch(excelUrl)
-    function loadExcelFromGitHub() {
-        const status = document.getElementById('file-status');
-        status.style.display = 'block';
-        status.className = 'file-status';
-        status.textContent = '🔄 טוען קובץ מגוגל דרייב...';
+    function loadExcelFromSite() {
+    const status = document.getElementById('file-status');
+    status.style.display = 'block';
+    status.className = 'file-status';
+    status.textContent = '🔄 טוען קובץ מהאתר...';
 
-        fetch(excelUrl, {mode: "cors"})
-            .then(res => res.arrayBuffer())
-            .then(ab => {
-                const workbook = XLSX.read(ab, { type: "array" });
-                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+    // כאן יש להכניס את המיקום המדויק של הקובץ באתר
+    const excelPath = 'Lotto.xlsx'; // אם הקובץ בתיקיית הראשית של האתר
+    // אם בתיקייה אחרת, למשל 'assets/Lotto.xlsx', שנה ל- 'assets/Lotto.xlsx'
 
-                // הפונקציה שלך שמעבדת את הנתונים
-                processLotteryData(jsonData);
+    fetch(excelPath)
+        .then(res => {
+            if (!res.ok) throw new Error('Failed to fetch Excel file');
+            return res.arrayBuffer();
+        })
+        .then(ab => {
+            const workbook = XLSX.read(ab, { type: "array" });
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const jsonData = XLSX.utils.sheet_to_json(firstSheet);
 
-                status.className = 'file-status success';
-                status.textContent = `✅ הקובץ נטען בהצלחה! נטענו ${lotteryHistory.length} הגרלות`;
+            // הפונקציה הקיימת שלך שמעבדת את הנתונים
+            processLotteryData(jsonData);
 
-                // עדכון מונה היסטוריה
-                document.getElementById('history-counter').textContent = lotteryHistory.length;
-                document.getElementById('history-filter').style.display = 'flex';
-            })
-            .catch(error => {
-                status.className = 'file-status error';
-                status.textContent = '❌ שגיאה בטעינת הקובץ האוטומטי';
-                console.error("Error loading Excel file:", error);
-            });
-    }
+            status.className = 'file-status success';
+            status.textContent = `✅ הקובץ נטען בהצלחה! נטענו ${lotteryHistory.length} הגרלות`;
+
+            // עדכון מונה היסטוריה
+            document.getElementById('history-counter').textContent = lotteryHistory.length;
+            document.getElementById('history-filter').style.display = 'flex';
+        })
+        .catch(error => {
+            status.className = 'file-status error';
+            status.textContent = '❌ שגיאה בטעינת הקובץ האוטומטי';
+            console.error("Error loading Excel file:", error);
+        });
+}
 
 
 // אתחול האתר
@@ -1227,7 +1234,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // העלאת מונה הביקורים ב-Firebase
    // incrementVisitInFirebase();
     
-    loadExcelFromGitHub();
+    loadExcelFromSite();
     updateHotNumbersDisplay();
     generateNumbers();
 });
