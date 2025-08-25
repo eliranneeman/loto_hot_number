@@ -1221,6 +1221,15 @@ function hasSequenceOfThree(numbers) {
     return false;
 }
 
+function hasSequenceOfTwo(numbers) {
+    const sorted = [...numbers].sort((a, b) => a - b);
+    for (let i = 1; i < sorted.length; i++) {
+        if (sorted[i] === sorted[i - 1] + 1) {
+            return true; // נמצא זוג רציף
+        }
+    }
+    return false;
+}
 
      const excelUrl = "https://github.com/eliranneeman/loto_hot_number/raw/refs/heads/main/Lotto.xlsx";
     fetch(excelUrl)
