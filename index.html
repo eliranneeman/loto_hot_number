@@ -525,9 +525,13 @@
                 <input type="checkbox" id="allow-new" checked>
                 אפשר צירופים חדשים
              </label>
-<label>
-  <input type="checkbox" id="no-sequences"> בלי רצפים של 3 מספרים עוקבים ומעלה
-</label>
+             <label>
+                <input type="checkbox" 
+id="no-two-sequences"> בלי רצפים של 2 מספרים עוקבים (צימצום של 61% מהאפשרויות)
+            </label>
+            <label>
+  <input type="checkbox"
+id="no-sequences"> בלי רצפים של 3 מספרים עוקבים ומעלה (צימצום 8.2% אחוז מכלל האפשרויות)       </label>
         </div>
         
         <div class="stats">
@@ -1008,6 +1012,12 @@ const noSequences = document.getElementById('no-sequences').checked;
 // בדיקה על הצירוף
 if (noSequences && hasSequenceOfThree(regularNumbers)) {
     continue; // דילוג על הצירוף הזה
+}
+
+const noTwoSequences = document.getElementById('no-two-sequences').checked;
+
+if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
+    continue; // דילוג על הצירוף
 }
 
 
