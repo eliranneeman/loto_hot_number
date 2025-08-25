@@ -1194,7 +1194,7 @@ const strongStats = {
         status.className = 'file-status';
         status.textContent = '🔄 טוען קובץ מגוגל דרייב...';
 
-        fetch(excelUrl, {mode: "cors" })
+        fetch(excelUrl)
             .then(res => res.arrayBuffer())
             .then(ab => {
                 const workbook = XLSX.read(ab, { type: "array" });
