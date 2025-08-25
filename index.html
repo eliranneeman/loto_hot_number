@@ -488,31 +488,37 @@
             </div>
         </div>
 
-        <!-- העלאת קובץ היסטוריה -->
-        <div class="file-upload">
-            <div class="stats-title">📊 העלאת קובץ תוצאות הגרלות</div>
-            
-            <!-- כפתור הורדה -->
-            <div style="text-align: center; margin-bottom: 20px;">
-                <a href="#" id="download-sample-btn" class="file-upload-btn" onclick="downloadSampleFile()" style="text-decoration: none; display: inline-block;">
-                  הורדת קובץ עם תוצאות ההגדלות מעודכן מתאריך 28/02/2009
-                </a>
-                <div style="font-size: 12px; color: #666; margin-top: 5px;">
-                    קובץ Excel מעודכן עם כל תוצאות הלוטו מהשנים האחרונות נטען אוטומטית בכניסה לאתר. במידה ויש בידכם קובץ אחר שתרצו להפיק ממנו צירופים ניתן לטעון אותו כאן על פי הפרמטרים הרשומים מטה.
-                </div>
-            </div>
-            
-            <!-- אזור העלאה -->
-            <div class="file-upload-area" onclick="document.getElementById('excel-file').click()">
-                <div>📁 לחץ כאן להעלאת קובץ Excel עם תוצאות הגרלות קודמות</div>
-                <button type="button" class="file-upload-btn">בחר קובץ מהמחשב</button>
-                <div style="font-size: 12px; color: #666; margin-top: 10px;">
-                    קובץ Excel צריך לכלול עמודות: תאריך, מספר1, מספר2, מספר3, מספר4, מספר5, מספר6, מספר_חזק
-                </div>
-            </div>
-            <input type="file" id="excel-file" class="file-input" accept=".xlsx,.xls" onchange="handleExcelUpload(event)">
-            <div id="file-status" class="file-status"></div>
+    >
+<button class="file-upload-btn" onclick="toggleUploadSection()">📂 הצג / הסתר אפשרות העלאת קובץ</button>
+
+<!-- אזור ההעלאה (סגור כברירת מחדל) -->
+<div id="upload-section" style="display: none; margin-top: 15px;">
+
+    <div class="stats-title">📊 העלאת קובץ תוצאות הגרלות</div>
+    
+    <!-- כפתור הורדה -->
+    <div style="text-align: center; margin-bottom: 20px;">
+        <a href="#" id="download-sample-btn" class="file-upload-btn" onclick="downloadSampleFile()" style="text-decoration: none; display: inline-block;">
+          הורדת קובץ עם תוצאות ההגרלות מתאריך 28/02/2009
+        </a>
+        <div style="font-size: 12px; color: #666; margin-top: 5px;">
+            קובץ Excel מעודכן עם כל תוצאות הלוטו מהשנים האחרונות נטען אוטומטית בכניסה לאתר.<br>
+            במידה ויש בידכם קובץ אחר שתרצו להפיק ממנו צירופים ניתן לטעון אותו כאן על פי הפרמטרים הרשומים מטה.
         </div>
+    </div>
+    
+    <!-- אזור העלאה -->
+    <div class="file-upload-area" onclick="document.getElementById('excel-file').click()">
+        <div>📁 לחץ כאן להעלאת קובץ Excel עם תוצאות הגרלות קודמות</div>
+        <button type="button" class="file-upload-btn">בחר קובץ מהמחשב</button>
+        <div style="font-size: 12px; color: #666; margin-top: 10px;">
+            קובץ Excel צריך לכלול עמודות: תאריך, מספר1, מספר2, מספר3, מספר4, מספר5, מספר6, מספר_חזק
+        </div>
+    </div>
+    <input type="file" id="excel-file" class="file-input" accept=".xlsx,.xls" onchange="handleExcelUpload(event)">
+    <div id="file-status" class="file-status"></div>
+</div>
+
 
         <!-- מסנן היסטוריה -->
         <div class="history-filter" id="history-filter" style="display: none;">
@@ -1269,6 +1275,15 @@ function hasSequenceOfTwo(numbers) {
             console.error("Error loading Excel file:", error);
         });
 }
+
+
+<script>
+function toggleUploadSection() {
+    const section = document.getElementById("upload-section");
+    section.style.display = section.style.display === "none" ? "block" : "none";
+}
+</script>
+
 
 
 // אתחול האתר
