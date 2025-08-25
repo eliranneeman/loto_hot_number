@@ -1197,6 +1197,21 @@ if (noSequences && hasSequenceOfThree(regularNumbers)) {
         }
         
 
+function hasSequenceOfThree(numbers) {
+    const sorted = [...numbers].sort((a, b) => a - b);
+    let count = 1;
+    for (let i = 1; i < sorted.length; i++) {
+        if (sorted[i] === sorted[i - 1] + 1) {
+            count++;
+            if (count >= 3) return true;
+        } else {
+            count = 1;
+        }
+    }
+    return false;
+}
+
+
      const excelUrl = "https://github.com/eliranneeman/loto_hot_number/raw/refs/heads/main/Lotto.xlsx";
     fetch(excelUrl)
     function loadExcelFromSite() {
