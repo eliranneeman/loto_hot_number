@@ -417,21 +417,13 @@
 }
 
     </style>
-
-<!-- חיבור לפיירבייס -->
 <script type="module">
+    // --- ייבוא ספריות ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore
-
-
-
-
-    // Firebase Configuration
+    // --- קונפיגורציה ---
     const firebaseConfig = {
         apiKey: "AIzaSyDewHgup8jkCbRJOKfcE8qJn96lO5ZPo_I",
         authDomain: "loto-hot.firebaseapp.com",
@@ -443,11 +435,41 @@ import { getFirestore, collection, addDoc } from "firebase/firestore
         measurementId: "G-FR83RCV8Z8"
     };
 
-    // אתחול Firebase
+    // --- אתחול Firebase ---
     const app = initializeApp(firebaseConfig);
+
+    // --- אתחול Realtime Database ---
     const database = getDatabase(app);
+
+    // --- אתחול Firestore ---
     const db = getFirestore(app);
 
+    console.log("✅ Firebase initialized");
+    console.log("✅ Realtime Database ready:", database);
+    console.log("✅ Firestore ready:", db);
+
+    // --- דוגמת שימוש ---
+    // שמירה ל-Firestore
+    async function saveCombinationToFirestore(combination) {
+        try {
+            const docRef = await addDoc(collection(db, "combinations"), {
+                combination,
+                createdAt: new Date().toISOString(),
+                hits: 0,
+                hasStrong: false,
+                expireAt: null
+            });
+            console.log("✅ Saved combination with ID:", docRef.id);
+        } catch (error) {
+            console.error("❌ Firestore save error:", error);
+        }
+    }
+
+    // דוגמת שימוש ל-Realtime Database
+    function incrementCounter(counterPath) {
+        const counterRef = ref(database, counterPath);
+        runTransaction(counterRef, current => (current || 0) + 1);
+    }
 
 
 
