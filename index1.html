@@ -419,30 +419,31 @@
     </style>
 <!-- חיבור לפיירבייס -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
-  import { getDatabase } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 
-  // הגדרות Firebase
-  const firebaseConfig = {
-      apiKey: "AIzaSyDewHgup8jkCbRJOKfcE8qJn96lO5ZPo_I",
-      authDomain: "loto-hot.firebaseapp.com",
-      databaseURL: "https://loto-hot-default-rtdb.firebaseio.com",
-      projectId: "loto-hot",
-      storageBucket: "loto-hot.firebasestorage.app",
-      messagingSenderId: "1078323335501",
-      appId: "1:1078323335501:web:77f214ff257f14d17d2704",
-      measurementId: "G-FR83RCV8Z8"
-  };
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyDewHgup8jkCbRJOKfcE8qJn96lO5ZPo_I",
+    authDomain: "loto-hot.firebaseapp.com",
+    databaseURL: "https://loto-hot-default-rtdb.firebaseio.com",
+    projectId: "loto-hot",
+    storageBucket: "loto-hot.firebasestorage.app",
+    messagingSenderId: "1078323335501",
+    appId: "1:1078323335501:web:77f214ff257f14d17d2704",
+    measurementId: "G-FR83RCV8Z8"
+};
 
-  // אתחול Firebase
-  const app = initializeApp(firebaseConfig);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
-  // Firestore
-  const db = getFirestore(app);
+// Firestore
+const db = getFirestore(app);
 
-  // Realtime Database (למונה צירופים ומבקרים)
-  const database = getDatabase(app);
+// Realtime Database
+const database = getDatabase(app);
+
 
     console.log("✅ Firebase initialized");
     console.log("✅ Realtime Database ready:", database);
