@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תוצאות הגרלות - LottoGun</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            direction: rtl;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            color: white;
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        
+        .nav-buttons {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .nav-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 0 10px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .search-section {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .search-title {
+            color: white;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .search-inputs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .number-input {
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .strong-number-input {
+            border-color: #ff6b6b;
+            background: rgba(255,107,107,0.9);
+            color: white;
+        }
+        
+        .search-btn {
+            display: block;
+            margin: 15px auto 0;
+            padding: 12px 30px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .search-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        .results-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .results-title {
+            text-align: center;
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .results-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 8px;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid #ddd;
+        }
+        
+        .results-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+            background: white;
+        }
+        
+        .results-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .results-table tr:hover {
+            background: #e3f2fd;
+        }
+        
+        .number-cell {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .strong-number {
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            margin: 50px 0;
+        }
+        
+        .no-results {
+            text-align: center;
+            color: #666;
+            font-size: 1.1em;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+        
+        .match-found {
+            background: #c8e6c9 !important;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .search-result {
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .logo {
+                font-size: 2em;
+            }
+            
+            .search-inputs {
+                gap: 5px;
+            }
+            
+            .number-input {
+                width: 50px;
+                height: 50px;
+                font-size: 16px;
+            }
+            
+            .results-table {
+                font-size: 12px;
+            }
+            
+            .results-table th,
+            .results-table td {
+                padding: 8px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🎯 LottoGun</div>
+            <div class="subtitle">תוצאות הגרלות הלוטו</div>
+        </header>
+        
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-btn">🏠 דף הבית</a>
+            <a href="#" class="nav-btn">📊 סטטיסטיקות</a>
+        </div>
+        
+        <div class="search-section">
+            <div class="search-title">🔍 בדיקת צירוף מספרים</div>
+            <div style="text-align: center; color: rgba(255,255,255,0.9); margin-bottom: 15px;">
+                הכנס את המספרים שלך ובדוק אם הם יצאו בעבר
+            </div>
+            
+            <div class="search-inputs">
+                <input type="number" class="number-input" id="num1" min="1" max="37" placeholder="1">
+                <input type="number" class="number-input" id="num2" min="1" max="37" placeholder="2">
+                <input type="number" class="number-input" id="num3" min="1" max="37" placeholder="3">
+                <input type="number" class="number-input" id="num4" min="1" max="37" placeholder="4">
+                <input type="number" class="number-input" id="num5" min="1" max="37" placeholder="5">
+                <input type="number" class="number-input" id="num6" min="1" max="37" placeholder="6">
+                <input type="number" class="number-input strong-number-input" id="strong" min="1" max="7" placeholder="חזק">
+            </div>
+            
+            <button class="search-btn" onclick="searchNumbers()">🎯 בדוק צירוף</button>
+            <button class="search-btn" onclick="clearSearch()" style="background: #ff6b6b; margin-right: 10px;">🗑️ נקה</button>
+        </div>
+        
+        <div id="searchResult"></div>
+        
+        <div class="results-section">
+            <div class="results-title">📋 כל תוצאות ההגרלות</div>
+            <div id="loadingMessage" class="loading">טוען נתונים...</div>
+            
+            <table class="results-table" id="resultsTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>תאריך</th>
+                        <th>מספר 1</th>
+                        <th>מספר 2</th>
+                        <th>מספר 3</th>
+                        <th>מספר 4</th>
+                        <th>מספר 5</th>
+                        <th>מספר 6</th>
+                        <th>מספר חזק</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsBody">
+                </tbody>
+            </table>
+            
+            <div id="noDataMessage" class="no-results" style="display: none;">
+                לא נמצאו נתונים. אנא ודא שקובץ Lotto.xlsx קיים בתיקייה הראשית.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        let allResults = [];
+
+        // טעינת הנתונים מקובץ האקסל
+        async function loadExcelData() {
+            try {
+                const response = await fetch('Lotto.xlsx');
+                if (!response.ok) throw new Error('לא ניתן לטעון את קובץ הנתונים');
+                
+                const data = await response.arrayBuffer();
+                const workbook = XLSX.read(data, {type: 'array'});
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                
+                allResults = jsonData;
+                displayResults(allResults);
+                
+                document.getElementById('loadingMessage').style.display = 'none';
+                document.getElementById('resultsTable').style.display = 'table';
+                
+            } catch (error) {
+                console.error('שגיאה בטעינת הנתונים:', error);
+                document.getElementById('loadingMessage').style.display = 'none';
+                document.getElementById('noDataMessage').style.display = 'block';
+            }
+        }
+
+        // הצגת התוצאות בטבלה
+        function displayResults(results) {
+            const tbody = document.getElementById('resultsBody');
+            tbody.innerHTML = '';
+            
+            results.forEach((result, index) => {
+                const row = document.createElement('tr');
+                row.id = `row-${index}`;
+                
+                // תאריך
+                const dateCell = document.createElement('td');
+                dateCell.textContent = formatDate(result['תאריך'] || result['Date'] || '');
+                row.appendChild(dateCell);
+                
+                // מספרים 1-6
+                for (let i = 1; i <= 6; i++) {
+                    const numberCell = document.createElement('td');
+                    numberCell.className = 'number-cell';
+                    numberCell.textContent = result[`מספר ${i}`] || result[`Number ${i}`] || '';
+                    row.appendChild(numberCell);
+                }
+                
+                // מספר חזק
+                const strongCell = document.createElement('td');
+                const strongNumber = result['מספר חזק'] || result['Strong Number'] || '';
+                if (strongNumber) {
+                    const strongSpan = document.createElement('span');
+                    strongSpan.className = 'strong-number';
+                    strongSpan.textContent = strongNumber;
+                    strongCell.appendChild(strongSpan);
+                }
+                row.appendChild(strongCell);
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        // חיפוש צירוף מספרים
+        function searchNumbers() {
+            const searchNumbers = [];
+            for (let i = 1; i <= 6; i++) {
+                const value = document.getElementById(`num${i}`).value;
+                if (value) searchNumbers.push(parseInt(value));
+            }
+            
+            const strongNumber = document.getElementById('strong').value;
+            const searchResult = document.getElementById('searchResult');
+            
+            if (searchNumbers.length === 0) {
+                searchResult.innerHTML = '<div class="search-result" style="border-color: #ff6b6b; background: rgba(255,107,107,0.1);">אנא הכנס לפחות מספר אחד לחיפוש</div>';
+                return;
+            }
+            
+            // נקה תוצאות קודמות
+            clearHighlights();
+            
+            const matches = findMatches(searchNumbers, strongNumber);
+            
+            if (matches.length > 0) {
+                searchResult.innerHTML = `
+                    <div class="search-result">
+                        <h3>🎉 נמצאו ${matches.length} התאמות!</h3>
+                        <p>הצירוף שלך יצא ${matches.length} פעמים בעבר</p>
+                    </div>
+                `;
+                
+                // הדגש את השורות המתאימות
+                matches.forEach(match => {
+                    const row = document.getElementById(`row-${match.index}`);
+                    if (row) {
+                        row.classList.add('match-found');
+                        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
+                
+            } else {
+                searchResult.innerHTML = `
+                    <div class="search-result" style="border-color: #ff9800; background: rgba(255,152,0,0.1);">
+                        <h3>🔍 לא נמצאו התאמות</h3>
+                        <p>הצירוף הזה לא יצא עדיין בהגרלות הקודמות</p>
+                    </div>
+                `;
+            }
+        }
+
+        // מציאת התאמות
+        function findMatches(searchNumbers, strongNumber) {
+            const matches = [];
+            
+            allResults.forEach((result, index) => {
+                const resultNumbers = [];
+                for (let i = 1; i <= 6; i++) {
+                    const num = result[`מספר ${i}`] || result[`Number ${i}`];
+                    if (num) resultNumbers.push(parseInt(num));
+                }
+                
+                const resultStrong = result['מספר חזק'] || result['Strong Number'];
+                
+                // בדיקה אם כל המספרים שחיפשנו נמצאים בתוצאה
+                const numbersMatch = searchNumbers.every(num => resultNumbers.includes(num));
+                const strongMatch = !strongNumber || parseInt(strongNumber) === parseInt(resultStrong);
+                
+                if (numbersMatch && strongMatch) {
+                    matches.push({ index, result });
+                }
+            });
+            
+            return matches;
+        }
+
+        // נקוי הדגשות
+        function clearHighlights() {
+            const rows = document.querySelectorAll('.match-found');
+            rows.forEach(row => row.classList.remove('match-found'));
+        }
+
+        // נקוי החיפוש
+        function clearSearch() {
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`num${i}`).value = '';
+            }
+            document.getElementById('strong').value = '';
+            document.getElementById('searchResult').innerHTML = '';
+            clearHighlights();
+        }
+
+        // פורמט תאריך
+        function formatDate(dateValue) {
+            if (!dateValue) return '';
+            
+            // אם זה תאריך של אקסל (מספר)
+            if (typeof dateValue === 'number') {
+                const date = XLSX.SSF.parse_date_code(dateValue);
+                return `${date.d.toString().padStart(2, '0')}/${date.m.toString().padStart(2, '0')}/${date.y}`;
+            }
+            
+            // אם זה כבר מחרוזת
+            return dateValue.toString();
+        }
+
+        // טעינת הנתונים כשהדף נטען
+        window.addEventListener('load', loadExcelData);
+    </script>
+</body>
+</html>
