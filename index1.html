@@ -463,33 +463,26 @@ const database = getDatabase(app);
     console.log("✅ Realtime Database ready:", database);
     console.log("✅ Firestore ready:", db);
 
-    // --- דוגמת שימוש ---
-    // שמירה ל-Firestore
-    async function saveCombinationToFirestore(combination) {
-        try {
-            const docRef = await addDoc(collection(db, "combinations"), {
-                combination,
-                createdAt: new Date().toISOString(),
-                hits: 0,
-                hasStrong: false,
-                expireAt: null
-            });
-            console.log("✅ Saved combination with ID:", docRef.id);
-        } catch (error) {
-            console.error("❌ Firestore save error:", error);
-        }
-    }
 
-    // דוגמת שימוש ל-Realtime Database
-    function incrementCounter(counterPath) {
-        const counterRef = ref(database, counterPath);
-        runTransaction(counterRef, current => (current || 0) + 1);
-    }
+// ✅ הוסף את הפונקציות האלה לwindow כדי שיהיו נגישות בכל האתר
+window.db = db;
+window.database = database;
+window.firestore = {
+    collection,
+    addDoc,
+    getDocs,
+    getDoc,
+    doc,
+    updateDoc,
+    deleteDoc,
+    query,
+    where,
+    limit,
+    orderBy
+};
 
 
-
-
-
+    
 
     // משתנים גלובליים
     let visitCount = 0;
