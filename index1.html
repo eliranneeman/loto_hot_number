@@ -7,6 +7,10 @@
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-2154227955978159"
          crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+	
+
     
     <style>
         body {
@@ -34,6 +38,132 @@
             margin-bottom: 30px;
             font-size: 2.5em;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .counters {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .counter {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .counter-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .counter-label {
+            color: #4a5568;
+            font-size: 0.9em;
+        }
+
+        .file-upload {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .file-upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-area:hover {
+            border-color: #f5576c;
+            background: #fafafa;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        #download-sample-btn {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            font-weight: bold;
+        }
+
+        #download-sample-btn:hover {
+            background: linear-gradient(135deg, #00a085 0%, #008f7a 100%);
+        }
+
+        .file-status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .file-status.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .file-status.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .history-filter {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .history-filter label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .history-filter input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
         }
         
         .controls {
@@ -104,6 +234,15 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
+        }
+
+        .combination.winner {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            border: 3px solid #e17055;
+        }
+
+        .combination.new {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
         }
         
         .numbers {
@@ -180,6 +319,26 @@
             font-size: 14px;
             font-weight: bold;
         }
+
+        .winner-badge {
+            background: #e17055;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .new-badge {
+            background: #00b894;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
         
         /* CSS לאנימציות פרסומות */
         @keyframes fadeIn {
@@ -219,12 +378,205 @@
                 flex-direction: column;
                 text-align: center;
             }
+
+            .counters {
+                grid-template-columns: 1fr;
+            }
+
+            .history-filter {
+                flex-direction: column;
+                align-items: stretch;
+            }
         }
+
+#sidebar {
+  position: fixed;
+  top: 0;
+  right: -400px; /* מוסתר מחוץ למסך */
+  width: 400px;
+  height: 100%;
+  background: #fff;
+  border-left: 2px solid #ccc;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+  transition: right 0.3s ease;
+  overflow-y: auto;
+  z-index: 9999;
+  padding: 15px;
+}
+#sidebar.open {
+  right: 0; /* נכנס למסך */
+}
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
     </style>
+
+<!-- חיבור לפיירבייס -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
+    // Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDewHgup8jkCbRJOKfcE8qJn96lO5ZPo_I",
+        authDomain: "loto-hot.firebaseapp.com",
+        databaseURL: "https://loto-hot-default-rtdb.firebaseio.com",
+        projectId: "loto-hot",
+        storageBucket: "loto-hot.firebasestorage.app",
+        messagingSenderId: "1078323335501",
+        appId: "1:1078323335501:web:77f214ff257f14d17d2704",
+        measurementId: "G-FR83RCV8Z8"
+    };
+
+    // אתחול Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    // משתנים גלובליים
+    let visitCount = 0;
+    let comboCount = 0;
+    let lotteryHistory = [];
+
+    // מאזין בזמן אמת לנתונים מהפיירבייס
+    function listenToCounters() {
+        const countersRef = ref(database, 'counters');
+        onValue(countersRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                visitCount = data.visits || 0;
+                comboCount = data.combos || 0;
+                updateCountersDisplay()
+            }
+        });
+    }
+
+    // מגדיל את מונה הביקורים
+    function incrementVisitInFirebase() {
+        runTransaction(ref(database, 'counters/visits'), (current) => (current || 0) + 1)
+            .catch((error) => console.error("❌ visit increment error:", error));
+    }
+
+    // מגדיל את מונה הצירופים
+    function incrementComboInFirebase() {
+        runTransaction(ref(database, 'counters/combos'), (current) => (current || 0) + 1)
+            .catch((error) => console.error("❌ combo increment error:", error));
+    }
+
+    // מגדיל צירופים בכמות מסוימת
+    function incrementCombosInFirebase(count) {
+        runTransaction(ref(database, 'counters/combos'), (current) => (current || 0) + count)
+            .catch((error) => console.error("❌ combo increment error:", error));
+         return;
+    }
+
+    // עדכון התצוגה באתר
+    function updateCountersDisplay() {
+        document.getElementById("visitCount").textContent = visitCount;
+        document.getElementById("comboCount").textContent = comboCount;
+    }
+
+    // טעינת האתר
+    window.addEventListener("DOMContentLoaded", () => {
+        listenToCounters();      // מאזין למונים בזמן אמת
+        incrementVisitInFirebase(); // סופר כניסה חדשה
+    });
+     window.incrementCombosInFirebase = incrementCombosInFirebase;
+</script>
+
+
+
+
+	
+
 </head>
 <body>
     <div class="container">
         <h1>🎲 מחולל צירופי לוטו מתקדם 🎲</h1>
+        
+        <!-- מונים -->
+        <div class="counters">
+            <div class="counter">
+                <div class="counter-number" id="visitCount">0</div>
+                <div class="counter-label">ביקורים באתר</div>
+            </div>
+            <div class="counter">
+                <div class="counter-number" id="comboCount">0</div>
+                <div class="counter-label">צירופים שנוצרו</div>
+            </div>
+            <div class="counter">
+                <div class="counter-number" id="history-counter">0</div>
+                <div class="counter-label">הגרלות בהיסטוריה</div>
+            </div>
+        </div>
+
+<!-- כפתור פתיחה -->
+<button class="open-sidebar" onclick="toggleSidebar()">📂 היסטוריית פגיעות</button>
+
+<!-- חלון צד -->
+<div id="sidebar">
+  <div class="sidebar-header">
+    <h2>📊 היסטוריית פגיעות</h2>
+    <button onclick="toggleSidebar()">❌ סגור</button>
+  </div>
+  <div id="sidebar-content"></div>
+</div>
+
+    >
+<button class="file-upload-btn" onclick="toggleUploadSection()">📂 הצג / הסתר אפשרות העלאת קובץ</button>
+
+<!-- אזור ההעלאה (סגור כברירת מחדל) -->
+<div id="upload-section" style="display: none; margin-top: 15px;">
+
+    <div class="stats-title">📊 העלאת קובץ תוצאות הגרלות</div>
+    
+    <!-- כפתור הורדה -->
+    <div style="text-align: center; margin-bottom: 20px;">
+        <a href="#" id="download-sample-btn" class="file-upload-btn" onclick="downloadSampleFile()" style="text-decoration: none; display: inline-block;">
+          הורדת קובץ עם תוצאות ההגרלות מתאריך 28/02/2009
+        </a>
+        <div style="font-size: 12px; color: #666; margin-top: 5px;">
+            קובץ Excel מעודכן עם כל תוצאות הלוטו מהשנים האחרונות נטען אוטומטית בכניסה לאתר.<br>
+            במידה ויש בידכם קובץ אחר שתרצו להפיק ממנו צירופים ניתן לטעון אותו כאן על פי הפרמטרים הרשומים מטה.
+        </div>
+    </div>
+    
+    <!-- אזור העלאה -->
+    <div class="file-upload-area" onclick="document.getElementById('excel-file').click()">
+        <div>📁 לחץ כאן להעלאת קובץ Excel עם תוצאות הגרלות קודמות</div>
+        <button type="button" class="file-upload-btn">בחר קובץ מהמחשב</button>
+        <div style="font-size: 12px; color: #666; margin-top: 10px;">
+            קובץ Excel צריך לכלול עמודות: תאריך, מספר1, מספר2, מספר3, מספר4, מספר5, מספר6, מספר_חזק
+        </div>
+    </div>
+    <input type="file" id="excel-file" class="file-input" accept=".xlsx,.xls" onchange="handleExcelUpload(event)">
+    <div id="file-status" class="file-status"></div>
+</div>
+
+
+        <!-- מסנן היסטוריה -->
+        <div class="history-filter" id="history-filter" style="display: none;">
+            <div class="stats-title">🎯 בחירת סוג צירופים:</div>
+            <label>
+                <input type="checkbox" id="allow-winners" checked>
+                אפשר צירופים שזכו בעבר
+            </label>
+            <label>
+                <input type="checkbox" id="allow-new" checked>
+                אפשר צירופים חדשים
+             </label>
+             <label>
+                <input type="checkbox" 
+id="no-two-sequences"> בלי רצפים של 2 מספרים עוקבים (צימצום של 61% מהאפשרויות)
+            </label>
+            <label>
+  <input type="checkbox"
+id="no-sequences"> בלי רצפים של 3 מספרים עוקבים ומעלה (צימצום 8.2% אחוז מכלל האפשרויות)       </label>
+        </div>
         
         <div class="stats">
             <div class="stats-title">📊 המספרים החמים ביותר (על פי הסטטיסטיקות - משנת 2005 מאתר מפעל הפיס)</div>
@@ -260,9 +612,9 @@
                     <option value="4">4</option>
                     <option value="6">6</option>
                     <option value="8">8</option>
-                    <option value="10">10</option>
-                    <option value="12">12</option>
-                    <option value="14">14</option>
+                    <option value="10">10<option>
+                    <option value="12">12<option>
+                    <option value="14">14<option>
                 </select>
             </div>
             
@@ -280,7 +632,186 @@
         <div id="results" class="results"></div>
     </div>
 
-    <script>
+
+
+
+
+<script>
+
+
+
+
+		
+        // משתנים גלובליים
+        let visitCount = 0;
+        let comboCount = 0;
+        let lotteryHistory = [];
+        let winningCombinations = new Set();
+
+        // פונקציה לטעינת נתונים מהזיכרון
+        function loadCounters() {
+  			  const db = firebase.database();
+
+    		db.ref("counters/visitCount").on("value", (snapshot) => {
+        		document.getElementById("visitCount").innerText = snapshot.val() || 0;
+   			 });
+
+    		db.ref("counters/comboCount").on("value", (snapshot) => {
+        		document.getElementById("comboCount").innerText = snapshot.val() || 0;
+    		});
+
+            
+            // בניית רשימת צירופים זוכים
+            //buildWinningCombinations();
+           
+           // updateCountersDisplay();
+        }
+
+        // פונקציה לשמירת נתונים לזיכרון
+        function saveCounters() {
+            sessionStorage.setItem('lotto-visits', JSON.stringify(visitCount));
+            sessionStorage.setItem('lotto-combos', JSON.stringify(comboCount));
+            sessionStorage.setItem('lotto-history', JSON.stringify(lotteryHistory));
+        }
+
+        // פונקציה לעדכון תצוגת המונים
+        function updateCountersDisplay() {
+            document.getElementById('visitCount').textContent = visitCount.toLocaleString('he-IL');
+            document.getElementById('comboCount').textContent = comboCount.toLocaleString('he-IL');
+            document.getElementById('history-counter').textContent = lotteryHistory.length.toLocaleString('he-IL');
+        }
+
+        // פונקציה לבניית רשימת צירופים זוכים
+        function buildWinningCombinations() {
+            winningCombinations.clear();
+            lotteryHistory.forEach(draw => {
+                if (draw.numbers && draw.strong) {
+                    const combination = [...draw.numbers].sort((a, b) => a - b).join(',') + '|' + draw.strong;
+                    winningCombinations.add(combination);
+                }
+            });
+        }
+
+        // פונקציה לבדיקה אם צירוף זכה בעבר
+        function isCombinationWinner(regularNumbers, strongNumber) {
+            const combination = [...regularNumbers].sort((a, b) => a - b).join(',') + '|' + strongNumber;
+            return winningCombinations.has(combination);
+        }
+
+        // פונקציה להורדת קובץ הדוגמה
+        function downloadSampleFile() {
+            // כאן תוכל להחליף את הקישור לקישור האמיתי שלך ב-GitHub
+            const githubUrl = 'https://github.com/eliranneeman/loto_hot_number/raw/refs/heads/main/Lotto.xlsx';
+            
+            // יצירת אלמנט a זמני להורדה
+            const link = document.createElement('a');
+            link.href = githubUrl;
+            link.download = 'lottery_results.xlsx';
+            link.target = '_blank';
+            
+            // הצגת הודעה למשתמש
+            const status = document.getElementById('file-status');
+            status.style.display = 'block';
+            status.className = 'file-status';
+            status.innerHTML = '🔄 מפנה להורדת הקובץ מ-GitHub...';
+            
+            // ניסיון לפתוח את הקישור
+            try {
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                setTimeout(() => {
+                    status.className = 'file-status success';
+                    status.innerHTML = '✅ הקישור נפתח! אם ההורדה לא החלה, נסה שוב או פנה ישירות לקישור GitHub.';
+                }, 1000);
+                
+            } catch (error) {
+                status.className = 'file-status error';
+                status.innerHTML = `❌ שגיאה בפתיחת הקישור. נסה לגשת ישירות: <a href="${githubUrl}" target="_blank" style="color: #721c24;">לחץ כאן</a>`;
+            }
+        }
+
+        // פונקציה לטיפול בהעלאת קובץ Excel
+        function handleExcelUpload(event) {
+            const file = event.target.files[0];
+            const status = document.getElementById('file-status');
+            
+            if (!file) return;
+            
+            status.style.display = 'block';
+            status.className = 'file-status';
+            status.textContent = 'טוען קובץ...';
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = e.target.result;
+                    const workbook = XLSX.read(data, { type: 'binary' });
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                    
+                    processLotteryData(jsonData);
+                    
+                    status.className = 'file-status success';
+                    status.textContent = `✅ הקובץ נטען בהצלחה! נטענו ${lotteryHistory.length} הגרלות`;
+                    
+                     // הוסף את השורה הזו:
+                    document.getElementById('history-counter').textContent = lotteryHistory.length;
+            
+                     
+                    document.getElementById('history-filter').style.display = 'flex';
+                    
+                } catch (error) {
+                    status.className = 'file-status error';
+                    status.textContent = '❌ שגיאה בטעינת הקובץ. אנא וודא שהקובץ בפורמט הנכון';
+                    console.error('Error processing Excel file:', error);
+                }
+            };
+            
+            reader.readAsBinaryString(file);
+        }
+
+        // פונקציה לעיבוד נתוני ההגרלות
+        function processLotteryData(data) {
+            lotteryHistory = [];
+            
+            data.forEach(row => {
+                try {
+                    // ניסיון לזהות עמודות באופן אוטומטי
+                    const keys = Object.keys(row);
+                    const dateKey = keys.find(k => k.includes('תאריך') || k.toLowerCase().includes('date'));
+                    const strongKey = keys.find(k => k.includes('חזק') || k.toLowerCase().includes('strong'));
+                    
+                    // מציאת עמודות המספרים
+                    const numberKeys = keys.filter(k => 
+                        k.includes('מספר') || 
+                        /^[1-6]$/.test(k) || 
+                        k.toLowerCase().includes('number')
+                    ).slice(0, 6);
+                    
+                    if (numberKeys.length >= 6 && strongKey) {
+                        const numbers = numberKeys.map(k => parseInt(row[k])).filter(n => !isNaN(n) && n >= 1 && n <= 37);
+                        const strong = parseInt(row[strongKey]);
+                        
+                        if (numbers.length === 6 && strong >= 1 && strong <= 8) {
+                            lotteryHistory.push({
+                                date: row[dateKey] || 'לא ידוע',
+                                numbers: numbers,
+                                strong: strong
+                            });
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Error processing row:', row, error);
+                }
+            });
+            
+            buildWinningCombinations();
+            
+            
+        }
+
         // פונקציה להצגת פרסומת מסך מלא
         function showInterstitialAd() {
             try {
@@ -385,16 +916,16 @@
 
         // נתוני הסטטיסטיקות
         const regularStats = {
-            1: 389, 2: 364, 3: 384, 4: 345, 5: 355, 6: 377, 7: 354, 8: 382,
-            9: 358, 10: 381, 11: 408, 12: 394, 13: 361, 14: 338, 15: 355,
-            16: 347, 17: 369, 18: 348, 19: 344, 20: 374, 21: 396, 22: 365,
-            23: 359, 24: 367, 25: 390, 26: 385, 27: 374, 28: 381, 29: 385,
-            30: 370, 31: 356, 32: 347, 33: 367, 34: 373, 35: 315, 36: 280, 37: 297
-        };
-        
-        const strongStats = {
-            1: 144, 2: 137, 3: 145, 4: 125, 5: 148, 6: 157, 7: 144, 8: 123
-        };
+    1: 390, 2: 364, 3: 386, 4: 345, 5: 355, 6: 377, 7: 354, 8: 381,
+    9: 359, 10: 381, 11: 409, 12: 394, 13: 361, 14: 338, 15: 355,
+    16: 348, 17: 370, 18: 348, 19: 344, 20: 374, 21: 395, 22: 365,
+    23: 359, 24: 368, 25: 391, 26: 385, 27: 375, 28: 381, 29: 386,
+    30: 371, 31: 357, 32: 347, 33: 366, 34: 373, 35: 317, 36: 280, 37: 297
+};
+
+const strongStats = {
+    1: 264, 2: 254, 3: 268, 4: 245, 5: 260, 6: 265, 7: 250, 8: 22
+};
         
         // מספרים מסודרים לפי תדירות
         const hotRegular = Object.entries(regularStats)
@@ -417,7 +948,7 @@
         function updateHotNumbersDisplay() {
             const hotRegularList = document.getElementById('hot-regular-list');
             hotRegularList.innerHTML = '';
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 9; i++) {
                 const num = hotRegular[i];
                 const count = regularStats[num];
                 const span = document.createElement('span');
@@ -443,7 +974,16 @@
             document.getElementById('hotWeightValue').textContent = this.value + '%';
         });
         
-        // פונקציה מרכזית ליצירת 6 מספרים ייחודיים
+        // פונקציה ליצירת צירוף זוכה מהיסטוריה (אם קיים)
+        function generateWinningCombination() {
+            if (lotteryHistory.length === 0) return null;
+            
+            const randomDraw = lotteryHistory[Math.floor(Math.random() * lotteryHistory.length)];
+            return {
+                numbers: [...randomDraw.numbers].sort((a, b) => a - b),
+                strong: randomDraw.strong
+            };
+        }
         function selectUniqueNumbers(sourceArray, count) {
             if (count > sourceArray.length) {
                 throw new Error(`Cannot select ${count} unique numbers from array of length ${sourceArray.length}`);
@@ -453,49 +993,117 @@
             return shuffled.slice(0, count);
         }
         
-        function generateNumbers() {
-            showInterstitialAd();
-            
-            setTimeout(() => {
-                const strategy = document.getElementById('strategy').value;
-                const numCombinations = parseInt(document.getElementById('combinations').value);
-                const hotWeight = parseInt(document.getElementById('hotWeight').value) / 100;
-                
-                const results = document.getElementById('results');
-                results.innerHTML = '';
-                
-                results.innerHTML = '<div style="text-align: center; padding: 20px; font-size: 18px; color: #667eea;">🎲 יוצר את הצירופים שלך...</div>';
-                
-                setTimeout(() => {
-                    results.innerHTML = '';
-                    
-                    for (let i = 0; i < numCombinations; i++) {
-                        let regularNumbers, strongNumber;
-                        
-                        switch (strategy) {
-                            case 'hot':
-                                regularNumbers = generateHotNumbers(hotWeight);
-                                strongNumber = generateHotStrongNumber(hotWeight);
-                                break;
-                            case 'balanced':
-                                regularNumbers = generateBalancedNumbers();
-                                strongNumber = generateBalancedStrongNumber();
-                                break;
-                            case 'cold':
-                                regularNumbers = generateColdNumbers();
-                                strongNumber = generateColdStrongNumber();
-                                break;
-                            default:
-                                regularNumbers = generateRandomNumbers();
-                                strongNumber = generateRandomStrongNumber();
-                        }
-                        
-                        displayCombination(regularNumbers, strongNumber, i + 1);
-                    }
-                }, 800);
-            }, 500);
-        }
+     function generateNumbers() {
+    showInterstitialAd();
+       
+    setTimeout(() => {
+        const strategy = document.getElementById('strategy').value;
+        const numCombinations = parseInt(document.getElementById('combinations').value);
+        const hotWeight = parseInt(document.getElementById('hotWeight').value) / 100;
+        const allowWinners = document.getElementById('allow-winners').checked;
+        const allowNew = document.getElementById('allow-new').checked;
         
+        const results = document.getElementById('results');
+        results.innerHTML = '';
+
+        results.innerHTML = '<div style="text-align: center; padding: 20px; font-size: 18px; color: #667eea;">🎲 יוצר את הצירופים שלך...</div>';
+
+        setTimeout(() => {
+            results.innerHTML = '';
+            let generatedCount = 0;
+            let attempts = 0;
+            const maxAttempts = numCombinations * 10; // למנוע לולאה אינסופית
+
+            while (generatedCount < numCombinations && attempts < maxAttempts) {
+                attempts++;
+                let regularNumbers, strongNumber, isWinner = false;
+
+                // אם המשתמש רוצה רק צירופים זוכים ויש היסטוריה
+                if (allowWinners && !allowNew && lotteryHistory.length > 0) {
+                    const winningCombo = generateWinningCombination();
+                    if (winningCombo) {
+                        regularNumbers = winningCombo.numbers;
+                        strongNumber = winningCombo.strong;
+                        isWinner = true;
+                    } else {
+                        continue;
+                    }
+                } else {
+                    // יצירת צירוף רגיל לפי האסטרטגיה
+                    switch (strategy) {
+                        case 'hot':
+                            regularNumbers = generateHotNumbers(hotWeight);
+                            strongNumber = generateHotStrongNumber(hotWeight);
+                            break;
+                        case 'balanced':
+                            regularNumbers = generateBalancedNumbers();
+                            strongNumber = generateBalancedStrongNumber();
+                            break;
+                        case 'cold':
+                            regularNumbers = generateColdNumbers();
+                            strongNumber = generateColdStrongNumber();
+                            break;
+                        default:
+                            regularNumbers = generateRandomNumbers();
+                            strongNumber = generateRandomStrongNumber();
+                    }
+
+                    isWinner = isCombinationWinner(regularNumbers, strongNumber);
+                }
+
+const noSequences = document.getElementById('no-sequences').checked;
+
+// בדיקה על הצירוף
+if (noSequences && hasSequenceOfThree(regularNumbers)) {
+    continue; // דילוג על הצירוף הזה
+}
+
+const noTwoSequences = document.getElementById('no-two-sequences').checked;
+
+if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
+    continue; // דילוג על הצירוף
+}
+
+
+                // בדיקה אם הצירוף מתאים להעדפות המשתמש
+                const shouldInclude = (isWinner && allowWinners) || (!isWinner && allowNew);
+
+                // אם לא הועלה קובץ היסטוריה, כל הצירופים נחשבים חדשים
+                const hasHistory = lotteryHistory.length > 0;
+
+                if (!hasHistory && allowNew) {
+                    displayCombination(regularNumbers, strongNumber, generatedCount + 1, false);
+                    generatedCount++;
+                } else if (hasHistory && shouldInclude) {
+                    displayCombination(regularNumbers, strongNumber, generatedCount + 1, isWinner);
+                    generatedCount++
+                }
+            }
+
+            if (generatedCount === 0) {
+                let errorMessage = '';
+                const hasHistory = lotteryHistory.length > 0;
+
+                if (!hasHistory && !allowNew) {
+                    errorMessage = '⚠️ לא הועלה קובץ היסטוריה ולא נבחרה אפשרות "צירופים חדשים". אנא העלה קובץ Excel או אפשר צירופים חדשים.';
+                } else if (hasHistory && !allowWinners && !allowNew) {
+                    errorMessage = '⚠️ לא נבחרה אף אפשרות ליצירת צירופים. אנא בחר "צירופים שזכו בעבר" או "צירופים חדשים".';
+                } else if (hasHistory && allowWinners && !allowNew) {
+                    errorMessage = `⚠️ לא נמצאו מספיק צירופים זוכים במאגר ההיסטוריה (${winningCombinations.size} צירופים זוכים זמינים). נסה להוסיף גם צירופים חדשים.`;
+                } else {
+                    errorMessage = '⚠️ לא ניתן ליצור צירופים עם ההגדרות הנוכחיות. נסה לשנות את הפילטרים.';
+                }
+
+                results.innerHTML = `<div style="text-align: center; padding: 20px; font-size: 16px; color: #e17055; line-height: 1.5;">${errorMessage}</div>`;
+            }
+              else{
+              incrementCombosInFirebase(generatedCount);
+              }
+        }, 800);
+    }, 500);
+          
+}
+
         // פונקציות מתוקנות למניעת כפילויות
         function generateHotNumbers(weight) {
             const hotCount = Math.floor(6 * weight);
@@ -602,11 +1210,11 @@
             return Math.floor(Math.random() * 8) + 1;
         }
         
-        function displayCombination(regularNumbers, strongNumber, index) {
+        function displayCombination(regularNumbers, strongNumber, index, isWinner = false) {
             const results = document.getElementById('results');
             
             const combinationDiv = document.createElement('div');
-            combinationDiv.className = 'combination';
+            combinationDiv.className = isWinner ? 'combination winner' : 'combination new';
             
             const numbersDiv = document.createElement('div');
             numbersDiv.className = 'numbers';
@@ -626,7 +1234,12 @@
             numbersDiv.appendChild(strongSpan);
             
             const infoDiv = document.createElement('div');
+            const statusBadge = isWinner ? 
+                '<span class="winner-badge">🏆 זכה בעבר</span>' : 
+                '<span class="new-badge">🆕 צירוף חדש</span>';
+            
             infoDiv.innerHTML = `
+                ${statusBadge}
                 <strong>צירוף מספר ${index}</strong><br>
                 <small>מספר חזק: ${strongNumber}</small><br>
                 <small style="color: #666;">✓ כל המספרים ייחודיים</small>
@@ -637,11 +1250,200 @@
             results.appendChild(combinationDiv);
         }
         
-        // יצירת צירוף ראשוני
-        document.addEventListener('DOMContentLoaded', function() {
-            updateHotNumbersDisplay();
-            generateNumbers();
+
+function hasSequenceOfThree(numbers) {
+    const sorted = [...numbers].sort((a, b) => a - b);
+    let count = 1;
+    for (let i = 1; i < sorted.length; i++) {
+        if (sorted[i] === sorted[i - 1] + 1) {
+            count++;
+            if (count >= 3) return true;
+        } else {
+            count = 1;
+        }
+    }
+    return false;
+}
+
+function hasSequenceOfTwo(numbers) {
+    const sorted = [...numbers].sort((a, b) => a - b);
+    for (let i = 1; i < sorted.length; i++) {
+        if (sorted[i] === sorted[i - 1] + 1) {
+            return true; // נמצא זוג רציף
+        }
+    }
+    return false;
+}
+
+     const excelUrl = "https://github.com/eliranneeman/loto_hot_number/raw/refs/heads/main/Lotto.xlsx";
+    fetch(excelUrl)
+    function loadExcelFromSite() {
+    const status = document.getElementById('file-status');
+    status.style.display = 'block';
+    status.className = 'file-status';
+    status.textContent = '🔄 טוען קובץ מהאתר...';
+
+    // כאן יש להכניס את המיקום המדויק של הקובץ באתר
+    const excelPath = 'Lotto.xlsx'; // אם הקובץ בתיקיית הראשית של האתר
+    // אם בתיקייה אחרת, למשל 'assets/Lotto.xlsx', שנה ל- 'assets/Lotto.xlsx'
+
+    fetch(excelPath)
+        .then(res => {
+            if (!res.ok) throw new Error('Failed to fetch Excel file');
+            return res.arrayBuffer();
+        })
+        .then(ab => {
+            const workbook = XLSX.read(ab, { type: "array" });
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+
+            // הפונקציה הקיימת שלך שמעבדת את הנתונים
+            processLotteryData(jsonData);
+
+            status.className = 'file-status success';
+            status.textContent = `✅ הקובץ נטען בהצלחה! נטענו ${lotteryHistory.length} הגרלות`;
+
+            // עדכון מונה היסטוריה
+            document.getElementById('history-counter').textContent = lotteryHistory.length;
+            document.getElementById('history-filter').style.display = 'flex';
+        })
+        .catch(error => {
+            status.className = 'file-status error';
+            status.textContent = '❌ שגיאה בטעינת הקובץ האוטומטי';
+            console.error("Error loading Excel file:", error);
         });
+}
+
+//שמירת צירופים לפיירבייס
+async function saveCombinationToFirebase(combination) {
+    const docRef = await addDoc(collection(db, "combinations"), {
+        combination,
+        createdAt: new Date().toISOString(),
+        hits: 0,
+        hasStrong: false,
+        expireAt: null
+    });
+    return docRef.id;
+}
+
+//חישוב פגיעות פלוס עידכון תאריך הפגיעה
+async function processHits(lotteryHistory) {
+    const q = query(collection(db, "combinations"));
+    const snapshot = await getDocs(q);
+
+    snapshot.forEach(async (docSnap) => {
+        const c = docSnap.data();
+        let maxHits = 0;
+        let hasStrong = false;
+        let lastExpireAt = null;
+
+        lotteryHistory.forEach((draw, i) => {
+            const drawDate = new Date(draw.תאריך);
+            const drawNumbers = [draw.מספר1, draw.מספר2, draw.מספר3, draw.מספר4, draw.מספר5, draw.מספר6];
+            const strong = draw.מספר_חזק;
+
+            if (new Date(c.createdAt) <= drawDate) {
+                const hits = c.combination.filter(num => drawNumbers.includes(num)).length;
+                const strongHit = c.combination.includes(strong);
+
+                if (hits >= 3) {
+                    maxHits = Math.max(maxHits, hits);
+                    hasStrong = strongHit;
+
+                    let expireAt = null;
+
+                    if ((hits === 3 || hits === 4) || (hits === 5 && !strongHit)) {
+                        if (i < lotteryHistory.length - 1) {
+                            expireAt = new Date(lotteryHistory[i + 1].תאריך);
+                        }
+                    }
+
+                    if ((hits === 5 && strongHit) || hits === 6) {
+                        expireAt = null; // לתמיד
+                    }
+
+                    lastExpireAt = expireAt;
+                }
+            }
+        });
+
+        // עדכון בפיירבייס
+        await updateDoc(doc(db, "combinations", docSnap.id), {
+            hits: maxHits,
+            hasStrong,
+            expireAt: lastExpireAt
+        });
+    });
+}
+
+//שליפה לחלונית הצד רק מה שלא פג תוקף
+async function getActiveCombinations() {
+    const q = query(collection(db, "combinations"));
+    const snapshot = await getDocs(q);
+
+    const now = new Date();
+    const active = [];
+
+    snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        if (!data.expireAt || new Date(data.expireAt) > now) {
+            active.push({ id: docSnap.id, ...data });
+        }
+    });
+
+    return active;
+}
+
+
+//תצוגה לחלונית הצד
+async function renderSidebar() {
+    const sidebarContent = document.getElementById("sidebar-content");
+    sidebarContent.innerHTML = "<h3>📌 צירופים עם פגיעות</h3>";
+
+    const combos = await getActiveCombinations();
+
+    combos.forEach(r => {
+        sidebarContent.innerHTML += `
+            <div class="hit-combination">
+              <strong>${r.combination.join(", ")}</strong>
+              <span style="color:${r.hits >= 5 ? 'gold' : 'green'};">
+                ✅ ${r.hits} פגיעות ${r.hasStrong ? '(כולל חזק)' : ''}
+              </span>
+              <div style="font-size:12px; color:#666;">
+                נוצר ב: ${new Date(r.createdAt).toLocaleDateString()}  
+                ${r.expireAt ? `(תקף עד ${new Date(r.expireAt).toLocaleDateString()})` : '(נשמר לתמיד)'}
+              </div>
+            </div>
+        `;
+    });
+}
+
+
+//פתיחת חלונית טעינת ההיסטוריה
+function toggleUploadSection() {
+    const section = document.getElementById("upload-section");
+    section.style.display = section.style.display === "none" ? "block" : "none";
+}
+
+//בתיחת חלון צד
+function toggleSidebar() {
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.toggle("open");
+}
+
+
+// אתחול האתר
+document.addEventListener('DOMContentLoaded', function() {
+    // טעינת מונים בזמן אמת
+   // loadCounters();   // מאזין לשינויים בפיירבייס
+    
+    // העלאת מונה הביקורים ב-Firebase
+   // incrementVisitInFirebase();
+    
+    loadExcelFromSite();
+    updateHotNumbersDisplay();
+    generateNumbers();
+});
     </script>
 </body>
 </html>
