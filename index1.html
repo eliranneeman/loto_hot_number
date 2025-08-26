@@ -1101,7 +1101,7 @@ const strongStats = {
         if (!hasHistory && allowNew) {
             displayCombination(regularNumbers, strongNumber, generatedCount + 1, false);
             try {
-                await saveCombinationToFirebase({
+                await saveCombinationToFirestore({
                     numbers: regularNumbers,
                     strong: strongNumber,
                     isWinner: false
@@ -1113,7 +1113,7 @@ const strongStats = {
         } else if (hasHistory && shouldInclude) {
             displayCombination(regularNumbers, strongNumber, generatedCount + 1, isWinner);
             try {
-                await saveCombinationToFirebase({
+                await saveCombinationToFirestore({
                     numbers: regularNumbers,
                     strong: strongNumber,
                     isWinner
@@ -1345,15 +1345,22 @@ function hasSequenceOfTwo(numbers) {
 }
 
 //שמירת צירופים לפיירבייס
-async function saveCombinationToFirebase(combination) {
-    const docRef = await addDoc(collection(db, "combinations"), {
-        combination,
-        createdAt: new Date().toISOString(),
-        hits: 0,
-        hasStrong: false,
-        expireAt: null
-    });
-    return docRef.id;
+async function saveCombinationToFirestore({ numbers, strong, isWinner }) {
+    try {
+        const docRef = await addDoc(collection(db, "combinations"), {
+            numbers,
+            strong,
+            isWinner,
+            createdAt: new Date().toISOString(),
+            hits: 0,
+            hasStrong: !!strong,
+            expireAt: null
+        });
+        console.log("✅ Saved combination with ID:", docRef.id);
+        return docRef.id;
+    } catch (error) {
+        console.error("❌ Firestore save error:", error);
+    }
 }
 
 //חישוב פגיעות פלוס עידכון תאריך הפגיעה
