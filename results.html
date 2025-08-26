@@ -429,11 +429,11 @@
             allResults.forEach((result, index) => {
                 const resultNumbers = [];
                 for (let i = 1; i <= 6; i++) {
-                    const num = result[`מספר ${i}`] || result[`Number ${i}`];
+                    const num = result[`${i}`] || result[`${i}`];
                     if (num) resultNumbers.push(parseInt(num));
                 }
                 
-                const resultStrong = result['מספר חזק'] || result['Strong Number'];
+                const resultStrong = result['המספר החזק'] || result['Strong Number'];
                 
                 // בדיקה אם כל המספרים שחיפשנו נמצאים בתוצאה
                 const numbersMatch = searchNumbers.every(num => resultNumbers.includes(num));
