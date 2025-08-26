@@ -1073,9 +1073,26 @@ if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
 
                 if (!hasHistory && allowNew) {
                     displayCombination(regularNumbers, strongNumber, generatedCount + 1, false);
+
+
+    saveCombinationToFirebase({
+        numbers: regularNumbers,
+        strong: strongNumber,
+        isWinner: false
+    });
+
+
                     generatedCount++;
                 } else if (hasHistory && shouldInclude) {
                     displayCombination(regularNumbers, strongNumber, generatedCount + 1, isWinner);
+
+
+    saveCombinationToFirebase({
+        numbers: regularNumbers,
+        strong: strongNumber,
+        isWinner: isWinner
+    });
+
                     generatedCount++
                 }
             }
