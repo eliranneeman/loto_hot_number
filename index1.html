@@ -1032,7 +1032,7 @@ const strongStats = {
             return shuffled.slice(0, count);
         }
         
-     function generateNumbers() {
+  async function generateNumbers() {
     showInterstitialAd();
        
     setTimeout(() => {
@@ -1111,30 +1111,34 @@ if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
                 const hasHistory = lotteryHistory.length > 0;
 
                 if (!hasHistory && allowNew) {
-                    displayCombination(regularNumbers, strongNumber, generatedCount + 1, false);
+    displayCombination(regularNumbers, strongNumber, generatedCount + 1, false);
 
+    try {
+        await saveCombinationToFirebase({
+            numbers: regularNumbers,
+            strong: strongNumber,
+            isWinner: false
+        });
+    } catch (error) {
+        console.error("Error saving combination:", error);
+    }
 
-    saveCombinationToFirebase({
-        numbers: regularNumbers,
-        strong: strongNumber,
-        isWinner: false
-    });
+    generatedCount++;
+} else if (hasHistory && shouldInclude) {
+    displayCombination(regularNumbers, strongNumber, generatedCount + 1, isWinner);
 
+    try {
+        await saveCombinationToFirebase({
+            numbers: regularNumbers,
+            strong: strongNumber,
+            isWinner: isWinner
+        });
+    } catch (error) {
+        console.error("Error saving combination:", error);
+    }
 
-                    generatedCount++;
-                } else if (hasHistory && shouldInclude) {
-                    displayCombination(regularNumbers, strongNumber, generatedCount + 1, isWinner);
-
-
-    saveCombinationToFirebase({
-        numbers: regularNumbers,
-        strong: strongNumber,
-        isWinner: isWinner
-    });
-
-                    generatedCount++
-                }
-            }
+    generatedCount++;
+}
 
             if (generatedCount === 0) {
                 let errorMessage = '';
