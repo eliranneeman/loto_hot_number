@@ -7,6 +7,8 @@
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-2154227955978159"
          crossorigin="anonymous"></script>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 	
@@ -420,6 +422,15 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+</script>
+
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, addDoc } from "firebase/firestore
+
+
 
     // Firebase Configuration
     const firebaseConfig = {
@@ -436,6 +447,8 @@
     // אתחול Firebase
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
+
+
 
     // משתנים גלובליים
     let visitCount = 0;
