@@ -1345,7 +1345,7 @@ function hasSequenceOfTwo(numbers) {
 }
 
 //שמירת צירופים לפיירבייס
-async function saveCombinationToFirebase(combination) {
+async function saveCombinationToFirebase(combination,1,false) {
     const docRef = await addDoc(collection(db, "combinations"), {
         combination,
         createdAt: new Date().toISOString(),
