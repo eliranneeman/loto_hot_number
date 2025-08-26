@@ -1034,135 +1034,103 @@ const strongStats = {
         
   async function generateNumbers() {
     showInterstitialAd();
-       
-    setTimeout(() => {
-        const strategy = document.getElementById('strategy').value;
-        const numCombinations = parseInt(document.getElementById('combinations').value);
-        const hotWeight = parseInt(document.getElementById('hotWeight').value) / 100;
-        const allowWinners = document.getElementById('allow-winners').checked;
-        const allowNew = document.getElementById('allow-new').checked;
-        
-        const results = document.getElementById('results');
-        results.innerHTML = '';
 
-        results.innerHTML = '<div style="text-align: center; padding: 20px; font-size: 18px; color: #667eea;">🎲 יוצר את הצירופים שלך...</div>';
+    const strategy = document.getElementById('strategy').value;
+    const numCombinations = parseInt(document.getElementById('combinations').value);
+    const hotWeight = parseInt(document.getElementById('hotWeight').value) / 100;
+    const allowWinners = document.getElementById('allow-winners').checked;
+    const allowNew = document.getElementById('allow-new').checked;
+    const noSequences = document.getElementById('no-sequences').checked;
+    const noTwoSequences = document.getElementById('no-two-sequences').checked;
+    const results = document.getElementById('results');
 
-        setTimeout(() => {
-            results.innerHTML = '';
-            let generatedCount = 0;
-            let attempts = 0;
-            const maxAttempts = numCombinations * 10; // למנוע לולאה אינסופית
+    results.innerHTML = '<div style="text-align: center; padding: 20px; font-size: 18px; color: #667eea;">🎲 יוצר את הצירופים שלך...</div>';
 
-            while (generatedCount < numCombinations && attempts < maxAttempts) {
-                attempts++;
-                let regularNumbers, strongNumber, isWinner = false;
+    // דיליי קצר כדי שה-UI יספיק לעדכן
+    await new Promise(resolve => setTimeout(resolve, 800));
 
-                // אם המשתמש רוצה רק צירופים זוכים ויש היסטוריה
-                if (allowWinners && !allowNew && lotteryHistory.length > 0) {
-                    const winningCombo = generateWinningCombination();
-                    if (winningCombo) {
-                        regularNumbers = winningCombo.numbers;
-                        strongNumber = winningCombo.strong;
-                        isWinner = true;
-                    } else {
-                        continue;
-                    }
-                } else {
-                    // יצירת צירוף רגיל לפי האסטרטגיה
-                    switch (strategy) {
-                        case 'hot':
-                            regularNumbers = generateHotNumbers(hotWeight);
-                            strongNumber = generateHotStrongNumber(hotWeight);
-                            break;
-                        case 'balanced':
-                            regularNumbers = generateBalancedNumbers();
-                            strongNumber = generateBalancedStrongNumber();
-                            break;
-                        case 'cold':
-                            regularNumbers = generateColdNumbers();
-                            strongNumber = generateColdStrongNumber();
-                            break;
-                        default:
-                            regularNumbers = generateRandomNumbers();
-                            strongNumber = generateRandomStrongNumber();
-                    }
+    results.innerHTML = '';
+    let generatedCount = 0;
+    let attempts = 0;
+    const maxAttempts = numCombinations * 10;
+    const hasHistory = lotteryHistory.length > 0;
 
-                    isWinner = isCombinationWinner(regularNumbers, strongNumber);
-                }
+    while (generatedCount < numCombinations && attempts < maxAttempts) {
+        attempts++;
+        let regularNumbers, strongNumber, isWinner = false;
 
-const noSequences = document.getElementById('no-sequences').checked;
-
-// בדיקה על הצירוף
-if (noSequences && hasSequenceOfThree(regularNumbers)) {
-    continue; // דילוג על הצירוף הזה
-}
-
-const noTwoSequences = document.getElementById('no-two-sequences').checked;
-
-if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
-    continue; // דילוג על הצירוף
-}
-
-
-                // בדיקה אם הצירוף מתאים להעדפות המשתמש
-                const shouldInclude = (isWinner && allowWinners) || (!isWinner && allowNew);
-
-                // אם לא הועלה קובץ היסטוריה, כל הצירופים נחשבים חדשים
-                const hasHistory = lotteryHistory.length > 0;
-
-                if (!hasHistory && allowNew) {
-    displayCombination(regularNumbers, strongNumber, generatedCount + 1, false);
-
-    try {
-        await saveCombinationToFirebase({
-            numbers: regularNumbers,
-            strong: strongNumber,
-            isWinner: false
-        });
-    } catch (error) {
-        console.error("Error saving combination:", error);
-    }
-
-    generatedCount++;
-} else if (hasHistory && shouldInclude) {
-    displayCombination(regularNumbers, strongNumber, generatedCount + 1, isWinner);
-
-    try {
-        await saveCombinationToFirebase({
-            numbers: regularNumbers,
-            strong: strongNumber,
-            isWinner: isWinner
-        });
-    } catch (error) {
-        console.error("Error saving combination:", error);
-    }
-
-    generatedCount++;
-}
-}
-
-            if (generatedCount === 0) {
-                let errorMessage = '';
-                const hasHistory = lotteryHistory.length > 0;
-
-                if (!hasHistory && !allowNew) {
-                    errorMessage = '⚠️ לא הועלה קובץ היסטוריה ולא נבחרה אפשרות "צירופים חדשים". אנא העלה קובץ Excel או אפשר צירופים חדשים.';
-                } else if (hasHistory && !allowWinners && !allowNew) {
-                    errorMessage = '⚠️ לא נבחרה אף אפשרות ליצירת צירופים. אנא בחר "צירופים שזכו בעבר" או "צירופים חדשים".';
-                } else if (hasHistory && allowWinners && !allowNew) {
-                    errorMessage = `⚠️ לא נמצאו מספיק צירופים זוכים במאגר ההיסטוריה (${winningCombinations.size} צירופים זוכים זמינים). נסה להוסיף גם צירופים חדשים.`;
-                } else {
-                    errorMessage = '⚠️ לא ניתן ליצור צירופים עם ההגדרות הנוכחיות. נסה לשנות את הפילטרים.';
-                }
-
-                results.innerHTML = `<div style="text-align: center; padding: 20px; font-size: 16px; color: #e17055; line-height: 1.5;">${errorMessage}</div>`;
+        // יצירת צירוף
+        if (allowWinners && !allowNew && hasHistory) {
+            const winningCombo = generateWinningCombination();
+            if (winningCombo) {
+                regularNumbers = winningCombo.numbers;
+                strongNumber = winningCombo.strong;
+                isWinner = true;
+            } else {
+                continue;
             }
-              else{
-              incrementCombosInFirebase(generatedCount);
-              }
-        }, 800);
-    }, 500);
-          
+        } else {
+            switch (strategy) {
+                case 'hot':
+                    regularNumbers = generateHotNumbers(hotWeight);
+                    strongNumber = generateHotStrongNumber(hotWeight);
+                    break;
+                case 'balanced':
+                    regularNumbers = generateBalancedNumbers();
+                    strongNumber = generateBalancedStrongNumber();
+                    break;
+                case 'cold':
+                    regularNumbers = generateColdNumbers();
+                    strongNumber = generateColdStrongNumber();
+                    break;
+                default:
+                    regularNumbers = generateRandomNumbers();
+                    strongNumber = generateRandomStrongNumber();
+            }
+            isWinner = isCombinationWinner(regularNumbers, strongNumber);
+        }
+
+        // סינון רצפים
+        if (noSequences && hasSequenceOfThree(regularNumbers)) continue;
+        if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) continue;
+
+        const shouldInclude = (isWinner && allowWinners) || (!isWinner && allowNew);
+
+        // בדיקה והצגה
+        if (!hasHistory && allowNew) {
+            displayCombination(regularNumbers, strongNumber, generatedCount + 1, false);
+            try {
+                await saveCombinationToFirebase({
+                    numbers: regularNumbers,
+                    strong: strongNumber,
+                    isWinner: false
+                });
+            } catch (error) {
+                console.error("Error saving combination:", error);
+            }
+            generatedCount++;
+        } else if (hasHistory && shouldInclude) {
+            displayCombination(regularNumbers, strongNumber, generatedCount + 1, isWinner);
+            try {
+                await saveCombinationToFirebase({
+                    numbers: regularNumbers,
+                    strong: strongNumber,
+                    isWinner
+                });
+            } catch (error) {
+                console.error("Error saving combination:", error);
+            }
+            generatedCount++;
+        }
+    }
+
+    if (generatedCount === 0) {
+        results.innerHTML = `<div style="text-align: center; padding: 20px; font-size: 16px; color: #e17055; line-height: 1.5;">
+            ⚠️ לא ניתן ליצור צירופים עם ההגדרות הנוכחיות.
+        </div>`;
+    } else {
+        incrementCombosInFirebase(generatedCount);
+    }
 }
 
         // פונקציות מתוקנות למניעת כפילויות
