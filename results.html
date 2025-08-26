@@ -355,13 +355,13 @@
                 for (let i = 1; i <= 6; i++) {
                     const numberCell = document.createElement('td');
                     numberCell.className = 'number-cell';
-                    numberCell.textContent = result[`מספר ${i}`] || result[`Number ${i}`] || '';
+                    numberCell.textContent = result[`${i}`] || result[`${i}`] || '';
                     row.appendChild(numberCell);
                 }
                 
                 // מספר חזק
                 const strongCell = document.createElement('td');
-                const strongNumber = result['מספר חזק'] || result['Strong Number'] || '';
+                const strongNumber = result['המספר החזק'] || result['Strong Number'] || '';
                 if (strongNumber) {
                     const strongSpan = document.createElement('span');
                     strongSpan.className = 'strong-number';
