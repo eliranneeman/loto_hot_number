@@ -2,7 +2,7 @@
 .menu-btn {
   position: fixed;
   top: 16px;
-  right: 16px; /* מיקום הכפתור בפינה הימנית העליונה */
+  right: 16px;
   font-size: 28px;
   background: none;
   border: none;
@@ -13,13 +13,13 @@
 
 .sidebar {
   height: 100%;
-  width: 250px; /* תמיד מוגדר לרוחב קבוע */
+  width: 250px;
   position: fixed;
   top: 0;
-  right: -250px; /* התפריט מוסתר מחוץ למסך מימין */
+  right: -250px;
   background-color: #0f172a;
   overflow-x: hidden;
-  transition: transform 0.3s ease; /* מעבר חלק במאפיין transform */
+  transition: transform 0.3s ease;
   padding-top: 60px;
   z-index: 1000;
 }
@@ -34,6 +34,18 @@
 }
 
 .sidebar nav a:hover {
+  background-color: #111827;
+  border-radius: 8px;
+}
+
+.close-btn {
+  position: absolute; /* מיקום אבסולוטי בתוך התפריט */
+  top: 16px;
+  left: 16px; /* מיקום הכפתור בצד שמאל של התפריט */
+  font-size: 30px;
+  color: #e5e7eb;
+  cursor: pointer;
+}
   background-color: #111827;
   border-radius: 8px;
 }
