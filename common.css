@@ -1,12 +1,28 @@
+/* ===== צבעי האתר ===== */
+:root {
+  --bg-dark: #0f172a;       /* רקע כהה */
+  --bg-hover: #111827;      /* hover כהה */
+  --text-light: #e5e7eb;    /* טקסט לבן */
+  --accent: #22d3ee;        /* כפתורים/קישורים */
+}
+
+/* ===== כלליות ===== */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+}
+
 /* ===== תפריט צד מודרני ===== */
 .menu-btn {
   position: fixed;
   top: 16px;
-  right: 16px; /* מיקום הכפתור בפינה הימנית העליונה */
+  right: 16px;
   font-size: 28px;
   background: none;
   border: none;
-  color: #e5e7eb;
+  color: var(--text-light);
   cursor: pointer;
   z-index: 1001;
 }
@@ -16,8 +32,8 @@
   width: 0;
   position: fixed;
   top: 0;
-  right: 0; /* מיקום התפריט בצד ימין */
-  background-color: #0f172a;
+  right: 0;
+  background-color: var(--bg-dark);
   overflow-x: hidden;
   transition: width 0.3s ease;
   padding-top: 60px;
@@ -28,13 +44,125 @@
   display: block;
   padding: 16px 24px;
   text-decoration: none;
-  color: #e5e7eb;
+  color: var(--text-light);
   font-size: 18px;
   transition: background 0.2s;
 }
 
 .sidebar nav a:hover {
-  background-color: #111827;
+  background-color: var(--bg-hover);
+  border-radius: 8px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  font-size: 30px;
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+/* ===== פוטר ===== */
+#site-footer {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+#site-footer nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#site-footer nav ul li a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+#site-footer nav ul li a:hover {
+  text-decoration: underline;
+}
+
+/* ===== באנר קוקיז ===== */
+#lg-cookie-banner {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 99999;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+
+#lg-cookie-banner .lg-text {
+  flex: 1 1 300px;
+  color: #cbd5e1;
+}
+
+#lg-cookie-banner a.lg-link {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+#lg-cookie-banner .lg-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.lg-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #e6f6ff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.lg-btn:focus {
+  outline: 3px solid rgba(34,211,238,0.18);
+  outline-offset: 2px;
+}
+
+.lg-btn.primary {
+  background: linear-gradient(90deg,#0ea5a4,#06b6d4);
+  color: #042027;
+  border: none;
+}
+
+.lg-btn.ghost {
+  background: transparent;
+  color: #cbd5e1;
+}
+
+/* ===== מדיה למובייל ===== */
+@media (min-width: 900px) {
+  #lg-cookie-banner {
+    left: 24px;
+    right: auto;
+    max-width: 880px;
+    margin: 0 auto;
+    bottom: 24px;
+  }
+}  background-color: #111827;
   border-radius: 8px;
 }
 
