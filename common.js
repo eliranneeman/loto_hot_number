@@ -7,22 +7,22 @@ fetch("/menu.html")
   .catch(err => {
     console.error("שגיאה בטעינת התפריט:", err);
   });
-
+ 
 document.addEventListener('click', (e) => {
     const sidebar = document.getElementById("mySidebar");
     
-    // בודק אם הקליק היה על כפתור הפתיחה
     if (e.target.closest('#menu-open-btn')) {
         if (sidebar) {
-            sidebar.style.width = "250px";
+            // פותח את התפריט על ידי הזזתו 250px שמאלה
+            sidebar.style.transform = "translateX(-250px)";
             sidebar.setAttribute("aria-hidden", "false");
         }
     }
     
-    // בודק אם הקליק היה על כפתור הסגירה
     if (e.target.closest('#menu-close-btn')) {
         if (sidebar) {
-            sidebar.style.width = "0";
+            // סוגר את התפריט על ידי החזרתו למצב המקורי
+            sidebar.style.transform = "translateX(0)";
             sidebar.setAttribute("aria-hidden", "true");
         }
     }
