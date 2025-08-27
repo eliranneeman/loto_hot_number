@@ -1,5 +1,5 @@
 // טוען פוטר משותף לכל האתר
-fetch("/footer.html")
+fetch("/menu.html")
   .then(res => res.text())
   .then(html => {
     document.body.insertAdjacentHTML("beforeend", html);
