@@ -4,11 +4,23 @@
   top: 16px;
   right: 16px; /* מיקום הכפתור בפינה הימנית העליונה */
   font-size: 28px;
-  background: none;
+  /* שינויים לעיצוב הכפתור */
+  background-color: #0f172a; /* צבע רקע כהה */
+  color: #fff; /* צבע טקסט לבן */
   border: none;
-  color: #e5e7eb;
+  border-radius: 8px; /* פינות מעוגלות */
+  padding: 10px 15px; /* מרווח פנימי */
   cursor: pointer;
   z-index: 1001;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* הוספת צל */
+  transition: all 0.3s ease-in-out; /* הוספת מעבר חלק לכל המאפיינים */
+}
+
+/* אפקט מעבר עכבר על הכפתור */
+.menu-btn:hover {
+  background-color: #2d3748; /* צבע כהה יותר במעבר עכבר */
+  transform: translateY(-2px); /* הזזה קלה כלפי מעלה */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* צל עמוק יותר */
 }
 
 .sidebar {
@@ -45,4 +57,5 @@
   font-size: 30px;
   color: #e5e7eb;
   cursor: pointer;
+  z-index: 1002; /* Z-index גבוה יותר כדי שיופיע מעל כפתור הפתיחה */
 }
