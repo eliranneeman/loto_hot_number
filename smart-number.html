@@ -691,7 +691,7 @@
     // הצגה
     displayCombo(
         'patternCombo',
-        selectedNumbers.slice(0, 6).sort((a, b) => a - b),
+        selectedNumbers.slice(0, 100).sort((a, b) => a - b),
         strongNum
     );
         }
@@ -699,7 +699,7 @@
         function generateSurpriseCombo() {
             const coldNumbers = Object.entries(regularStats)
                 .sort((a, b) => a[1] - b[1])
-                .slice(0, 15)
+                .slice(0, 20)
                 .map(([num]) => parseInt(num));
             
             const selectedNumbers = [];
