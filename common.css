@@ -2,10 +2,7 @@
 .menu-btn {
   position: fixed;
   top: 16px;
-  /* הכפתור בצד ימין עבור RTL ועברית */
-  right: 16px; 
-  /* מיקום הכפתור בצד שמאל עבור LTR ואנגלית */
-  left: 16px; 
+  right: 16px; /* מיקום הכפתור בפינה הימנית העליונה */
   font-size: 28px;
   background: none;
   border: none;
@@ -16,16 +13,13 @@
 
 .sidebar {
   height: 100%;
-  width: 0;
+  width: 250px; /* תמיד מוגדר לרוחב קבוע */
   position: fixed;
   top: 0;
-  /* מיקום התפריט בצד ימין עבור RTL ועברית */
-  right: 0; 
-  /* מיקום התפריט בצד שמאל עבור LTR ואנגלית */
-  left: 0;
+  right: -250px; /* התפריט מוסתר מחוץ למסך מימין */
   background-color: #0f172a;
   overflow-x: hidden;
-  transition: width 0.3s ease;
+  transition: transform 0.3s ease; /* מעבר חלק במאפיין transform */
   padding-top: 60px;
   z-index: 1000;
 }
@@ -34,6 +28,24 @@
   display: block;
   padding: 16px 24px;
   text-decoration: none;
+  color: #e5e7eb;
+  font-size: 18px;
+  transition: background 0.2s;
+}
+
+.sidebar nav a:hover {
+  background-color: #111827;
+  border-radius: 8px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 16px;
+  left: 16px; /* כפתור הסגירה בצד שמאל של התפריט */
+  font-size: 30px;
+  color: #e5e7eb;
+  cursor: pointer;
+}
   color: #e5e7eb;
   font-size: 18px;
   transition: background 0.2s;
