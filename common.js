@@ -2,14 +2,12 @@
 fetch("/menu.html")
   .then(res => res.text())
   .then(html => {
-    // טוען רק את התוכן של התפריט
     document.body.insertAdjacentHTML("beforeend", html);
   })
   .catch(err => {
     console.error("שגיאה בטעינת התפריט:", err);
   });
 
-// מאזין לקליקים על כל הדף, כדי לתפוס את הכפתורים גם אם הם נוצרו מאוחר יותר
 document.addEventListener('click', (e) => {
     const sidebar = document.getElementById("mySidebar");
     
