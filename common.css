@@ -1,0 +1,48 @@
+/* ===== תפריט צד מודרני ===== */
+.menu-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  font-size: 28px;
+  background: none;
+  border: none;
+  color: #e5e7eb;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: #0f172a; /* צבע רקע כחול כהה מהאתר שלך */
+  overflow-x: hidden;
+  transition: width 0.3s ease;
+  padding-top: 60px;
+  z-index: 1000;
+}
+
+.sidebar nav a {
+  display: block;
+  padding: 16px 24px;
+  text-decoration: none;
+  color: #e5e7eb; /* טקסט לבן */
+  font-size: 18px;
+  transition: background 0.2s;
+}
+
+.sidebar nav a:hover {
+  background-color: #111827; /* צבע hover כהה יותר */
+  border-radius: 8px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  font-size: 30px;
+  color: #e5e7eb;
+  cursor: pointer;
+}
