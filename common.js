@@ -1,29 +1,30 @@
-// טוען תפריט צד משותף לכל האתר
+// ===== טוען תפריט צדדי =====
 fetch("/menu.html")
   .then(res => res.text())
   .then(html => {
     document.body.insertAdjacentHTML("beforeend", html);
 
-    // עכשיו שהתפריט נטען, מוסיפים את הפקודות לפתיחה וסגירה
+    // לאחר שה־HTML נטען, מחברים את האירועים
     const openBtn = document.getElementById("menu-open-btn");
-    const sidebar = document.getElementById("mySidebar");
     const closeBtn = document.getElementById("menu-close-btn");
+    const sidebar = document.getElementById("mySidebar");
 
     openBtn.addEventListener("click", () => {
-      sidebar.style.width = "250px"; // או רוחב מותאם
+      sidebar.style.width = "250px";
+      sidebar.setAttribute("aria-hidden", "false");
     });
 
     closeBtn.addEventListener("click", () => {
       sidebar.style.width = "0";
+      sidebar.setAttribute("aria-hidden", "true");
     });
   });
 
-// טוען באנר קוקיז משותף
+// ===== טוען באנר קוקיז =====
 fetch("/cookie-banner.html")
   .then(res => res.text())
   .then(html => {
     document.body.insertAdjacentHTML("beforeend", html);
-    // אחרי ההוספה — נריץ את הסקריפט של הבאנר
     const script = document.createElement("script");
     script.src = "/cookie-banner.js";
     document.body.appendChild(script);
