@@ -642,48 +642,58 @@
         }
 
         function generatePatternCombo() {
-            const selectedNumbers = [];
-            
-            // התחל עם הזוג הכי נפוץ
-            const topPairs = Object.entries(pairStats)
-                .sort((a, b) => b[1] - a[1]);
-            
-            if (topPairs.length > 0) {
-                const [pair] = topPairs[0];
-                const [num1, num2] = pair.split('-').map(n => parseInt(n));
-                selectedNumbers.push(num1, num2);
+    const selectedNumbers = [];
+
+    // זוג אקראי מתוך ה-5 הכי נפוצים
+    const topPairs = Object.entries(pairStats)
+        .sort((a, b) => b[1] - a[1]);
+    
+    if (topPairs.length > 0) {
+        const randomPairIndex = Math.floor(Math.random() * Math.min(5, topPairs.length));
+        const [pair] = topPairs[randomPairIndex];
+        const [num1, num2] = pair.split('-').map(n => parseInt(n));
+        selectedNumbers.push(num1, num2);
+    }
+
+    // הוסף מספרים נוספים מזוגות אחרים (באקראי)
+    for (const [pair] of topPairs.slice(1)) {
+        if (selectedNumbers.length >= 6) break;
+        
+        const [num1, num2] = pair.split('-').map(n => parseInt(n));
+        const nums = [num1, num2].sort(() => Math.random() - 0.5); // ערבוב
+        for (const n of nums) {
+            if (!selectedNumbers.includes(n) && selectedNumbers.length < 6) {
+                selectedNumbers.push(n);
             }
-            
-            // הוסף מספרים נוספים מזוגות נפוצים
-            for (const [pair] of topPairs.slice(1)) {
-                if (selectedNumbers.length >= 6) break;
-                
-                const [num1, num2] = pair.split('-').map(n => parseInt(n));
-                
-                if (!selectedNumbers.includes(num1) && selectedNumbers.length < 6) {
-                    selectedNumbers.push(num1);
-                }
-                if (!selectedNumbers.includes(num2) && selectedNumbers.length < 6) {
-                    selectedNumbers.push(num2);
-                }
-            }
-            
-            // השלם עם מספרים חמים
-            const hotNumbers = Object.entries(regularStats)
-                .sort((a, b) => b[1] - a[1])
-                .map(([num]) => parseInt(num));
-            
-            for (const num of hotNumbers) {
-                if (selectedNumbers.length >= 6) break;
-                if (!selectedNumbers.includes(num)) {
-                    selectedNumbers.push(num);
-                }
-            }
-            
-            const strongNum = parseInt(Object.entries(strongStats)
-                .sort((a, b) => b[1] - a[1])[0][0]);
-            
-            displayCombo('patternCombo', selectedNumbers.slice(0, 6).sort((a,b) => a-b), strongNum);
+        }
+    }
+
+    // השלם עם מספרים חמים רנדומליים
+    const hotNumbers = Object.entries(regularStats)
+        .sort((a, b) => b[1] - a[1])
+        .map(([num]) => parseInt(num));
+
+    const shuffledHot = hotNumbers.sort(() => Math.random() - 0.5);
+    for (const num of shuffledHot) {
+        if (selectedNumbers.length >= 6) break;
+        if (!selectedNumbers.includes(num)) {
+            selectedNumbers.push(num);
+        }
+    }
+
+    // מספר חזק אקראי מתוך ה-3 הכי חמים
+    const strongSorted = Object.entries(strongStats)
+        .sort((a, b) => b[1] - a[1])
+        .map(([num]) => parseInt(num));
+    
+    const strongNum = strongSorted[Math.floor(Math.random() * Math.min(3, strongSorted.length))];
+
+    // הצגה
+    displayCombo(
+        'patternCombo',
+        selectedNumbers.slice(0, 6).sort((a, b) => a - b),
+        strongNum
+    );
         }
 
         function generateSurpriseCombo() {
