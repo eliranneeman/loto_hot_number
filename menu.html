@@ -1,40 +1,16 @@
-<!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>Lottogun.com</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-    }
+<!-- כפתור פתיחת התפריט -->
+<button id="menu-open-btn" class="menu-btn" aria-label="Open menu">☰</button>
 
-    /* כפתור פתיחת התפריט */
-    .menu-btn {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      font-size: 28px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      z-index: 1001;
-    }
-
-    /* המעטפת של התפריט */
-    .sidebar {
-      height: 100%;
-      width: 0;
-      position: fixed;
-      top: 0;
-      right: 0;
-      background-color: #111;
-      overflow-x: hidden;
-      transition: 0.3s;
-      padding-top: 60px;
-      z-index: 1000;
-    }
-
+<!-- תפריט צדדי -->
+<div id="mySidebar" class="sidebar" aria-hidden="true">
+  <span id="menu-close-btn" class="close-btn" aria-label="Close menu">&times;</span>
+  <nav>
+    <a href="/">דף הבית</a>
+    <a href="/privacy-policy.html">מדיניות פרטיות</a>
+    <a href="/terms.html">תנאי שימוש</a>
+    <a href="/cookies.html">מדיניות עוגיות</a>
+  </nav>
+</div>
     /* פריטים בתפריט */
     .sidebar a {
       padding: 12px 24px;
