@@ -623,6 +623,8 @@
                 console.error('שגיאה בטעינת הנתונים:', error);
                 document.getElementById('loadingMessage').style.display = 'none';
                 document.getElementById('noDataMessage').style.display = 'block';
+                document.getElementById('loadingMessage').innerHTML = '❌ שגיאה בטעינת הנתונים. אנא ודא שקובץ Lotto.xlsx קיים.';
+       
             }
         }
         
