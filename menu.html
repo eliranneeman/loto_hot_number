@@ -1,8 +1,5 @@
-<html lang="en" dir="ltr">
-<!-- כפתור פתיחת התפריט -->
 <button id="menu-open-btn" class="menu-btn" aria-label="Open menu">☰</button>
 
-<!-- תפריט צדדי -->
 <div id="mySidebar" class="sidebar" aria-hidden="true">
   <span id="menu-close-btn" class="close-btn" aria-label="Close menu">&times;</span>
   <nav>
@@ -11,32 +8,4 @@
     <a href="/terms.html">תנאי שימוש</a>
     <a href="/cookies.html">מדיניות עוגיות</a>
   </nav>
-</div>  </style>
-</head>
-<body>
-</html>
-
-<!-- כפתור פתיחה -->
-<button class="menu-btn" onclick="openMenu()">☰</button>
-
-<!-- תפריט צד -->
-<div id="mySidebar" class="sidebar">
-  <span class="close-btn" onclick="closeMenu()">&times;</span>
-  <a href="/">דף הבית</a>
-  <a href="/privacy-policy.html">מדיניות פרטיות</a>
-  <a href="/terms.html">תנאי שימוש</a>
-  <a href="/cookies.html">מדיניות עוגיות</a>
 </div>
-
-<script>
-  function openMenu() {
-    document.getElementById("mySidebar").style.width = "250px";
-  }
-
-  function closeMenu() {
-    document.getElementById("mySidebar").style.width = "0";
-  }
-</script>
-
-</body>
-
