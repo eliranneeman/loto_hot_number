@@ -588,7 +588,7 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
         let allResults = [];
         let regularStats = {};
@@ -643,4 +643,312 @@
             allResults.forEach(result => {
                 // ספירת מספרים רגילים - העמודות נקראות '1', '2', '3', '4', '5', '6'
                 for (let i = 1; i <= 6; i++) {
-                    const num = parseInt(resu
+                    const num = parseInt(result[i.toString()]);
+                    if (num && !isNaN(num) && num >= 1 && num <= 37) {
+                        regularStats[num]++;
+                    }
+                }
+                
+                // ספירת מספר חזק - העמודה נקראת 'המספר החזק'
+                const strongNum = parseInt(result['המספר החזק']);
+                if (strongNum && !isNaN(strongNum) && strongNum >= 1 && strongNum <= 7) {
+                    strongStats[strongNum]++;
+                }
+            });
+            
+            console.log('Statistics calculated - Regular stats:', regularStats);
+            console.log('Strong stats:', strongStats);
+        }
+
+        // חישוב צירופים נפוצים
+        function calculateCombinations() {
+            pairStats = {};
+            tripleStats = {};
+            quadStats = {};
+
+            allResults.forEach(result => {
+                const numbers = [];
+                
+                // איסוף המספרים מהעמודות '1', '2', '3', '4', '5', '6'
+                for (let i = 1; i <= 6; i++) {
+                    const num = parseInt(result[i.toString()]);
+                    if (num && !isNaN(num) && num >= 1 && num <= 37) {
+                        numbers.push(num);
+                    }
+                }
+                
+                // רק אם יש לנו בדיוק 6 מספרים
+                if (numbers.length === 6) {
+                    numbers.sort((a, b) => a - b);
+                    
+                    // חישוב זוגות
+                    for (let i = 0; i < numbers.length; i++) {
+                        for (let j = i + 1; j < numbers.length; j++) {
+                            const pair = `${numbers[i]}-${numbers[j]}`;
+                            pairStats[pair] = (pairStats[pair] || 0) + 1;
+                        }
+                    }
+                    
+                    // חישוב שלשות
+                    for (let i = 0; i < numbers.length; i++) {
+                        for (let j = i + 1; j < numbers.length; j++) {
+                            for (let k = j + 1; k < numbers.length; k++) {
+                                const triple = `${numbers[i]}-${numbers[j]}-${numbers[k]}`;
+                                tripleStats[triple] = (tripleStats[triple] || 0) + 1;
+                            }
+                        }
+                    }
+                    
+                    // חישוב רביעיות
+                    for (let i = 0; i < numbers.length; i++) {
+                        for (let j = i + 1; j < numbers.length; j++) {
+                            for (let k = j + 1; k < numbers.length; k++) {
+                                for (let l = k + 1; l < numbers.length; l++) {
+                                    const quad = `${numbers[i]}-${numbers[j]}-${numbers[k]}-${numbers[l]}`;
+                                    quadStats[quad] = (quadStats[quad] || 0) + 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // הוספת debug info
+            console.log('Total pairs found:', Object.keys(pairStats).length);
+            console.log('Top 3 pairs:', Object.entries(pairStats).sort((a,b) => b[1] - a[1]).slice(0,3));
+        }
+
+        // הצגת הסטטיסטיקות
+        function displayStatistics() {
+            displaySummary();
+            displayInsights();
+            displayCharts();
+            displayPatternAnalysis();
+            displayRegularNumbers();
+            displayStrongNumbers();
+        }
+
+        // הצגת תובנות וצירופים
+        function displayInsights() {
+            // הצגת זוגות נפוצים
+            const topPairs = Object.entries(pairStats)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+            
+            const pairsContainer = document.getElementById('popularPairs');
+            pairsContainer.innerHTML = topPairs.map(([pair, count]) => 
+                `<div class="combination-item">
+                    <span class="combination-numbers">${pair.replace('-', ', ')}</span>
+                    <span class="combination-count">${count} פעמים</span>
+                </div>`
+            ).join('');
+
+            // הצגת שלשות נפוצות
+            const topTriples = Object.entries(tripleStats)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+            
+            const triplesContainer = document.getElementById('popularTriples');
+            triplesContainer.innerHTML = topTriples.map(([triple, count]) => 
+                `<div class="combination-item">
+                    <span class="combination-numbers">${triple.replace(/-/g, ', ')}</span>
+                    <span class="combination-count">${count} פעמים</span>
+                </div>`
+            ).join('');
+
+            // הצגת רביעיות נפוצות
+            const topQuads = Object.entries(quadStats)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+            
+            const quadsContainer = document.getElementById('popularQuads');
+            quadsContainer.innerHTML = topQuads.map(([quad, count]) => 
+                `<div class="combination-item">
+                    <span class="combination-numbers">${quad.replace(/-/g, ', ')}</span>
+                    <span class="combination-count">${count} פעמים</span>
+                </div>`
+            ).join('');
+        }
+
+        // הצגת גרפים
+        function displayCharts() {
+            // גרף מספרים רגילים
+            const regularChart = document.getElementById('regularChart');
+            const sortedRegular = Object.entries(regularStats).sort((a, b) => b[1] - a[1]);
+            const maxRegular = sortedRegular[0][1];
+            
+            regularChart.innerHTML = sortedRegular.slice(0, 15).map(([number, count]) => {
+                const height = (count / maxRegular) * 200;
+                return `<div class="chart-bar" style="height: ${height}px;">
+                    <div class="chart-bar-label">${number}</div>
+                    <div class="chart-bar-value">${count}</div>
+                </div>`;
+            }).join('');
+
+            // גרף מספרים חזקים
+            const strongChart = document.getElementById('strongChart');
+            const sortedStrong = Object.entries(strongStats).sort((a, b) => b[1] - a[1]);
+            const maxStrong = sortedStrong[0][1];
+            
+            strongChart.innerHTML = sortedStrong.map(([number, count]) => {
+                const height = (count / maxStrong) * 200;
+                return `<div class="chart-bar" style="height: ${height}px; background: linear-gradient(to top, #ff6b6b, #ff8a80);">
+                    <div class="chart-bar-label">${number}</div>
+                    <div class="chart-bar-value">${count}</div>
+                </div>`;
+            }).join('');
+        }
+
+        // ניתוח דפוסים מתקדם
+        function displayPatternAnalysis() {
+            let evenCount = 0, oddCount = 0;
+            let highCount = 0, lowCount = 0; // גבוה > 18, נמוך <= 18
+            let consecutiveCount = 0;
+            let totalSum = 0;
+            let validDraws = 0;
+            
+            allResults.forEach(result => {
+                const numbers = [];
+                let drawSum = 0;
+                
+                // קריאת המספרים מהעמודות '1', '2', '3', '4', '5', '6'
+                for (let i = 1; i <= 6; i++) {
+                    const num = parseInt(result[i.toString()]);
+                    if (num && !isNaN(num) && num >= 1 && num <= 37) {
+                        numbers.push(num);
+                        drawSum += num;
+                        
+                        if (num % 2 === 0) evenCount++;
+                        else oddCount++;
+                        
+                        if (num > 18) highCount++;
+                        else lowCount++;
+                    }
+                }
+                
+                if (numbers.length === 6) {
+                    totalSum += drawSum;
+                    validDraws++;
+                    
+                    // בדיקת מספרים רצופים
+                    numbers.sort((a, b) => a - b);
+                    for (let i = 0; i < numbers.length - 1; i++) {
+                        if (numbers[i + 1] - numbers[i] === 1) {
+                            consecutiveCount++;
+                        }
+                    }
+                }
+            });
+            
+            if (validDraws > 0) {
+                const totalNumbers = evenCount + oddCount;
+                const evenOddRatio = `${Math.round((evenCount / totalNumbers) * 100)}:${Math.round((oddCount / totalNumbers) * 100)}`;
+                const highLowRatio = `${Math.round((highCount / totalNumbers) * 100)}:${Math.round((lowCount / totalNumbers) * 100)}`;
+                const avgConsecutive = (consecutiveCount / validDraws).toFixed(1);
+                const avgSum = Math.round(totalSum / validDraws);
+                
+                document.getElementById('evenOddRatio').textContent = evenOddRatio;
+                document.getElementById('highLowRatio').textContent = highLowRatio;
+                document.getElementById('consecutiveAvg').textContent = avgConsecutive;
+                document.getElementById('sumAverage').textContent = avgSum;
+            } else {
+                // אם אין נתונים תקינים
+                document.getElementById('evenOddRatio').textContent = 'N/A';
+                document.getElementById('highLowRatio').textContent = 'N/A';
+                document.getElementById('consecutiveAvg').textContent = 'N/A';
+                document.getElementById('sumAverage').textContent = 'N/A';
+            }
+            
+            console.log('Pattern analysis - Valid draws:', validDraws);
+            console.log('Even/Odd counts:', evenCount, oddCount);
+        }
+
+        // הצגת מספרים רגילים
+        function displayRegularNumbers() {
+            const container = document.getElementById('regularNumbersGrid');
+            container.innerHTML = '';
+            
+            // מיון לפי תכיפות (מהגבוה לנמוך)
+            const sorted = Object.entries(regularStats).sort((a, b) => b[1] - a[1]);
+            const maxCount = sorted[0][1];
+            
+            sorted.forEach(([number, count], index) => {
+                const item = document.createElement('div');
+                item.className = 'number-item';
+                
+                // הוספת תווית חם/קר
+                let label = '';
+                if (index < 6) {
+                    label = '<div class="hot-label">🔥 חם</div>';
+                } else if (index >= sorted.length - 6) {
+                    label = '<div class="cold-label">🧊 קר</div>';
+                }
+                
+                const percentage = Math.round((count / maxCount) * 100);
+                
+                item.innerHTML = `
+                    ${label}
+                    <div class="number-value">${number}</div>
+                    <div class="number-count">${count} פעמים</div>
+                    <div class="frequency-bar">
+                        <div class="frequency-fill" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+                
+                container.appendChild(item);
+            });
+        }
+
+        // הצגת מספרים חזקים
+        function displayStrongNumbers() {
+            const container = document.getElementById('strongNumbersGrid');
+            container.innerHTML = '';
+            
+            // מיון לפי תכיפות (מהגבוה לנמוך)
+            const sorted = Object.entries(strongStats).sort((a, b) => b[1] - a[1]);
+            const maxCount = sorted[0][1];
+            
+            sorted.forEach(([number, count], index) => {
+                const item = document.createElement('div');
+                item.className = 'number-item';
+                
+                // הוספת תווית חם/קר
+                let label = '';
+                if (index < 2) {
+                    label = '<div class="hot-label">🔥 חם</div>';
+                } else if (index >= sorted.length - 2) {
+                    label = '<div class="cold-label">🧊 קר</div>';
+                }
+                
+                const percentage = Math.round((count / maxCount) * 100);
+                
+                item.innerHTML = `
+                    ${label}
+                    <div class="number-value">${number}</div>
+                    <div class="number-count">${count} פעמים</div>
+                    <div class="frequency-bar">
+                        <div class="frequency-fill" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+                
+                container.appendChild(item);
+            });
+        }
+
+        // פורמט תאריך
+        function formatDate(dateValue) {
+            if (!dateValue) return '';
+            
+            if (typeof dateValue === 'number') {
+                const date = XLSX.SSF.parse_date_code(dateValue);
+                return `${date.d.toString().padStart(2, '0')}/${date.m.toString().padStart(2, '0')}/${date.y}`;
+            }
+            
+            return dateValue.toString();
+        }
+
+        // טעינה כשהדף נטען
+        window.addEventListener('load', loadAndCalculateStats);
+    </script>
+</body>
+</html>
