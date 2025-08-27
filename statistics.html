@@ -601,30 +601,28 @@
 
         // טעינת הנתונים מקובץ האקסל וחישוב סטטיסטיקות
         async function loadAndCalculateStats() {
-            try {
-                const response = await fetch('Lotto.xlsx');
-                if (!response.ok) throw new Error('לא ניתן לטעון את קובץ הנתונים');
-                
-                const data = await response.arrayBuffer();
-                const workbook = XLSX.read(data, {type: 'array'});
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[sheetName];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                
-                allResults = jsonData;
-                calculateStatistics();
-                calculateCombinations();
-                displayStatistics();
-                
-                document.getElementById('loadingMessage').style.display = 'none';
-                document.getElementById('resultsTable').style.display = 'block';
-                
-            } catch (error) {
-                console.error('שגיאה בטעינת הנתונים:', error);
-                document.getElementById('noDataMessage').style.display = 'block';
-                document.getElementById('loadingMessage').innerHTML = '❌ שגיאה בטעינת הנתונים. אנא ודא שקובץ Lotto.xlsx קיים.';
-       
-            }
+    try {
+        const response = await fetch('Lotto.xlsx');
+        if (!response.ok) throw new Error('לא ניתן לטעון את קובץ הנתונים');
+        
+        const data = await response.arrayBuffer();
+        const workbook = XLSX.read(data, {type: 'array'});
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        
+        allResults = jsonData;
+        calculateStatistics();
+        calculateCombinations();
+        displayStatistics();
+        
+        document.getElementById('loadingMessage').style.display = 'none';
+        document.getElementById('statsContent').style.display = 'block';
+        
+    } catch (error) {
+        console.error('שגיאה בטעינת הנתונים:', error);
+        document.getElementById('loadingMessage').innerHTML = '❌ שגיאה בטעינת הנתונים. אנא ודא שקובץ Lotto.xlsx קיים.';
+    }
         }
         
 
