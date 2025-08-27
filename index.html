@@ -482,22 +482,7 @@
     <div class="container">
         <h1>🎲 הלוטו החכם 🎲</h1>
         
-        <!-- מונים -->
-        <div class="counters">
-            <div class="counter">
-                <div class="counter-number" id="visitCount">0</div>
-                <div class="counter-label">ביקורים באתר</div>
-            </div>
-            <div class="counter">
-                <div class="counter-number" id="comboCount">0</div>
-                <div class="counter-label">צירופים שנוצרו</div>
-            </div>
-            <div class="counter">
-                <div class="counter-number" id="history-counter">0</div>
-                <div class="counter-label">הגרלות בהיסטוריה</div>
-            </div>
-        </div>
-
+        
     >
 <button class="file-upload-btn" onclick="toggleUploadSection()">📂 הצג / הסתר אפשרות העלאת קובץ</button>
 
@@ -530,7 +515,25 @@
 </div>
 
 
-        <!-- מסנן היסטוריה -->
+        
+        
+        <div class="stats">
+            <div class="stats-title">📊 המספרים החמים ביותר (על פי הסטטיסטיקות - משנת 2005 מאתר מפעל הפיס)</div>
+            <div class="hot-numbers">
+                <div class="hot-category">
+                    <h4>טופ 9 המספרים החמים:</h4>
+                    <div class="hot-list" id="hot-regular-list">
+                        </div>
+                </div>
+                <div class="hot-category">
+                    <h4>טופ 3 המספרים החזקים החמים:</h4>
+                    <div class="hot-list" id="hot-strong-list">
+                        </div>
+                </div>
+            </div>
+        </div>
+
+		<!-- מסנן היסטוריה -->
         <div class="history-filter" id="history-filter" style="display: none;">
             <div class="stats-title">🎯 בחירת סוג צירופים:</div>
             <label>
@@ -548,23 +551,7 @@ id="no-two-sequences"> בלי רצפים של 2 מספרים עוקבים (צי�
             <label>
   <input type="checkbox"
 id="no-sequences"> בלי רצפים של 3 מספרים עוקבים ומעלה (צימצום 8.2% אחוז מכלל האפשרויות)       </label>
-        </div>
-        
-        <div class="stats">
-            <div class="stats-title">📊 המספרים החמים ביותר (על פי הסטטיסטיקות - משנת 2005 מאתר מפעל הפיס)</div>
-            <div class="hot-numbers">
-                <div class="hot-category">
-                    <h4>מספרים ראשיים חמים:</h4>
-                    <div class="hot-list" id="hot-regular-list">
-                        </div>
-                </div>
-                <div class="hot-category">
-                    <h4>מספר חזק חם:</h4>
-                    <div class="hot-list" id="hot-strong-list">
-                        </div>
-                </div>
-            </div>
-        </div>
+		</div>
         
         <div class="controls">
             <div class="control-group">
@@ -605,7 +592,22 @@ id="no-sequences"> בלי רצפים של 3 מספרים עוקבים ומעלה
     </div>
 
 
-
+<!-- מונים -->
+        <div class="counters">
+            <div class="counter">
+                <div class="counter-number" id="visitCount">0</div>
+                <div class="counter-label">ביקורים באתר</div>
+            </div>
+            <div class="counter">
+                <div class="counter-number" id="comboCount">0</div>
+                <div class="counter-label">צירופים שנוצרו</div>
+            </div>
+            <div class="counter">
+                <div class="counter-number" id="history-counter">0</div>
+                <div class="counter-label">הגרלות בהיסטוריה</div>
+            </div>
+		</div>
+	
 
 
 <script>
