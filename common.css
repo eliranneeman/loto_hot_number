@@ -41,6 +41,18 @@
 .close-btn {
   position: absolute;
   top: 16px;
+  left: 16px; /* מיקום כפתור הסגירה בתוך התפריט עצמו, בצד שמאל */
+  font-size: 30px;
+  color: #e5e7eb;
+  cursor: pointer;
+}
+  background-color: #111827;
+  border-radius: 8px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 16px;
   left: 16px; /* מיקום כפתור הסגירה בחלק השמאלי של התפריט */
   font-size: 30px;
   color: #e5e7eb;
