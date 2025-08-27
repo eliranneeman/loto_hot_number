@@ -46,6 +46,18 @@
   color: #e5e7eb;
   cursor: pointer;
 }
+  background-color: #111827;
+  border-radius: 8px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 16px;
+  left: 16px; /* כפתור הסגירה בצד שמאל של התפריט */
+  font-size: 30px;
+  color: #e5e7eb;
+  cursor: pointer;
+}
   color: #e5e7eb;
   font-size: 18px;
   transition: background 0.2s;
