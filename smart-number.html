@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>צירופים מנצחים - LottoGun</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            direction: rtl;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            color: white;
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+        
+        .nav-buttons {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .nav-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 0 10px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .winning-combinations {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .winning-title {
+            text-align: center;
+            font-size: 2.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .winning-subtitle {
+            text-align: center;
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .combinations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .combination-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 3px solid;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .combination-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .hot-combo {
+            border-color: #FF6B6B;
+            background: linear-gradient(135deg, rgba(255,107,107,0.1), rgba(255,107,107,0.05));
+        }
+        
+        .balanced-combo {
+            border-color: #4ECDC4;
+            background: linear-gradient(135deg, rgba(78,205,196,0.1), rgba(78,205,196,0.05));
+        }
+        
+        .pattern-combo {
+            border-color: #9C27B0;
+            background: linear-gradient(135deg, rgba(156,39,176,0.1), rgba(156,39,176,0.05));
+        }
+        
+        .surprise-combo {
+            border-color: #FF9800;
+            background: linear-gradient(135deg, rgba(255,152,0,0.1), rgba(255,152,0,0.05));
+        }
+        
+        .combo-type {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .combo-subtitle {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        
+        .combo-numbers {
+            margin: 20px 0;
+            min-height: 80px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .combo-ball {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            animation: bounceIn 0.5s ease-out;
+        }
+        
+        .combo-strong {
+            background: linear-gradient(135deg, #FF6B6B, #E55555);
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(255,107,107,0.4);
+        }
+        
+        .loading-combo {
+            color: #999;
+            font-style: italic;
+        }
+        
+        .generate-combo-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76,175,80,0.3);
+        }
+        
+        .generate-combo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76,175,80,0.4);
+        }
+        
+        .strategy-explanation {
+            border-top: 2px solid #eee;
+            padding-top: 30px;
+        }
+        
+        .strategy-title {
+            text-align: center;
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #333;
+        }
+        
+        .strategies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .strategy-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .strategy-name {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .strategy-desc {
+            font-size: 0.95em;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.5em;
+            margin: 50px 0;
+        }
+        
+        .stats-summary {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .stats-title {
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+        
+        .stats-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stats-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stats-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .combinations-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .combo-ball {
+                width: 40px;
+                height: 40px;
+                font-size: 1em;
+            }
+            
+            .winning-title {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🏆 LottoGun</div>
+            <div class="subtitle">צירופים מנצחים וחכמים</div>
+        </header>
+        
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-btn">🏠 דף הבית</a>
+            <a href="statistics.html" class="nav-btn">📊 סטטיסטיקות</a>
+            <a href="results.html" class="nav-btn">📋 תוצאות הגרלות</a>
+        </div>
+        
+        <div id="loadingMessage" class="loading">
+            🔄 טוען נתונים וחושב צירופים מנצחים...
+        </div>
+        
+        <div id="mainContent" style="display: none;">
+            <div class="stats-summary">
+                <div class="stats-title">📈 סיכום נתונים</div>
+                <div class="stats-grid">
+                    <div class="stats-item">
+                        <div class="stats-value" id="totalDraws">0</div>
+                        <div class="stats-label">סה"כ הגרלות</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-value" id="hottestNumber">-</div>
+                        <div class="stats-label">המספר הכי חם</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-value" id="hottestPair">-</div>
+                        <div class="stats-label">הזוג הכי נפוץ</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-value" id="avgSum">-</div>
+                        <div class="stats-label">ממוצע סכום</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="winning-combinations">
+                <div class="winning-title">🏆 צירופים מנצחים מומלצים</div>
+                <div class="winning-subtitle">מבוסס על הניתוח הסטטיסטי של הנתונים ההיסטוריים</div>
+                
+                <div class="combinations-grid">
+                    <div class="combination-card hot-combo">
+                        <div class="combo-type">🔥 צירוף חם</div>
+                        <div class="combo-subtitle">מבוסס על המספרים החמים ביותר</div>
+                        <div class="combo-numbers" id="hotCombo">
+                            <div class="loading-combo">מחשב...</div>
+                        </div>
+                        <button class="generate-combo-btn" onclick="generateHotCombo()">🎯 צור צירוף חם</button>
+                    </div>
+                    
+                    <div class="combination-card balanced-combo">
+                        <div class="combo-type">⚖️ צירוף מאוזן</div>
+                        <div class="combo-subtitle">שילוב של מספרים חמים וקרים</div>
+                        <div class="combo-numbers" id="balancedCombo">
+                            <div class="loading-combo">מחשב...</div>
+                        </div>
+                        <button class="generate-combo-btn" onclick="generateBalancedCombo()">🎲 צור צירוף מאוזן</button>
+                    </div>
+                    
+                    <div class="combination-card pattern-combo">
+                        <div class="combo-type">🧠 צירוף חכם</div>
+                        <div class="combo-subtitle">מבוסס על דפוסים וזוגות נפוצים</div>
+                        <div class="combo-numbers" id="patternCombo">
+                            <div class="loading-combo">מחשב...</div>
+                        </div>
+                        <button class="generate-combo-btn" onclick="generatePatternCombo()">🔍 צור צירוף חכם</button>
+                    </div>
+                    
+                    <div class="combination-card surprise-combo">
+                        <div class="combo-type">✨ צירוף הפתעה</div>
+                        <div class="combo-subtitle">מספרים שלא יצאו לאחרונה</div>
+                        <div class="combo-numbers" id="surpriseCombo">
+                            <div class="loading-combo">מחשב...</div>
+                        </div>
+                        <button class="generate-combo-btn" onclick="generateSurpriseCombo()">🎰 צור צירוף הפתעה</button>
+                    </div>
+                </div>
+                
+                <div class="strategy-explanation">
+                    <div class="strategy-title">📚 הסבר על האסטרטגיות</div>
+                    <div class="strategies-grid">
+                        <div class="strategy-item">
+                            <div class="strategy-name">🔥 אסטרטגיית החום</div>
+                            <div class="strategy-desc">בוחרת את המספרים שהופיעו הכי הרבה פעמים בהגרלות הקודמות. התיאוריה: "מספרים חמים נוטים להמשיך להופיע".</div>
+                        </div>
+                        <div class="strategy-item">
+                            <div class="strategy-name">⚖️ אסטרטגיית האיזון</div>
+                            <div class="strategy-desc">משלבת מספרים חמים עם מספרים קרים, זוגיים עם אי-זוגיים, וגבוהים עם נמוכים לאיזון מושלם.</div>
+                        </div>
+                        <div class="strategy-item">
+                            <div class="strategy-name">🧠 אסטרטגיית הדפוסים</div>
+                            <div class="strategy-desc">מנתחת זוגות ושלשות נפוצות ובונה צירופים המכילים מספרים שאוהבים להופיע יחד.</div>
+                        </div>
+                        <div class="strategy-item">
+                            <div class="strategy-name">✨ אסטרטגיית ההפתעה</div>
+                            <div class="strategy-desc">מתמקדת במספרים שלא יצאו זמן רב, בהנחה שהם "חייבים" לצאת בקרוב.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        let allResults = [];
+        let regularStats = {};
+        let strongStats = {};
+        let pairStats = {};
+        let tripleStats = {};
+
+        // טעינת הנתונים מקובץ האקסל
+        async function loadAndAnalyzeData() {
+            try {
+                const response = await fetch('Lotto.xlsx');
+                if (!response.ok) throw new Error('לא ניתן לטעון את קובץ הנתונים');
+                
+                const data = await response.arrayBuffer();
+                const workbook = XLSX.read(data, {type: 'array'});
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                
+                allResults = jsonData;
+                calculateStatistics();
+                calculateCombinations();
+                updateSummary();
+                initializeWinningCombos();
+                
+                document.getElementById('loadingMessage').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                
+            } catch (error) {
+                console.error('שגיאה בטעינת הנתונים:', error);
+                document.getElementById('loadingMessage').innerHTML = '❌ שגיאה בטעינת הנתונים. אנא ודא שקובץ Lotto.xlsx קיים.';
+            }
+        }
+
+        // חישוב סטטיסטיקות בסיסיות
+        function calculateStatistics() {
+            regularStats = {};
+            strongStats = {};
+            
+            // אתחול מספרים רגילים (1-37)
+            for (let i = 1; i <= 37; i++) {
+                regularStats[i] = 0;
+            }
+            
+            // אתחול מספרים חזקים (1-7)
+            for (let i = 1; i <= 7; i++) {
+                strongStats[i] = 0;
+            }
+            
+            // ספירת המספרים בכל הגרלה
+            allResults.forEach(result => {
+                // ספירת מספרים רגילים - העמודות נקראות '1', '2', '3', '4', '5', '6'
+                for (let i = 1; i <= 6; i++) {
+                    const num = parseInt(result[i.toString()]);
+                    if (num && !isNaN(num) && num >= 1 && num <= 37) {
+                        regularStats[num]++;
+                    }
+                }
+                
+                // ספירת מספר חזק - העמודה נקראת 'המספר החזק'
+                const strongNum = parseInt(result['המספר החזק']);
+                if (strongNum && !isNaN(strongNum) && strongNum >= 1 && strongNum <= 7) {
+                    strongStats[strongNum]++;
+                }
+            });
+        }
+
+        // חישוב צירופים נפוצים
+        function calculateCombinations() {
+            pairStats = {};
+            tripleStats = {};
+
+            allResults.forEach(result => {
+                const numbers = [];
+                
+                // איסוף המספרים מהעמודות '1', '2', '3', '4', '5', '6'
+                for (let i = 1; i <= 6; i++) {
+                    const num = parseInt(result[i.toString()]);
+                    if (num && !isNaN(num) && num >= 1 && num <= 37) {
+                        numbers.push(num);
+                    }
+                }
+                
+                // רק אם יש לנו בדיוק 6 מספרים
+                if (numbers.length === 6) {
+                    numbers.sort((a, b) => a - b);
+                    
+                    // חישוב זוגות
+                    for (let i = 0; i < numbers.length; i++) {
+                        for (let j = i + 1; j < numbers.length; j++) {
+                            const pair = `${numbers[i]}-${numbers[j]}`;
+                            pairStats[pair] = (pairStats[pair] || 0) + 1;
+                        }
+                    }
+                    
+                    // חישוב שלשות
+                    for (let i = 0; i < numbers.length; i++) {
+                        for (let j = i + 1; j < numbers.length; j++) {
+                            for (let k = j + 1; k < numbers.length; k++) {
+                                const triple = `${numbers[i]}-${numbers[j]}-${numbers[k]}`;
+                                tripleStats[triple] = (tripleStats[triple] || 0) + 1;
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // עדכון הסיכום
+        function updateSummary() {
+            document.getElementById('totalDraws').textContent = allResults.length;
+            
+            const sortedRegular = Object.entries(regularStats).sort((a, b) => b[1] - a[1]);
+            document.getElementById('hottestNumber').textContent = sortedRegular[0][0];
+            
+            const sortedPairs = Object.entries(pairStats).sort((a, b) => b[1] - a[1]);
+            if (sortedPairs.length > 0) {
+                document.getElementById('hottestPair').textContent = sortedPairs[0][0].replace('-', ', ');
+            }
+                        // חישוב ממוצע סכום
+            let totalSum = 0;
+            let validDraws = 0;
+            
+            allResults.forEach(result => {
+                let drawSum = 0;
+                let validNumbers = 0;
+                
+                for (let i = 1; i <= 6; i++) {
+                    const num = parseInt(result[i.toString()]);
+                    if (num && !isNaN(num) && num >= 1 && num <= 37) {
+                        drawSum += num;
+                        validNumbers++;
+                    }
+                }
+                
+                if (validNumbers === 6) {
+                    totalSum += drawSum;
+                    validDraws++;
+                }
+            });
+            
+            if (validDraws > 0) {
+                document.getElementById('avgSum').textContent = Math.round(totalSum / validDraws);
+            }
+        }
+
+        // פונקציות ליצירת צירופים מנצחים
+        function generateHotCombo() {
+            const hotNumbers = Object.entries(regularStats)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 12)
+                .map(([num]) => parseInt(num));
+            
+            const selectedNumbers = [];
+            while (selectedNumbers.length < 6) {
+                const randomIndex = Math.floor(Math.random() * Math.min(10, hotNumbers.length));
+                const number = hotNumbers[randomIndex];
+                if (!selectedNumbers.includes(number)) {
+                    selectedNumbers.push(number);
+                }
+            }
+            
+            const hotStrong = Object.entries(strongStats)
+                .sort((a, b) => b[1] - a[1])[0][0];
+            
+            displayCombo('hotCombo', selectedNumbers.sort((a,b) => a-b), hotStrong);
+        }
+
+        function generateBalancedCombo() {
+            const sortedRegular = Object.entries(regularStats)
+                .sort((a, b) => b[1] - a[1])
+                .map(([num]) => parseInt(num));
+            
+            const selectedNumbers = [];
+            
+            // 3 מספרים חמים
+            const hotNumbers = sortedRegular.slice(0, 12);
+            for (let i = 0; i < 3; i++) {
+                let num;
+                do {
+                    num = hotNumbers[Math.floor(Math.random() * hotNumbers.length)];
+                } while (selectedNumbers.includes(num));
+                selectedNumbers.push(num);
+            }
+            
+            // 2 מספרים בינוניים
+            const mediumNumbers = sortedRegular.slice(12, 25);
+            for (let i = 0; i < 2; i++) {
+                let num;
+                do {
+                    num = mediumNumbers[Math.floor(Math.random() * mediumNumbers.length)];
+                } while (selectedNumbers.includes(num));
+                selectedNumbers.push(num);
+            }
+            
+            // 1 מספר קר
+            const coldNumbers = sortedRegular.slice(25);
+            let num;
+            do {
+                num = coldNumbers[Math.floor(Math.random() * coldNumbers.length)];
+            } while (selectedNumbers.includes(num));
+            selectedNumbers.push(num);
+            
+            const strongNum = Math.floor(Math.random() * 7) + 1;
+            
+            displayCombo('balancedCombo', selectedNumbers.sort((a,b) => a-b), strongNum);
+        }
+
+        function generatePatternCombo() {
+            const selectedNumbers = [];
+            
+            // התחל עם הזוג הכי נפוץ
+            const topPairs = Object.entries(pairStats)
+                .sort((a, b) => b[1] - a[1]);
+            
+            if (topPairs.length > 0) {
+                const [pair] = topPairs[0];
+                const [num1, num2] = pair.split('-').map(n => parseInt(n));
+                selectedNumbers.push(num1, num2);
+            }
+            
+            // הוסף מספרים נוספים מזוגות נפוצים
+            for (const [pair] of topPairs.slice(1)) {
+                if (selectedNumbers.length >= 6) break;
+                
+                const [num1, num2] = pair.split('-').map(n => parseInt(n));
+                
+                if (!selectedNumbers.includes(num1) && selectedNumbers.length < 6) {
+                    selectedNumbers.push(num1);
+                }
+                if (!selectedNumbers.includes(num2) && selectedNumbers.length < 6) {
+                    selectedNumbers.push(num2);
+                }
+            }
+            
+            // השלם עם מספרים חמים
+            const hotNumbers = Object.entries(regularStats)
+                .sort((a, b) => b[1] - a[1])
+                .map(([num]) => parseInt(num));
+            
+            for (const num of hotNumbers) {
+                if (selectedNumbers.length >= 6) break;
+                if (!selectedNumbers.includes(num)) {
+                    selectedNumbers.push(num);
+                }
+            }
+            
+            const strongNum = parseInt(Object.entries(strongStats)
+                .sort((a, b) => b[1] - a[1])[0][0]);
+            
+            displayCombo('patternCombo', selectedNumbers.slice(0, 6).sort((a,b) => a-b), strongNum);
+        }
+
+        function generateSurpriseCombo() {
+            const coldNumbers = Object.entries(regularStats)
+                .sort((a, b) => a[1] - b[1])
+                .slice(0, 15)
+                .map(([num]) => parseInt(num));
+            
+            const selectedNumbers = [];
+            while (selectedNumbers.length < 6) {
+                const number = coldNumbers[Math.floor(Math.random() * coldNumbers.length)];
+                if (!selectedNumbers.includes(number)) {
+                    selectedNumbers.push(number);
+                }
+            }
+            
+            const coldStrong = Object.entries(strongStats)
+                .sort((a, b) => a[1] - b[1])[0][0];
+            
+            displayCombo('surpriseCombo', selectedNumbers.sort((a,b) => a-b), coldStrong);
+        }
+
+        function displayCombo(containerId, numbers, strongNumber) {
+            const container = document.getElementById(containerId);
+            
+            let html = '';
+            numbers.forEach(num => {
+                html += `<div class="combo-ball">${num}</div>`;
+            });
+            html += `<div class="combo-ball combo-strong">${strongNumber}</div>`;
+            
+            container.innerHTML = html;
+        }
+
+        // צור צירופים ראשוניים
+        function initializeWinningCombos() {
+            setTimeout(() => {
+                generateHotCombo();
+                generateBalancedCombo();
+                generatePatternCombo();
+                generateSurpriseCombo();
+            }, 500);
+        }
+
+        // טעינה כשהדף נטען
+        window.addEventListener('load', loadAndAnalyzeData);
+    </script>
+</body>
+</html>
