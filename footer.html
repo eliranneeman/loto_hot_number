@@ -36,7 +36,7 @@
   }
 <!-- כפתור התקנה -->
 <div style="text-align:center; margin-top:15px;">
-  <button id="installBtn" style="display:block; background:linear-gradient(45deg, #4CAF50, #45a049); color:white; border:none; padding:10px 20px; border-radius:25px; cursor:pointer; font-size:14px; font-weight:bold; box-shadow:0 2px 8px rgba(0,0,0,0.2); transition:all 0.3s ease;">
+  <button id="installBtn" style="display:none; background:linear-gradient(45deg, #4CAF50, #45a049); color:white; border:none; padding:10px 20px; border-radius:25px; cursor:pointer; font-size:14px; font-weight:bold; box-shadow:0 2px 8px rgba(0,0,0,0.2); transition:all 0.3s ease;">
     📲 התקן את האפליקציה
   </button>
 </div>
@@ -48,8 +48,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   if (!installBtn) return;
 
-  // תמיד גלוי
-  installBtn.style.display = "block";
+
 
   // לוגים לבדיקה
   console.log("Footer JS נטען, כפתור מוכן");
