@@ -146,12 +146,7 @@ function resetAccessibility() {
   document.body.style.fontSize = "";
 }
 
-// תיקון נוסף לניידים - מניעת zoom בלחיצה כפולה
-document.addEventListener('touchend', (e) => {
-  if (e.target.closest('.sidebar') || e.target.closest('.floating-accessibility')) {
-    e.preventDefault();
-  }
-});
+
 
 // וידוא שהתפריטים סגורים בהתחלה
 document.addEventListener('DOMContentLoaded', () => {
