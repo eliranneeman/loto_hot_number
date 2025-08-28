@@ -45,9 +45,14 @@
   background-color: #0f172a;
   transition: transform 0.3s ease;
   z-index: 1000;
-  overflow-y: auto; /* מאפשר גלילה אנכית */
+  overflow-y: hidden; /* מאפשר גלילה אנכית */
   height: 100vh; /* מגדיר את גובה התפריט לכל גובה המסך */
   padding-top: 60px; /* מפנה מקום לכפתור הפתיחה */
+}
+
+.scrollable-content {
+  height: calc(100vh - 120px); /* גובה הניתן לגלילה, מותאם לצורך */
+  overflow-y: auto; /* מאפשר גלילה רק בתוך האלמנט הזה */
 }
 
 .sidebar nav a {
