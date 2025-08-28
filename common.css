@@ -48,8 +48,9 @@
   overflow-y: scroll; /* מאפשר גלילה בתוך התפריט */
   transition: transform 0.3s ease;
   padding-top: 60px; /* מפנה מקום לכפתור הפתיחה */
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 20px; /* מזיז את התוכן מעל כפתורי הניווט */
   z-index: 1000;
-  padding-bottom: env(safe-area-inset-bottom); /* מזיז את התוכן מעל כפתורי הניווט */
+  -webkit-overflow-scrolling: touch;
 }
 
 
