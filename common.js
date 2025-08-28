@@ -47,7 +47,7 @@ function toggleLinks() {
 }
 
 function resetAccessibility() {
-  fontSize = 100;
-  document.body.style.fontSize = "100%";
-  document.body.classList.remove("high-contrast", "highlight-links");
+  document.body.classList.remove("high-contrast");
+  document.body.style.fontSize = "";
 }
+
