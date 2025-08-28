@@ -45,7 +45,7 @@
   right: -250px;
   background-color: #0f172a;
   overflow-x: hidden;
-  overflow-y: auto; /* מאפשר גלילה בתוך התפריט */
+  overflow-y: scroll; /* מאפשר גלילה בתוך התפריט */
   transition: transform 0.3s ease;
   padding-top: 60px; /* מפנה מקום לכפתור הפתיחה */
   z-index: 1000;
@@ -61,13 +61,13 @@
   text-decoration: none;
   color: #e5e7eb;
   font-size: 18px;
-  overflow-y: auto; /* מאפשר גלילה בתוך התפריט */
+  overflow-y: scroll; /* מאפשר גלילה בתוך התפריט */
   transition: background 0.2s;
 }
 
 .sidebar nav a:hover {
   background-color: #111827;
-  overflow-y: auto; /* מאפשר גלילה בתוך התפריט */
+  overflow-y: scroll; /* מאפשר גלילה בתוך התפריט */
   border-radius: 8px;
 }
 
