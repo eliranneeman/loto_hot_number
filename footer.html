@@ -3,17 +3,15 @@
     💰 יותר מנשמח לשמוע אם זכיתם בזכותינו 💰
   </p>
 
-  <!-- כפתור התקנה -->
   <div style="text-align:center; margin-top:15px;">
-    <button id="installBtn" style="display:block; background:linear-gradient(45deg, #4CAF50, #45a049); color:white; border:none; padding:10px 20px; border-radius:25px; cursor:pointer; font-size:14px; font-weight:bold; box-shadow:0 2px 8px rgba(0,0,0,0.2); transition:all 0.3s ease;">
+    <button id="installBtn" style="display:none; background:linear-gradient(45deg, #4CAF50, #45a049); color:white; border:none; padding:10px 20px; border-radius:25px; cursor:pointer; font-size:14px; font-weight:bold; box-shadow:0 2px 8px rgba(0,0,0,0.2); transition:all 0.3s ease;">
       📲 התקן את האפליקציה
     </button>
   </div>
 </footer>
 
-<!-- סקריפט התקנה -->
+<!-- Firebase Analytics -->
 <script type="module">
-  // Firebase / Analytics
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
 
@@ -32,50 +30,50 @@
   const analytics = getAnalytics(app);
 </script>
 
+<!-- Service Worker + PWA Install -->
 <script>
-  // Service Worker
+  // Service Worker Registration
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/service-worker.js")
       .then(() => console.log("Service Worker Registered"))
       .catch(err => console.error("Service Worker registration failed:", err));
   }
 
-  // פונקציית אתחול כפתור התקנה
- document.addEventListener("DOMContentLoaded", function() {
-  const btn = document.getElementById("installBtn");
-  if (!btn) return;
+  document.addEventListener("DOMContentLoaded", function() {
+    const btn = document.getElementById("installBtn");
+    if (!btn) return;
 
-  btn.style.display = "block"; // תמיד גלוי
-  let deferredPrompt;
+    btn.style.display = "block"; // תמיד גלוי
+    let deferredPrompt;
 
-  // לפני התקנה רשמית
-  window.addEventListener("beforeinstallprompt", function(e) {
-    e.preventDefault();
-    deferredPrompt = e;
-    btn.style.background = "#4CAF50"; // ירוק = מוכן להתקנה
+    // beforeinstallprompt
+    window.addEventListener("beforeinstallprompt", function(e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      btn.style.background = "#4CAF50"; // ירוק = מוכן להתקנה
+    });
+
+    // לחיצה על הכפתור
+    btn.addEventListener("click", async function() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice;
+        if (choice.outcome === "accepted") btn.style.display = "none";
+        deferredPrompt = null;
+      } else {
+        // הוראות ידניות
+        const ua = navigator.userAgent.toLowerCase();
+        let message = "להתקנת האפליקציה:\n- חפש בתפריט הדפדפן 'Install' או 'Add to Home Screen'";
+        if (ua.includes("safari") && !ua.includes("chrome")) message = "Safari:\n1. לחץ על ⬆️ Share\n2. Add to Home Screen";
+        else if (ua.includes("chrome") || ua.includes("edge") || ua.includes("brave")) message = "Chrome/Edge:\n1. לחץ על ⋮ Menu\n2. Install App";
+        else if (ua.includes("firefox")) message = "Firefox:\n1. לחץ על ☰ Menu\n2. Install";
+        alert(message);
+      }
+    });
+
+    // אחרי התקנה
+    window.addEventListener("appinstalled", function() {
+      btn.style.display = "none";
+    });
   });
-
-  // אירוע לחיצה
-  btn.addEventListener("click", async function() {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const choice = await deferredPrompt.userChoice;
-      if (choice.outcome === "accepted") btn.style.display = "none";
-      deferredPrompt = null;
-    } else {
-      // הוראות ידניות
-      const ua = navigator.userAgent.toLowerCase();
-      let message = "להתקנת האפליקציה:\n- חפש בתפריט הדפדפן 'Install' או 'Add to Home Screen'";
-      if (ua.includes("safari") && !ua.includes("chrome")) message = "Safari:\n1. לחץ על ⬆️ Share\n2. Add to Home Screen";
-      else if (ua.includes("chrome") || ua.includes("edge") || ua.includes("brave")) message = "Chrome/Edge:\n1. לחץ על ⋮ Menu\n2. Install App";
-      else if (ua.includes("firefox")) message = "Firefox:\n1. לחץ על ☰ Menu\n2. Install";
-      alert(message);
-    }
-  });
-
-  // אחרי התקנה
-  window.addEventListener("appinstalled", function() {
-    btn.style.display = "none";
-  });
-});
 </script>
