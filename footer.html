@@ -41,70 +41,41 @@
   }
 
   // פונקציית אתחול כפתור התקנה
-  function initInstallBtn() {
-    const installBtn = document.getElementById("installBtn");
+ document.addEventListener("DOMContentLoaded", function() {
+  const btn = document.getElementById("installBtn");
+  if (!btn) return;
 
-    if (!installBtn) {
-      // אם הכפתור עדיין לא נטען, נסה שוב אחרי 200ms
-      setTimeout(initInstallBtn, 200);
-      return;
-    }
+  btn.style.display = "block"; // תמיד גלוי
+  let deferredPrompt;
 
-    installBtn.style.display = "block";
-    console.log("installBtn נמצא ומוכן");
+  // לפני התקנה רשמית
+  window.addEventListener("beforeinstallprompt", function(e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    btn.style.background = "#4CAF50"; // ירוק = מוכן להתקנה
+  });
 
-    let deferredPrompt;
-
-    // לפני התקנה רשמית
-    window.addEventListener("beforeinstallprompt", (e) => {
-      console.log("beforeinstallprompt זוהה!");
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.style.background = "#4CAF50"; // ירוק = מוכן להתקנה רשמית
-    });
-
-    // לחיצה על הכפתור
-    installBtn.addEventListener("click", async function() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const choiceResult = await deferredPrompt.userChoice;
-        if (choiceResult.outcome === "accepted") {
-          console.log("התקנה אושרה");
-          installBtn.style.display = "none";
-        } else {
-          console.log("התקנה נדחתה");
-        }
-        deferredPrompt = null;
-      } else {
-        showManualInstructions();
-      }
-    });
-
-    // אחרי התקנה
-    window.addEventListener("appinstalled", () => {
-      console.log("האפליקציה הותקנה בהצלחה!");
-      installBtn.style.display = "none";
-    });
-
-    // הוראות ידניות לפי דפדפן
-    function showManualInstructions() {
+  // אירוע לחיצה
+  btn.addEventListener("click", async function() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      if (choice.outcome === "accepted") btn.style.display = "none";
+      deferredPrompt = null;
+    } else {
+      // הוראות ידניות
       const ua = navigator.userAgent.toLowerCase();
-      let message = "";
-
-      if (ua.includes("chrome") || ua.includes("edge") || ua.includes("brave")) {
-        message = `להתקנת האפליקציה:\n\n1. לחץ על ⋮ (תפריט) בפינה הימנית\n2. חפש "התקן אפליקציה" או "Install App"\n3. לחץ "התקן"\n\nאו:\n- הוסף לסימניות\n- פתח מסימניות לגישה מהירה`;
-      } else if (ua.includes("safari") && !ua.includes("chrome")) {
-        message = `להתקנה ב-Safari:\n\n1. לחץ על כפתור השיתוף ⬆️\n2. בחר "Add to Home Screen"\n3. לחץ "Add"`;
-      } else if (ua.includes("firefox")) {
-        message = `להתקנה ב-Firefox:\n\n1. לחץ על ☰ (תפריט)\n2. בחר "Install"\n\nאו הוסף לסימניות לגישה מהירה`;
-      } else {
-        message = `להתקנת האפליקציה:\n\n- חפש בתפריט הדפדפן אפשרות "Install" או "Add to Home Screen"\n- או הוסף לסימניות לגישה מהירה`;
-      }
-
+      let message = "להתקנת האפליקציה:\n- חפש בתפריט הדפדפן 'Install' או 'Add to Home Screen'";
+      if (ua.includes("safari") && !ua.includes("chrome")) message = "Safari:\n1. לחץ על ⬆️ Share\n2. Add to Home Screen";
+      else if (ua.includes("chrome") || ua.includes("edge") || ua.includes("brave")) message = "Chrome/Edge:\n1. לחץ על ⋮ Menu\n2. Install App";
+      else if (ua.includes("firefox")) message = "Firefox:\n1. לחץ על ☰ Menu\n2. Install";
       alert(message);
     }
-  }
+  });
 
-  // הפעלת פונקציית אתחול
-  initInstallBtn();
+  // אחרי התקנה
+  window.addEventListener("appinstalled", function() {
+    btn.style.display = "none";
+  });
+});
 </script>
