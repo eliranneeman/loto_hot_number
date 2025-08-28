@@ -38,17 +38,16 @@
 }
 
 .sidebar {
-  height: 100%;
-  width: 250px;
   position: fixed;
   top: 0;
   right: -250px;
+  width: 250px;
   background-color: #0f172a;
-  overflow-x: hidden;
-  overflow-y: auto; /* הוסף את השורה הזו */
   transition: transform 0.3s ease;
-  padding-top: 60px;
   z-index: 1000;
+  overflow-y: auto; /* מאפשר גלילה אנכית */
+  height: 100vh; /* מגדיר את גובה התפריט לכל גובה המסך */
+  padding-top: 60px; /* מפנה מקום לכפתור הפתיחה */
 }
 
 .sidebar nav a {
