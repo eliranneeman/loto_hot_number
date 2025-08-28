@@ -1,10 +1,28 @@
-<footer id="site-footer">
-  <nav>
-    <ul>
-      <li><a href="/privacy-policy.html">מדיניות פרטיות</a></li>
-      <li><a href="/terms.html">תנאי שימוש</a></li>
-      <li><a href="/cookies.html">מדיניות עוגיות</a></li>
-    </ul>
-  </nav>
-  <p>© 2025 Lottogun.com</p>
+<!-- footer.html -->
+<footer>
+  <p style="text-align:center; font-size:14px; color:#777;">
+    © כל הזכויות שמורות - האתר שלי
+  </p>
 </footer>
+
+<!-- Google Analytics / Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
+
+  // Firebase Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDewHgup8jkCbRJOKfcE8qJn96lO5ZPo_I",
+    authDomain: "loto-hot.firebaseapp.com",
+    databaseURL: "https://loto-hot-default-rtdb.firebaseio.com",
+    projectId: "loto-hot",
+    storageBucket: "loto-hot.firebasestorage.app",
+    messagingSenderId: "1078323335501",
+    appId: "1:1078323335501:web:77f214ff257f14d17d2704",
+    measurementId: "G-FR83RCV8Z8"
+  };
+
+  // Init Firebase + Analytics
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
