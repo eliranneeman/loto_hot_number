@@ -38,7 +38,7 @@
 }
 
 .sidebar {
-  height: 100vh;
+  height: (100vh-env(safe-area-inset-bottom));
   width: 250px;
   position: fixed;
   top: 0;
@@ -49,7 +49,6 @@
   transition: transform 0.3s ease;
   padding-top: 60px;
   z-index: 1000;
-  padding-bottom: env(safe-area-inset-bottom);
   
 }
 
