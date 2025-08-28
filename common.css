@@ -61,7 +61,6 @@
   text-decoration: none;
   color: #e5e7eb;
   font-size: 18px;
-    overflow-y: auto; /* מאפשר גלילה בתוך התפריט */
   transition: background 0.2s;
 }
 
