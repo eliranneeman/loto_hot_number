@@ -43,24 +43,34 @@ function initAccessibilityEvents() {
   const accessibilityClose = document.getElementById("accessibility-close");
   const floatingAccessibility = document.getElementById("floating-accessibility");
   
+  // וידוא שהחלון מוסתר בהתחלה
+  if (floatingAccessibility) {
+    floatingAccessibility.classList.remove('show');
+  }
+  
   if (accessibilityToggle && floatingAccessibility) {
-    accessibilityToggle.addEventListener('click', () => {
-      floatingAccessibility.classList.toggle('show');
+    accessibilityToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      console.log('פתיחת תפריט נגישות'); // לדיבוג
+      floatingAccessibility.classList.add('show');
     });
   }
   
   if (accessibilityClose && floatingAccessibility) {
-    accessibilityClose.addEventListener('click', () => {
+    accessibilityClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      console.log('סגירת תפריט נגישות'); // לדיבוג
       floatingAccessibility.classList.remove('show');
     });
   }
   
   // סגירה בלחיצה מחוץ לתפריט
   document.addEventListener('click', (e) => {
-    if (floatingAccessibility && 
-        !floatingAccessibility.contains(e.target) && 
-        !accessibilityToggle.contains(e.target)) {
-      floatingAccessibility.classList.remove('show');
+    if (floatingAccessibility && floatingAccessibility.classList.contains('show')) {
+      if (!floatingAccessibility.contains(e.target) && 
+          !accessibilityToggle.contains(e.target)) {
+        floatingAccessibility.classList.remove('show');
+      }
     }
   });
 }
@@ -89,13 +99,19 @@ document.addEventListener('click', (e) => {
     
     // טיפול בתפריט נגישות
     if (e.target.closest('#accessibility-toggle')) {
+        e.stopPropagation();
+        const floatingAccessibility = document.getElementById("floating-accessibility");
         if (floatingAccessibility) {
-            floatingAccessibility.classList.toggle('show');
+            console.log('פתיחת תפריט נגישות מ-event delegation'); // לדיבוג
+            floatingAccessibility.classList.add('show');
         }
     }
     
     if (e.target.closest('#accessibility-close')) {
+        e.stopPropagation();
+        const floatingAccessibility = document.getElementById("floating-accessibility");
         if (floatingAccessibility) {
+            console.log('סגירת תפריט נגישות מ-event delegation'); // לדיבוג
             floatingAccessibility.classList.remove('show');
         }
     }
@@ -150,6 +166,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (floatingAccessibility) {
       floatingAccessibility.classList.remove('show');
+      console.log('תפריט נגישות הוסתר בהתחלה'); // לדיבוג
     }
   }, 200);
 });
+
+// פונקציה נוספת לוודא שהחלון מוסתר גם לאחר טעינת התפריט
+setTimeout(() => {
+  const floatingAccessibility = document.getElementById("floating-accessibility");
+  if (floatingAccessibility) {
+    floatingAccessibility.classList.remove('show');
+  }
+}, 500);
