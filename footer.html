@@ -41,43 +41,77 @@
       .then(() => console.log("Service Worker Registered"))
       .catch(err => console.error("Service Worker registration failed:", err));
   }
+// PWA Install - גרסה מאולצת שעובדת תמיד
+let deferredPrompt;
+const installBtn = document.getElementById("installBtn");
 
-  // PWA Install Functionality
-  let deferredPrompt;
-  const installBtn = document.getElementById("installBtn");
+if (installBtn) {
+  // הצג את הכפתור תמיד
+  installBtn.style.display = "inline-block";
+  
+  // האזן ל-beforeinstallprompt
+  window.addEventListener("beforeinstallprompt", (e) => {
+    console.log("beforeinstallprompt event fired!");
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.style.background = "#4CAF50"; // ירוק = מוכן להתקנה
+  });
 
-  // רק אם הכפתור קיים (למקרה שהקוד רץ לפני שה-DOM נטען)
-  if (installBtn) {
-    window.addEventListener("beforeinstallprompt", (e) => {
-      console.log("beforeinstallprompt event fired");
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.style.display = "inline-block";
-    });
-
-    installBtn.addEventListener("click", async () => {
-      if (!deferredPrompt) return;
-      
-      installBtn.style.display = "none";
+  installBtn.addEventListener("click", async () => {
+    if (deferredPrompt) {
+      // יש prompt - השתמש בו
+      console.log("מתחיל התקנה רגילה...");
       deferredPrompt.prompt();
-      
       const choiceResult = await deferredPrompt.userChoice;
-      if (choiceResult.outcome === "accepted") {
-        console.log("המשתמש התקין את האפליקציה");
-      } else {
-        console.log("המשתמש סירב להתקנה");
-        // אפשר להציג שוב את הכפתור אחרי זמן מה
-        setTimeout(() => {
-          installBtn.style.display = "inline-block";
-        }, 30000); // 30 שניות
-      }
+      console.log("תוצאה:", choiceResult.outcome);
       deferredPrompt = null;
-    });
+    } else {
+      // אין prompt - הצג הוראות ידניות
+      console.log("אין beforeinstallprompt - הצג הוראות");
+      showManualInstallInstructions();
+    }
+  });
 
-    // הסתר את הכפתור אם האפליקציה כבר מותקנת
-    window.addEventListener("appinstalled", () => {
-      console.log("האפליקציה הותקנה בהצלחה!");
-      installBtn.style.display = "none";
-    });
+  // אם האפליקציה הותקנה
+  window.addEventListener("appinstalled", () => {
+    console.log("האפליקציה הותקנה!");
+    installBtn.style.display = "none";
+  });
+}
+
+function showManualInstallInstructions() {
+  const userAgent = navigator.userAgent;
+  let instructions = "";
+  
+  if (userAgent.includes("Chrome")) {
+    instructions = `
+בכדי להתקין:
+1. לחץ על ⋮ (3 נקודות) בפינה הימנית העליונה
+2. בחר "התקן לוטו AI..." או "Add to Home screen"
+3. לחץ "התקן"
+    `;
+  } else if (userAgent.includes("Safari")) {
+    instructions = `
+בכדי להתקין ב-Safari:
+1. לחץ על כפתור השיתוף ⬆️
+2. גלול למטה ובחר "Add to Home Screen"
+3. לחץ "Add"
+    `;
+  } else if (userAgent.includes("Edge")) {
+    instructions = `
+בכדי להתקין ב-Edge:
+1. לחץ על ⋯ (3 נקודות) בפינה הימנית העליונה  
+2. בחר "Apps" ואז "Install this site as an app"
+3. לחץ "Install"
+    `;
+  } else {
+    instructions = `
+בכדי להתקין:
+- חפש אפשרות "Install" או "Add to Home Screen" בתפריט הדפדפן
+- או הוסף את האתר לסימניות ופתח משם
+    `;
   }
+  
+  alert(instructions);
+}
 </script>
