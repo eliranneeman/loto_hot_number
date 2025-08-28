@@ -39,14 +39,17 @@
       .catch(err => console.error("Service Worker registration failed:", err));
   }
 
+   // מחכה שה־DOM יטען
   document.addEventListener("DOMContentLoaded", function() {
     const btn = document.getElementById("installBtn");
     if (!btn) return;
 
-    btn.style.display = "block"; // תמיד גלוי
+    // הופך את הכפתור לגלוי
+    btn.style.display = "block";
+
     let deferredPrompt;
 
-    // beforeinstallprompt
+    // תפיסת beforeinstallprompt אם קיים
     window.addEventListener("beforeinstallprompt", function(e) {
       e.preventDefault();
       deferredPrompt = e;
