@@ -153,11 +153,34 @@ body.high-contrast select {
 }
 
 /* טבלאות */
-body.high-contrast table,
+body.high-contrast table {
+  border: 1px solid #fff !important;
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
 body.high-contrast th,
 body.high-contrast td {
   border: 1px solid #fff !important;
-  background-color: transparent !important;
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* דריסת כל סגנונות הרקע של שורות הטבלה */
+body.high-contrast tr,
+body.high-contrast tr:nth-child(odd),
+body.high-contrast tr:nth-child(even),
+body.high-contrast tbody tr,
+body.high-contrast tbody tr:nth-child(odd),
+body.high-contrast tbody tr:nth-child(even) {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* דריסת hover על שורות */
+body.high-contrast tr:hover,
+body.high-contrast tbody tr:hover {
+  background-color: #333 !important;
   color: #fff !important;
 }
 
