@@ -1,7 +1,8 @@
 {
   "name": "לוטו AI",
   "short_name": "lottogun",
-  "start_url": "lottogun.com",
+  "start_url": "https://lottogun.com/",
+  "display_override": ["fullscreen", "minimal-ui"],
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1976d2",
