@@ -216,3 +216,10 @@ body:not(.high-contrast) {
   background: #f5f5f5;
   color: #333;
 }
+/* כללים חדשים עבור הדגשת קישורים */
+body.highlight-links a {
+    color: #ffff00; /* צבע צהוב זוהר */
+    background-color: #333; /* רקע כהה לניגודיות */
+    padding: 2px 4px;
+    border-radius: 3px;
+}
