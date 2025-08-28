@@ -61,11 +61,13 @@
   text-decoration: none;
   color: #e5e7eb;
   font-size: 18px;
+  overflow-y: auto; /* מאפשר גלילה בתוך התפריט */
   transition: background 0.2s;
 }
 
 .sidebar nav a:hover {
   background-color: #111827;
+  overflow-y: auto; /* מאפשר גלילה בתוך התפריט */
   border-radius: 8px;
 }
 
