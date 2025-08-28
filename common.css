@@ -38,7 +38,7 @@
 }
 
 .sidebar {
-  height: 100%;
+  height: max-height;
   width: 250px;
   position: fixed;
   top: 0;
