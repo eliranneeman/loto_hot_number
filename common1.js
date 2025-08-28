@@ -166,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 200);
 });
 
+/*
 // פונקציה נוספת לוודא שהחלון מוסתר גם לאחר טעינת התפריט
 setTimeout(() => {
   const floatingAccessibility = document.getElementById("floating-accessibility");
@@ -173,3 +174,4 @@ setTimeout(() => {
     floatingAccessibility.classList.remove('show');
   }
 }, 500);
+*/
