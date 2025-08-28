@@ -73,3 +73,31 @@
   cursor: pointer;
   z-index: 1002; /* Z-index גבוה יותר כדי שיופיע מעל כפתור הפתיחה */
 }
+
+.accessibility-menu {
+  position: fixed;
+  top: 100px;
+  right: 10px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.accessibility-menu button {
+  padding: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.high-contrast {
+  background: #000 !important;
+  color: #fff !important;
+}
+.highlight-links a {
+  text-decoration: underline !important;
+  font-weight: bold;
+}
