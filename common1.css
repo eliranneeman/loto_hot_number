@@ -1,0 +1,490 @@
+/* ===== תפריט צד מודרני ===== */
+.menu-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  font-size: 28px;
+  background-color: #0f172a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  cursor: pointer;
+  z-index: 1001;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+
+/* צבע הקטגוריות בתפריט */
+.menu-category h3 {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-align: center;
+    background: rgba(102, 126, 234, 0.1);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+/* אפקט מעבר עכבר על הכפתור */
+.menu-btn:hover {
+  background-color: #2d3748;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar {
+  height: 100vh;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  right: -250px;
+  background-color: #0f172a;
+  overflow-x: hidden;
+  overflow-y: scroll; /* מאלץ גלילה */
+  transition: transform 0.3s ease;
+  padding-top: 60px;
+  padding-bottom: 80px; /* ריווח גדול יותר בתחתית */
+  z-index: 1000;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #374151 #0f172a;
+  /* תיקון לגלילה במכשירים ניידים */
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
+
+/* עיצוב גלילה בכרום/ספארי */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #4b5563;
+}
+
+.sidebar nav a {
+  display: block;
+  padding: 16px 24px;
+  text-decoration: none;
+  color: #e5e7eb;
+  font-size: 18px;
+  transition: background 0.2s;
+}
+
+.sidebar nav a:hover {
+  background-color: #111827;
+  border-radius: 8px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  font-size: 30px;
+  color: #e5e7eb;
+  cursor: pointer;
+  z-index: 1002;
+}
+
+.accessibility-menu {
+  display: none; /* מוסתר - כעת נעביר לתחתית */
+}
+
+/* כללים חדשים עבור הדגשת קישורים */
+body.highlight-links a {
+    color: #ffff00;
+    background-color: #333;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+/* התאמות נגישות במצב מרחף */
+body.high-contrast .floating-accessibility {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+body.high-contrast .accessibility-toggle-btn {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+body.high-contrast .accessibility-btn {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid #000 !important;
+}
+
+body.high-contrast .floating-accessibility h4 {
+  color: #fff !important;
+}
+@media (max-height: 700px) {
+  .sidebar {
+    padding-top: 45px;
+    padding-bottom: 60px;
+  }
+  
+  .sidebar nav a {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  
+  .menu-category h3 {
+    font-size: 12px;
+    padding: 6px 10px;
+    margin-bottom: 6px;
+  }
+  
+  .accessibility-menu {
+    padding: 8px;
+    gap: 6px;
+  }
+  
+  .accessibility-menu button {
+    padding: 8px 6px;
+    font-size: 0.8em;
+  }
+}
+
+/* התאמות למכשירים עם מסך קטן מאוד */
+@media (max-height: 600px) {
+  .sidebar {
+    padding-top: 40px;
+    padding-bottom: 50px;
+  }
+  
+  .sidebar nav a {
+    padding: 8px 16px;
+    font-size: 15px;
+  }
+  
+  .menu-category h3 {
+    margin-bottom: 4px;
+    font-size: 11px;
+  }
+  
+  .accessibility-menu button {
+    padding: 6px 4px;
+    font-size: 0.75em;
+  }
+}
+
+/* התאמות לאייפון עם Safe Area */
+@supports (padding: max(0px)) {
+  .sidebar {
+    padding-bottom: max(80px, calc(80px + env(safe-area-inset-bottom)));
+  }
+}
+
+/* הוספת overflow מפורש לניידים */
+@media (pointer: coarse) {
+  .sidebar {
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+  }
+}
+
+/* ===== מצב ניגודיות גבוהה - מתוקן ===== */
+body.high-contrast {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* טקסטים כלליים - מתוקן */
+body.high-contrast h1,
+body.high-contrast h2,
+body.high-contrast h3,
+body.high-contrast h4,
+body.high-contrast h5,
+body.high-contrast h6,
+body.high-contrast p,
+body.high-contrast span,
+body.high-contrast div,
+body.high-contrast li {
+  color: #fff !important;
+  background-color: transparent !important;
+}
+
+/* קישורים - מתוקן */
+body.high-contrast a {
+  color: #ffff00 !important;
+  text-decoration: underline !important;
+  background-color: transparent !important;
+}
+
+body.high-contrast a:hover {
+  color: #fff !important;
+  background-color: #333 !important;
+}
+
+/* כפתורים - מתוקן */
+body.high-contrast button {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+  font-weight: bold !important;
+}
+
+body.high-contrast button:hover {
+  background-color: #ffff00 !important;
+  color: #000 !important;
+  border-color: #ffff00 !important;
+}
+
+/* שדות טקסט */
+body.high-contrast input,
+body.high-contrast textarea,
+body.high-contrast select {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+/* טבלאות */
+body.high-contrast table {
+  border: 1px solid #fff !important;
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+body.high-contrast th,
+body.high-contrast td {
+  border: 1px solid #fff !important;
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* דריסת כל סגנונות הרקע של שורות הטבלה */
+body.high-contrast tr,
+body.high-contrast tr:nth-child(odd),
+body.high-contrast tr:nth-child(even),
+body.high-contrast tbody tr,
+body.high-contrast tbody tr:nth-child(odd),
+body.high-contrast tbody tr:nth-child(even) {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* דריסת hover על שורות */
+body.high-contrast tr:hover,
+body.high-contrast tbody tr:hover {
+  background-color: #333 !important;
+  color: #fff !important;
+}
+
+/* כרטיסים ותיבות */
+body.high-contrast .card,
+body.high-contrast .box,
+body.high-contrast .container {
+  background-color: #111 !important;
+  border: 1px solid #fff !important;
+  color: #fff !important;
+}
+
+/* תפריט במצב ניגודיות גבוהה */
+body.high-contrast .sidebar {
+  background-color: #000 !important;
+  border-left: 2px solid #fff !important;
+}
+
+body.high-contrast .menu-btn {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+body.high-contrast .accessibility-menu button {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+/* איפוס נגישות - ללא שינוי */
+body:not(.high-contrast) {
+  background: #f5f5f5;
+  color: #333;
+}
+
+/* ===== תפריט נגישות מרחף בתחתית ===== */
+.floating-accessibility {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(200px);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  z-index: 2000;
+  transition: all 0.4s ease-in-out;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 90vw;
+  width: 320px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.floating-accessibility.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+
+.accessibility-toggle-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  z-index: 2001;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accessibility-toggle-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.accessibility-close-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ff4757;
+  color: white;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  z-index: 2002;
+}
+
+.accessibility-close-btn:hover {
+  background: #ff3838;
+  transform: scale(1.1);
+}
+
+.floating-accessibility-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.floating-accessibility h4 {
+  color: white;
+  text-align: center;
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.accessibility-btn {
+  padding: 12px 8px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.accessibility-btn:hover {
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.accessibility-btn:active {
+  transform: translateY(0);
+}
+
+/* כפתור איפוס מיוחד */
+.accessibility-btn.reset {
+  grid-column: 1 / -1;
+  background: rgba(255, 255, 255, 0.8);
+  color: #ff4757;
+  font-weight: bold;
+}
+
+.accessibility-btn.reset:hover {
+  background: white;
+  color: #ff3838;
+}
+
+/* התאמות למסכים קטנים */
+@media (max-width: 480px) {
+  .floating-accessibility {
+    width: calc(100vw - 30px);
+    padding: 12px;
+    bottom: 90px;
+  }
+  
+  .accessibility-toggle-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    bottom: 15px;
+    left: 15px;
+  }
+  
+  .floating-accessibility-content {
+    gap: 8px;
+  }
+  
+  .accessibility-btn {
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+  
+  .accessibility-close-btn {
+    top: -8px;
+    right: -8px;
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
+  }
+}
