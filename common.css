@@ -53,10 +53,7 @@
 }
 
 
-.scrollable-content {
-  height: calc(100vh - 120px); /* גובה הניתן לגלילה, מותאם לצורך */
-  overflow-y: auto; /* מאפשר גלילה רק בתוך האלמנט הזה */
-}
+
 
 .sidebar nav a {
   display: block;
