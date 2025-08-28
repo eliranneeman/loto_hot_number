@@ -48,11 +48,11 @@
   background-color: 
 #0f172a;
   overflow-x: hidden;
-  overflow-y: auto; / מאפשר גלילה בתוך התפריט /
+  overflow-y: auto; /* מאפשר גלילה בתוך התפריט */
   transition: transform 0.3s ease;
-  padding-top: 60px; / מפנה מקום לכפתור הפתיחה /
+  padding-top: 60px; /* מפנה מקום לכפתור הפתיחה */
   z-index: 1000;
-  padding-bottom: env(safe-area-inset-bottom); / מזיז את התוכן מעל כפתורי הניווט */
+  padding-bottom: env(safe-area-inset-bottom); /* מזיז את התוכן מעל כפתורי הניווט */
 }
 
 .sidebar nav a {
@@ -127,7 +127,7 @@ body.high-contrast li {
   background-color: transparent !important;
 }
 
-/* קישורים - מתוקן /
+/* קישורים - מתוקן */
 body.high-contrast a {
   color: 
 #ffff00 !important; / צהוב בוהק על רקע שחור */
