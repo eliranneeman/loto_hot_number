@@ -1,21 +1,49 @@
 {
   "name": "לוטו AI",
-  "short_name": "lottogun",
-  "start_url": "/",
-  "display_override": ["fullscreen", "minimal-ui"],
+  "short_name": "LottoGun",
+  "description": "האפליקציה הטובה ביותר למספרים חמים ללוטו",
+  "start_url": "./",
   "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#4CAF50",
   "background_color": "#ffffff",
-  "theme_color": "#1976d2",
+  "scope": "/",
+  "lang": "he",
+  "dir": "rtl",
+  "categories": ["games", "entertainment"],
   "icons": [
     {
       "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512", 
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png", 
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "מספרים חמים",
+      "short_name": "חמים",
+      "description": "צפה במספרים החמים",
+      "url": "./",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     }
   ]
 }
