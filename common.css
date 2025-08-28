@@ -45,6 +45,7 @@
   right: -250px;
   background-color: #0f172a;
   overflow-x: hidden;
+  overflow-y: auto; /* הוסף את השורה הזו */
   transition: transform 0.3s ease;
   padding-top: 60px;
   z-index: 1000;
