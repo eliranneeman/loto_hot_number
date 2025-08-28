@@ -1,8 +1,15 @@
 <!-- footer.html -->
 <footer>
   <p style="text-align:center; font-size:14px; color:#777;">
-  💰  יותר מנשמח לשמוע אם זכיתם בזכותינו 💰
+    💰 יותר מנשמח לשמוע אם זכיתם בזכותינו 💰
   </p>
+  
+  <!-- כפתור התקנת PWA -->
+  <div style="text-align:center; margin-top:15px;">
+    <button id="installBtn" style="display:none; background:linear-gradient(45deg, #4CAF50, #45a049); color:white; border:none; padding:10px 20px; border-radius:25px; cursor:pointer; font-size:14px; font-weight:bold; box-shadow:0 2px 8px rgba(0,0,0,0.2); transition:all 0.3s ease;">
+      📲 התקן את האפליקציה
+    </button>
+  </div>
 </footer>
 
 <!-- Google Analytics / Firebase -->
@@ -28,8 +35,49 @@
 </script>
 
 <script>
+  // Service Worker Registration
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/service-worker.js")
-      .then(() => console.log("Service Worker Registered"));
+      .then(() => console.log("Service Worker Registered"))
+      .catch(err => console.error("Service Worker registration failed:", err));
+  }
+
+  // PWA Install Functionality
+  let deferredPrompt;
+  const installBtn = document.getElementById("installBtn");
+
+  // רק אם הכפתור קיים (למקרה שהקוד רץ לפני שה-DOM נטען)
+  if (installBtn) {
+    window.addEventListener("beforeinstallprompt", (e) => {
+      console.log("beforeinstallprompt event fired");
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = "inline-block";
+    });
+
+    installBtn.addEventListener("click", async () => {
+      if (!deferredPrompt) return;
+      
+      installBtn.style.display = "none";
+      deferredPrompt.prompt();
+      
+      const choiceResult = await deferredPrompt.userChoice;
+      if (choiceResult.outcome === "accepted") {
+        console.log("המשתמש התקין את האפליקציה");
+      } else {
+        console.log("המשתמש סירב להתקנה");
+        // אפשר להציג שוב את הכפתור אחרי זמן מה
+        setTimeout(() => {
+          installBtn.style.display = "inline-block";
+        }, 30000); // 30 שניות
+      }
+      deferredPrompt = null;
+    });
+
+    // הסתר את הכפתור אם האפליקציה כבר מותקנת
+    window.addEventListener("appinstalled", () => {
+      console.log("האפליקציה הותקנה בהצלחה!");
+      installBtn.style.display = "none";
+    });
   }
 </script>
