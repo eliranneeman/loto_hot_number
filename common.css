@@ -99,7 +99,7 @@
 /* מצב ניגודיות גבוהה */
 body.high-contrast {
   background-color: #000 !important;
-  color: #000 !important;
+  color: #fff !important;
 }
 
 /* טקסטים כלליים */
