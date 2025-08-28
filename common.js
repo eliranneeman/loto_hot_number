@@ -140,7 +140,6 @@ function toggleLinks() {
 }
 
 function resetAccessibility() {
-  fontSize = 100;
   document.body.classList.remove("high-contrast");
   document.body.classList.remove("highlight-links");
   document.body.style.fontSize = "";
