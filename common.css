@@ -1,3 +1,4 @@
+
 /* ===== תפריט צד מודרני ===== */
 .menu-btn {
   position: fixed;
@@ -45,11 +46,11 @@
   right: -250px;
   background-color: #0f172a;
   overflow-x: hidden;
-  overflow-y: scroll; /* מאפשר גלילה בתוך התפריט */
+  overflow-y: auto; /* מאפשר גלילה בתוך התפריט */
   transition: transform 0.3s ease;
   padding-top: 60px; /* מפנה מקום לכפתור הפתיחה */
-  padding-bottom: env(safe-area-inset-bottom); /* מזיז את התוכן מעל כפתורי הניווט */
   z-index: 1000;
+  padding-bottom: env(safe-area-inset-bottom); /* מזיז את התוכן מעל כפתורי הניווט */
 }
 
 
@@ -61,13 +62,11 @@
   text-decoration: none;
   color: #e5e7eb;
   font-size: 18px;
-  overflow-y: scroll; /* מאפשר גלילה בתוך התפריט */
   transition: background 0.2s;
 }
 
 .sidebar nav a:hover {
   background-color: #111827;
-  overflow-y: scroll; /* מאפשר גלילה בתוך התפריט */
   border-radius: 8px;
 }
 
@@ -229,4 +228,4 @@ body.highlight-links a {
     background-color: #333; /* רקע כהה לניגודיות */
     padding: 2px 4px;
     border-radius: 3px;
-}
+}ן
