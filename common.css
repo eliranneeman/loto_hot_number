@@ -50,7 +50,6 @@
   padding-top: 60px; /* מפנה מקום לכפתור הפתיחה */
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 20px; /* מזיז את התוכן מעל כפתורי הניווט */
   z-index: 1000;
-  -webkit-overflow-scrolling: touch;
 }
 
 
