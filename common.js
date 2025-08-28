@@ -121,12 +121,12 @@ document.addEventListener('click', (e) => {
 let fontSize = 100;
 
 function increaseFont() {
-  fontSize += 10;
+  fontSize += 5;
   document.body.style.fontSize = fontSize + "%";
 }
 
 function decreaseFont() {
-  fontSize -= 10;
+  fontSize -= 5;
   if (fontSize < 50) fontSize = 50; // מניעת טקסט קטן מדי
   document.body.style.fontSize = fontSize + "%";
 }
