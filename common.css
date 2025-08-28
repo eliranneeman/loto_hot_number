@@ -49,6 +49,8 @@
   transition: transform 0.3s ease;
   padding-top: 60px;
   z-index: 1000;
+  padding-bottom: env(safe-area-inset-bottom);
+  
 }
 
 
