@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-      <link rel="stylesheet" href="/common.css">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2154227955978159"
+  <link rel="stylesheet" href="/common.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2154227955978159"
      crossorigin="anonymous"></script>
 
-<meta name="google-adsense-account" content="ca-pub-2154227955978159">
-      
-      <meta charset="UTF-8">
+  <meta name="google-adsense-account" content="ca-pub-2154227955978159">
+  <meta charset="UTF-8">
   <title>צור קשר - LottoGun</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
@@ -62,17 +61,33 @@
   </style>
 </head>
 <body>
-    <script src="/common.js" defer></script>
+  <script src="/common.js" defer></script>
+
   <div class="container">
     <h1>צור קשר</h1>
     <p>נשמח לשמוע מכם! מלאו את הטופס ונחזור אליכם בהקדם.</p>
     
-    <form action="mailto:lottogun.office@gmail.com" method="post" enctype="text/plain">
-      <input type="text" name="name" placeholder="שם מלא" required>
-      <input type="email" name="email" placeholder="אימייל" required>
-      <textarea name="message" rows="6" placeholder="ההודעה שלך..." required></textarea>
+    <form id="contactForm">
+      <input type="text" id="name" placeholder="שם מלא" required>
+      <input type="email" id="email" placeholder="אימייל" required>
+      <textarea id="message" rows="6" placeholder="ההודעה שלך..." required></textarea>
       <button type="submit">שלח</button>
     </form>
   </div>
+
+  <script>
+    document.getElementById("contactForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const name = encodeURIComponent(document.getElementById("name").value);
+      const email = encodeURIComponent(document.getElementById("email").value);
+      const message = encodeURIComponent(document.getElementById("message").value);
+
+      const subject = encodeURIComponent("פנייה מאתר LottoGun");
+      const body = `שם: ${name}%0Aאימייל: ${email}%0Aהודעה: ${message}`;
+
+      window.location.href = `mailto:lottogun.office@gmail.com?subject=${subject}&body=${body}`;
+    });
+  </script>
 </body>
 </html>
