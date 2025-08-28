@@ -38,18 +38,18 @@
 }
 
 .sidebar {
-  height: (100vh-env(safe-area-inset-bottom));
+  height: 100vh; /* ממלא את כל גובה המסך */
   width: 250px;
   position: fixed;
   top: 0;
   right: -250px;
   background-color: #0f172a;
   overflow-x: hidden;
-  overflow-y: auto; /* וודא שהשורה הזו קיימת */
+  overflow-y: auto; /* מאפשר גלילה בתוך התפריט */
   transition: transform 0.3s ease;
-  padding-top: 60px;
+  padding-top: 60px; /* מפנה מקום לכפתור הפתיחה */
   z-index: 1000;
-  
+  padding-bottom: env(safe-area-inset-bottom); /* מזיז את התוכן מעל כפתורי הניווט */
 }
 
 
