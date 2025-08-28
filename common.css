@@ -94,12 +94,12 @@
 }
 
 .accessibility-menu button:hover {
-  background: #556cd6;
+  background: #000;
 }
 /* מצב ניגודיות גבוהה */
 body.high-contrast {
   background-color: #000 !important;
-  color: #fff !important;
+  color: #000 !important;
 }
 
 /* טקסטים כלליים */
@@ -120,9 +120,9 @@ body.high-contrast a {
 
 /* כפתורים */
 body.high-contrast button {
-  background-color: #fff !important;
+  background-color: #000 !important;
   color: #000 !important;
-  border: 1px solid #fff !important;
+  border: 1px solid #000 !important;
 }
 
 /* איפוס נגישות */
