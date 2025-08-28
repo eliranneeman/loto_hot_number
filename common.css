@@ -2,20 +2,20 @@
 .menu-btn {
   position: fixed;
   top: 16px;
-  right: 16px; /* מיקום הכפתור בפינה הימנית העליונה */
+  right: 16px;
   font-size: 28px;
-  /* שינויים לעיצוב הכפתור */
-  background-color: #0f172a; /* צבע רקע כהה */
-  color: #fff; /* צבע טקסט לבן */
+  background-color: #0f172a;
+  color: #fff;
   border: none;
-  border-radius: 8px; /* פינות מעוגלות */
-  padding: 10px 15px; /* מרווח פנימי */
+  border-radius: 8px;
+  padding: 10px 15px;
   cursor: pointer;
   z-index: 1001;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* הוספת צל */
-  transition: all 0.3s ease-in-out; /* הוספת מעבר חלק לכל המאפיינים */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
 }
-/*צבע הקטגוריות בתפריט*/
+
+/* צבע הקטגוריות בתפריט */
 .menu-category h3 {
     color: #fff;
     font-size: 14px;
@@ -32,9 +32,9 @@
 
 /* אפקט מעבר עכבר על הכפתור */
 .menu-btn:hover {
-  background-color: #2d3748; /* צבע כהה יותר במעבר עכבר */
-  transform: translateY(-2px); /* הזזה קלה כלפי מעלה */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* צל עמוק יותר */
+  background-color: #2d3748;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 .sidebar {
@@ -42,7 +42,7 @@
   width: 250px;
   position: fixed;
   top: 0;
-  right: -250px; /* התפריט מוסתר מחוץ למסך מימין */
+  right: -250px;
   background-color: #0f172a;
   overflow-x: hidden;
   transition: transform 0.3s ease;
@@ -67,13 +67,12 @@
 .close-btn {
   position: absolute;
   top: 16px;
-  left: 16px; /* מיקום הכפתור בצד השמאלי של התפריט */
+  left: 16px;
   font-size: 30px;
   color: #e5e7eb;
   cursor: pointer;
-  z-index: 1002; /* Z-index גבוה יותר כדי שיופיע מעל כפתור הפתיחה */
+  z-index: 1002;
 }
-
 
 .accessibility-menu {
   display: flex;
@@ -94,38 +93,102 @@
 }
 
 .accessibility-menu button:hover {
-  background: #000;
-}
-/* מצב ניגודיות גבוהה */
-body.high-contrast {
-  background-color: #000 !important;
-  color: #000 !important;
+  background: #5a6fd8;
 }
 
-/* טקסטים כלליים */
+/* ===== מצב ניגודיות גבוהה - מתוקן ===== */
+body.high-contrast {
+  background-color: #000 !important;
+  color: #fff !important; /* שינוי מ-#000 ל-#fff */
+}
+
+/* טקסטים כלליים - מתוקן */
 body.high-contrast h1,
 body.high-contrast h2,
 body.high-contrast h3,
+body.high-contrast h4,
+body.high-contrast h5,
+body.high-contrast h6,
 body.high-contrast p,
 body.high-contrast span,
-body.high-contrast div {
+body.high-contrast div,
+body.high-contrast li {
+  color: #fff !important;
+  background-color: transparent !important;
+}
+
+/* קישורים - מתוקן */
+body.high-contrast a {
+  color: #ffff00 !important; /* צהוב בוהק על רקע שחור */
+  text-decoration: underline !important;
+  background-color: transparent !important;
+}
+
+body.high-contrast a:hover {
+  color: #fff !important;
+  background-color: #333 !important;
+}
+
+/* כפתורים - מתוקן */
+body.high-contrast button {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+  font-weight: bold !important;
+}
+
+body.high-contrast button:hover {
+  background-color: #ffff00 !important;
+  color: #000 !important;
+  border-color: #ffff00 !important;
+}
+
+/* שדות טקסט */
+body.high-contrast input,
+body.high-contrast textarea,
+body.high-contrast select {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+/* טבלאות */
+body.high-contrast table,
+body.high-contrast th,
+body.high-contrast td {
+  border: 1px solid #fff !important;
+  background-color: transparent !important;
   color: #fff !important;
 }
 
-/* קישורים */
-body.high-contrast a {
-  color: #ff0 !important; /* צהוב – קריא על שחור */
-  text-decoration: underline;
+/* כרטיסים ותיבות */
+body.high-contrast .card,
+body.high-contrast .box,
+body.high-contrast .container {
+  background-color: #111 !important;
+  border: 1px solid #fff !important;
+  color: #fff !important;
 }
 
-/* כפתורים */
-body.high-contrast button {
+/* תפריט במצב ניגודיות גבוהה */
+body.high-contrast .sidebar {
   background-color: #000 !important;
-  color: #000 !important;
-  border: 1px solid #000 !important;
+  border-left: 2px solid #fff !important;
 }
 
-/* איפוס נגישות */
+body.high-contrast .menu-btn {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+body.high-contrast .accessibility-menu button {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+/* איפוס נגישות - ללא שינוי */
 body:not(.high-contrast) {
   background: #f5f5f5;
   color: #333;
