@@ -89,5 +89,14 @@
       window.location.href = `mailto:lottogun.office@gmail.com?subject=${subject}&body=${body}`;
     });
   </script>
+  <div id="footer"></div>
+
+<script>
+  fetch("footer.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    });
+</script>
 </body>
 </html>
