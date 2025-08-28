@@ -97,34 +97,35 @@
   background: #556cd6;
 }
 /* מצב ניגודיות גבוהה */
-.high-contrast {
+body.high-contrast {
   background-color: #000 !important;
   color: #fff !important;
 }
 
-.high-contrast * {
-  background: transparent !important;
+/* טקסטים כלליים */
+body.high-contrast h1,
+body.high-contrast h2,
+body.high-contrast h3,
+body.high-contrast p,
+body.high-contrast span,
+body.high-contrast div {
   color: #fff !important;
-  border-color: #fff !important;
 }
 
-/* כפתורים במצב ניגודיות */
-.high-contrast button,
-.high-contrast a {
-  background: #fff !important;
+/* קישורים */
+body.high-contrast a {
+  color: #ff0 !important; /* צהוב – קריא על שחור */
+  text-decoration: underline;
+}
+
+/* כפתורים */
+body.high-contrast button {
+  background-color: #fff !important;
   color: #000 !important;
   border: 1px solid #fff !important;
 }
 
-/* קישורים מודגשים */
-.highlight-links a {
-  outline: 2px solid yellow;
-  background-color: #222;
-  padding: 2px 4px;
-  border-radius: 3px;
-}
-
-/* איפוס מצב נגישות */
+/* איפוס נגישות */
 body:not(.high-contrast) {
   background: #f5f5f5;
   color: #333;
