@@ -25,3 +25,29 @@ document.addEventListener('click', (e) => {
         }
     }
 });
+
+let fontSize = 100;
+
+function increaseFont() {
+  fontSize += 10;
+  document.body.style.fontSize = fontSize + "%";
+}
+
+function decreaseFont() {
+  fontSize -= 10;
+  document.body.style.fontSize = fontSize + "%";
+}
+
+function toggleContrast() {
+  document.body.classList.toggle("high-contrast");
+}
+
+function toggleLinks() {
+  document.body.classList.toggle("highlight-links");
+}
+
+function resetAccessibility() {
+  fontSize = 100;
+  document.body.style.fontSize = "100%";
+  document.body.classList.remove("high-contrast", "highlight-links");
+}
