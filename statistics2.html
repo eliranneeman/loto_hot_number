@@ -718,7 +718,7 @@ for (let i = 0; i < numbers.length; i++) {
             // הצגת זוגות נפוצים
             const topPairs = Object.entries(pairStats)
                 .filter(([pair, count]) => count <= 15)
-                .sort((a, b) => b[1] - a[1]).slice(0, 15);
+                .sort((a, b) => b[1] - a[1]);
             
             
             
