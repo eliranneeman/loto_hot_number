@@ -292,6 +292,7 @@ body.high-contrast tbody tr:hover {
 /* כרטיסים ותיבות */
 body.high-contrast .card,
 body.high-contrast .box,
+body.high-contrasr .item-label,
 body.high-contrast .container {
   background-color: #111 !important;
   border: 1px solid #fff !important;
