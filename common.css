@@ -321,6 +321,7 @@ body.high-contrast .accessibility-menu button {
 /* מצב ניגודיות גבוהה - כרטיסים ותוכן פנימי */
 body.high-contrast .stats-grid,
 body.high-contrast .score-legend,
+body.high-contrast score-item score-very-hot,
 body.high-contrast .month-numbers,
 body.high-contrast .explanation-content {
   background-color: #000 !important;  /* רקע כהה */
