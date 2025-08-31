@@ -1,106 +1,135 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>תובנות וצירופים נוספים — LottoGun</title>
+  <meta charset="UTF-8">
+  <title>סטטיסטיקות צירופים</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; direction: rtl; }
-    .container { max-width: 800px; margin: auto; padding: 20px; }
-    h1 { text-align: center; margin-bottom: 20px; }
-    .section { background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    .section h2 { margin-top: 0; color: #333; font-size: 1.3em; }
-    .combo-list { display: flex; flex-wrap: wrap; gap: 10px; }
-    .combo-item { background: linear-gradient(to top, #4CAF50, #81C784); color: #fff; padding: 8px 12px; border-radius: 8px; font-weight: bold; font-size: 0.95em; }
-    .frequency { font-size: 0.8em; display: block; margin-top: 3px; color: #222; background: rgba(255,255,255,0.7); border-radius: 6px; padding: 1px 4px; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      margin: 20px;
+    }
+    .loading {
+      font-size: 20px;
+      margin: 20px;
+      color: #444;
+    }
+    .section {
+      margin: 30px auto;
+      width: 90%;
+      max-width: 900px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+    }
+    .card {
+      background: #4CAF50;
+      color: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>תובנות וצירופים נוספים</h1>
-
-    <div class="section">
-      <h2>זוגות שחזרו עד 15 פעמים</h2>
-      <div class="combo-list" id="pairs"></div>
-    </div>
-
-    <div class="section">
-      <h2>שלשות שחזרו עד 15 פעמים</h2>
-      <div class="combo-list" id="triplets"></div>
-    </div>
-
-    <div class="section">
-      <h2>רביעיות שחזרו עד 2 פעמים</h2>
-      <div class="combo-list" id="quads"></div>
-    </div>
-
-    <div class="section">
-      <h2>חמישיות שחזרו עד 2 פעמים</h2>
-      <div class="combo-list" id="quints"></div>
-    </div>
-  </div>
+  <h1>תובנות וצירופים נוספים</h1>
+  <div id="loading" class="loading">טוען נתונים...</div>
+  <div id="results"></div>
 
   <script>
-    (async function(){
-      const resp = await fetch('/Lotto.xlsx');
-      const arr = await resp.arrayBuffer();
-      const wb = XLSX.read(arr, { type: 'array' });
-      const ws = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(ws, { header:1 });
+    async function loadExcel() {
+      try {
+        const response = await fetch("Lotto.xlsx");
+        const arrayBuffer = await response.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: "array" });
+        const sheetName = workbook.SheetNames[0];
+        const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
+        return data;
+      } catch (err) {
+        document.getElementById("loading").innerText = "שגיאה בטעינת הקובץ!";
+        console.error(err);
+      }
+    }
 
-      const freq = { pairs:{}, triplets:{}, quads:{}, quints:{} };
+    function getCombinations(arr, size) {
+      function helper(start, combo) {
+        if (combo.length === size) {
+          results.push(combo);
+          return;
+        }
+        for (let i = start; i < arr.length; i++) {
+          helper(i + 1, combo.concat(arr[i]));
+        }
+      }
+      let results = [];
+      helper(0, []);
+      return results;
+    }
 
-      rows.forEach(r => {
-        const nums = r.filter(n => typeof n === 'number');
-        const len = nums.length;
-        for (let i=0; i<len; i++) {
-          for (let j=i+1; j<len; j++) {
-            const p = [nums[i], nums[j]].sort((a,b)=>a-b).join('-');
-            freq.pairs[p] = (freq.pairs[p]||0) + 1;
-          }
-          for (let j=i+1; j<len; j++) {
-            for (let k=j+1; k<len; k++) {
-              const t = [nums[i], nums[j], nums[k]].sort((a,b)=>a-b).join('-');
-              freq.triplets[t] = (freq.triplets[t]||0) + 1;
-            }
-            for (let k=j+1; k<len; k++) {
-              for (let l=k+1; l<len; l++) {
-                const q = [nums[i], nums[j], nums[k], nums[l]].sort((a,b)=>a-b).join('-');
-                freq.quads[q] = (freq.quads[q]||0) + 1;
-              }
-            }
-          }
-          for (let j=i+1; j<len; j++) {
-            for (let k=j+1; k<len; k++) {
-              for (let l=k+1; l<len; l++) {
-                for (let m=l+1; m<len; m++) {
-                  const qu = [nums[i], nums[j], nums[k], nums[l], nums[m]].sort((a,b)=>a-b).join('-');
-                  freq.quints[qu] = (freq.quints[qu]||0) + 1;
-                }
-              }
-            }
-          }
+    function countCombinations(data, size, maxTimes) {
+      let counts = {};
+      data.forEach(row => {
+        let numbers = row.filter(x => !isNaN(x)).map(Number);
+        if (numbers.length >= size) {
+          let combos = getCombinations(numbers, size);
+          combos.forEach(c => {
+            let key = c.sort((a,b)=>a-b).join("-");
+            counts[key] = (counts[key] || 0) + 1;
+          });
         }
       });
+      return Object.entries(counts)
+        .filter(([k,v]) => v <= maxTimes)
+        .sort((a,b) => b[1] - a[1]);
+    }
 
-      const filterAndRender = (dataObj, limit, containerId) => {
-        const arr = Object.entries(dataObj).filter(([_,c]) => c <= limit);
-        arr.sort((a,b) => b[1] - a[1]);
-        const cont = document.getElementById(containerId);
-        arr.forEach(([combo, count]) => {
-          const div = document.createElement('div');
-          div.className = 'combo-item';
-          div.innerHTML = `${combo} <span class="frequency">(${count} פעמים)</span>`;
-          cont.appendChild(div);
-        });
-      };
+    function renderSection(title, data) {
+      let section = document.createElement("div");
+      section.className = "section";
+      let h2 = document.createElement("h2");
+      h2.innerText = title;
+      section.appendChild(h2);
 
-      filterAndRender(freq.pairs, 15, 'pairs');
-      filterAndRender(freq.triplets, 15, 'triplets');
-      filterAndRender(freq.quads, 2, 'quads');
-      filterAndRender(freq.quints, 2, 'quints');
-    })();
+      let cards = document.createElement("div");
+      cards.className = "cards";
+      data.forEach(([combo, times]) => {
+        let card = document.createElement("div");
+        card.className = "card";
+        card.innerText = combo + " (" + times + " פעמים)";
+        cards.appendChild(card);
+      });
+      section.appendChild(cards);
+      return section;
+    }
+
+    async function main() {
+      let data = await loadExcel();
+      if (!data) return;
+
+      document.getElementById("loading").style.display = "none";
+
+      let resultsDiv = document.getElementById("results");
+
+      let pairs = countCombinations(data, 2, 15);
+      let triples = countCombinations(data, 3, 15);
+      let fours = countCombinations(data, 4, 2);
+      let fives = countCombinations(data, 5, 2);
+
+      resultsDiv.appendChild(renderSection("זוגות שחזרו עד 15 פעמים", pairs));
+      resultsDiv.appendChild(renderSection("שלשות שחזרו עד 15 פעמים", triples));
+      resultsDiv.appendChild(renderSection("רביעיות שחזרו עד 2 פעמים", fours));
+      resultsDiv.appendChild(renderSection("חמישיות שחזרו עד 2 פעמים", fives));
+    }
+
+    main();
   </script>
 </body>
 </html>
