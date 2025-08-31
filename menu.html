@@ -1,80 +1,79 @@
-<div class="custom-sidebar">
+<button id="menu-open-btn" class="menu-btn" aria-label="פתח תפריט">☰</button>
 
-  <button id="menu-open-btn" class="menu-btn" aria-label="פתח תפריט">☰</button>
+<!-- תפריט נגישות מרחף -->
+<button id="accessibility-toggle" class="accessibility-toggle-btn" aria-label="פתח תפריט נגישות">♿</button>
 
-  <div class="overlay" id="overlay"></div>
-
-  <div id="mySidebar" class="sidebar" aria-hidden="true">
-    <span id="menu-close-btn" class="close-btn" aria-label="סגור תפריט">&times;</span>
-    <nav>
-      <div class="menu-category">
-        <h3>נגישות</h3>
-      </div>
-
-      <div class="accessibility-menu">
-        <button onclick="increaseFont()">A+</button>
-        <button onclick="decreaseFont()">A-</button>
-        <button onclick="toggleContrast()">ניגודיות</button>
-        <button onclick="toggleLinks()">סימון קישורים</button>
-        <button onclick="resetAccessibility()">איפוס</button>
-      </div>
-
-      <div class="menu-category">
-        <h3>דפים עיקריים</h3>
-      </div>
-      <a href="/">
-        <span class="emoji">🏠</span>
-        דף הבית
-      </a>
-
-      <a href="/results.html">
-        <span class="emoji">📊</span>
-        תוצאות העבר ובדיקת צירופים
-      </a>
-
-      <a href="/statistics.html">
-        <span class="emoji">📈</span>
-        חישוב סטטיסטיקות
-      </a>
-
-      <div class="menu-category">
-        <h3>מידע ומדיניות</h3>
-      </div>
-
-      <a href="/about.html">
-        <span class="emoji">ℹ️</span>
-        אודות האתר
-      </a>
-
-      <a href="/privacy-policy.html">
-        <span class="emoji">🔒</span>
-        מדיניות פרטיות
-      </a>
-
-      <a href="/terms.html">
-        <span class="emoji">📋</span>
-        תנאי שימוש
-      </a>
-
-      <a href="/Accessibility-statment.html">
-        <span class="emoji">♿</span>
-        מדיניות נגישות
-      </a>
-
-      <a href="/cookies.html">
-        <span class="emoji">🍪</span>
-        מדיניות עוגיות
-      </a>
-
-      <div class="menu-category">
-        <h3>יצירת קשר</h3>
-      </div>
-
-      <a href="/contact.html">
-        <span class="emoji">✉️</span>
-        צור קשר
-      </a>
-    </nav>
+<div id="floating-accessibility" class="floating-accessibility">
+  <button class="accessibility-close-btn" id="accessibility-close">&times;</button>
+  <h4>כלי נגישות</h4>
+  <div class="floating-accessibility-content">
+    <button class="accessibility-btn" onclick="increaseFont()">A+ הגדל טקסט</button>
+    <button class="accessibility-btn" onclick="decreaseFont()">A- הקטן טקסט</button>
+    <button class="accessibility-btn" onclick="toggleContrast()">ניגודיות גבוהה</button>
+    <button class="accessibility-btn" onclick="toggleLinks()">הדגש קישורים</button>
+    <button class="accessibility-btn reset" onclick="resetAccessibility()">איפוס הכל</button>
   </div>
+</div>
 
+<div class="overlay" id="overlay"></div>
+
+<div id="mySidebar" class="sidebar" aria-hidden="true">
+  <span id="menu-close-btn" class="close-btn" aria-label="סגור תפריט">&times;</span>
+  <nav>
+    <div class="menu-category">
+      <h3>דפים עיקריים</h3>
+    </div>
+    <a href="/">
+      <span class="emoji">🏠</span>
+      דף הבית
+    </a>
+    
+    <a href="/results.html">
+      <span class="emoji">📊</span>
+      תוצאות העבר ובדיקת צירופים
+    </a>
+    
+    <a href="/statistics.html">
+      <span class="emoji">📈</span>
+      חישוב סטטיסטיקות
+    </a>
+
+    <div class="menu-category">
+      <h3>מידע ומדיניות</h3>
+    </div>
+    
+    <a href="/about.html">
+      <span class="emoji">ℹ️</span>
+      אודות האתר
+    </a>
+    
+    <a href="/privacy-policy.html">
+      <span class="emoji">🔒</span>
+      מדיניות פרטיות
+    </a>
+    
+    <a href="/terms.html">
+      <span class="emoji">📋</span>
+      תנאי שימוש
+    </a>
+
+    <a href="/Accessibility-statment.html">
+      <span class="emoji">📋</span>
+      מדיניות נגישות
+    </a>
+    
+    <a href="/cookies.html">
+      <span class="emoji">🍪</span>
+      מדיניות עוגיות
+    </a>
+
+    <div class="menu-category">
+      <h3>יצירת קשר</h3>
+    </div>
+    
+    <a href="/contact.html">
+      <span class="emoji">✉️</span>
+      צור קשר
+    </a>
+  </nav>
 </div>
