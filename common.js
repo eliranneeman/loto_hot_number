@@ -20,24 +20,22 @@ fetch("/menu1.html")
 
 // פונקציה להתקנת מאזיני אירועים לתפריט
 function initMenuEvents(wrapper) {
-  const menuOpenBtn = wrapper.querySelector("#menu-open-btn");
-  const menuCloseBtn = wrapper.querySelector("#menu-close-btn");
-  const sidebar = wrapper.querySelector("#mySidebar");
+ const menuOpenBtn = document.getElementById("menu-open-btn");
+const menuCloseBtn = document.getElementById("menu-close-btn");
+const sidebar = document.getElementById("mySidebar");
+const overlay = document.getElementById("overlay");
 
-  if (menuOpenBtn && sidebar) {
-    menuOpenBtn.addEventListener("click", () => {
-      sidebar.style.transform = "translateX(-250px)";
-      sidebar.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-    });
-  }
+menuOpenBtn.addEventListener("click", () => {
+  sidebar.classList.add("open");
+  overlay.style.display = "block";
+  document.body.style.overflow = "hidden";
+});
 
-  if (menuCloseBtn && sidebar) {
-    menuCloseBtn.addEventListener("click", () => {
-      sidebar.style.transform = "translateX(0)";
-      sidebar.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "auto";
-    });
+menuCloseBtn.addEventListener("click", () => {
+  sidebar.classList.remove("open");
+  overlay.style.display = "none";
+  document.body.style.overflow = "auto";
+});
   }
 }
 
