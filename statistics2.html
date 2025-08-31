@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>סטטיסטיקות צירופים - מתוך Excel</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .combo-section {
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    .combo-title {
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .chart-container {
+      position: relative;
+      height: 400px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>צירופי מספרים סטטיסטיים (מתוך Excel)</h1>
+
+    <div class="combo-section">
+      <div class="combo-title">זוגות שחזרו עד 15 פעמים</div>
+      <div class="chart-container"><canvas id="pairsChart"></canvas></div>
+    </div>
+
+    <div class="combo-section">
+      <div class="combo-title">שלשות שחזרו עד 15 פעמים</div>
+      <div class="chart-container"><canvas id="tripletsChart"></canvas></div>
+    </div>
+
+    <div class="combo-section">
+      <div class="combo-title">רביעיות שחזרו עד 2 פעמים</div>
+      <div class="chart-container"><canvas id="quadsChart"></canvas></div>
+    </div>
+
+    <div class="combo-section">
+      <div class="combo-title">חמישיות שחזרו עד 2 פעמים</div>
+      <div class="chart-container"><canvas id="quintsChart"></canvas></div>
+    </div>
+  </div>
+
+  <script>
+    async function loadExcel() {
+      // שים את הקובץ lotto.xlsx בתיקיית root באתר
+      const response = await fetch('/lotto.xlsx');
+      const data = await response.arrayBuffer();
+      const workbook = XLSX.read(data, { type: 'array' });
+
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+      processData(json);
+    }
+
+    function processData(rows) {
+      const pairs = {}, triplets = {}, quads = {}, quints = {};
+
+      rows.forEach(row => {
+        const nums = row.filter(n => typeof n === "number");
+
+        // זוגות
+        for (let i=0; i<nums.length; i++) {
+          for (let j=i+1; j<nums.length; j++) {
+            const key = [nums[i], nums[j]].sort((a,b)=>a-b).join("-");
+            pairs[key] = (pairs[key] || 0) + 1;
+          }
+        }
+
+        // שלשות
+        for (let i=0; i<nums.length; i++) {
+          for (let j=i+1; j<nums.length; j++) {
+            for (let k=j+1; k<nums.length; k++) {
+              const key = [nums[i], nums[j], nums[k]].sort((a,b)=>a-b).join("-");
+              triplets[key] = (triplets[key] || 0) + 1;
+            }
+          }
+        }
+
+        // רביעיות
+        for (let i=0; i<nums.length; i++) {
+          for (let j=i+1; j<nums.length; j++) {
+            for (let k=j+1; k<nums.length; k++) {
+              for (let l=k+1; l<nums.length; l++) {
+                const key = [nums[i], nums[j], nums[k], nums[l]].sort((a,b)=>a-b).join("-");
+                quads[key] = (quads[key] || 0) + 1;
+              }
+            }
+          }
+        }
+
+        // חמישיות
+        for (let i=0; i<nums.length; i++) {
+          for (let j=i+1; j<nums.length; j++) {
+            for (let k=j+1; k<nums.length; k++) {
+              for (let l=k+1; l<nums.length; l++) {
+                for (let m=l+1; m<nums.length; m++) {
+                  const key = [nums[i], nums[j], nums[k], nums[l], nums[m]].sort((a,b)=>a-b).join("-");
+                  quints[key] = (quints[key] || 0) + 1;
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // סינון לפי הדרישות שלך
+      const filteredPairs = Object.entries(pairs).filter(([_,c]) => c <= 15);
+      const filteredTriplets = Object.entries(triplets).filter(([_,c]) => c <= 15);
+      const filteredQuads = Object.entries(quads).filter(([_,c]) => c <= 2);
+      const filteredQuints = Object.entries(quints).filter(([_,c]) => c <= 2);
+
+      renderChart(filteredPairs, "pairsChart", "זוגות");
+      renderChart(filteredTriplets, "tripletsChart", "שלשות");
+      renderChart(filteredQuads, "quadsChart", "רביעיות");
+      renderChart(filteredQuints, "quintsChart", "חמישיות");
+    }
+
+    function renderChart(data, canvasId, label) {
+      const ctx = document.getElementById(canvasId).getContext("2d");
+      const labels = data.map(([combo]) => combo);
+      const counts = data.map(([_, count]) => count);
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: `מספר הופעות (${label})`,
+            data: counts,
+            backgroundColor: 'rgba(76, 175, 80, 0.7)',
+            borderColor: 'rgba(76, 175, 80, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              ticks: { autoSkip: true, maxRotation: 90, minRotation: 45 }
+            },
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    loadExcel();
+  </script>
+</body>
+</html>
