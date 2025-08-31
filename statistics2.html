@@ -561,7 +561,7 @@ for (let i = 0; i < numbers.length; i++) {
         function displayInsights() {
             // הצגת זוגות נפוצים
             const topPairs = Object.entries(pairStats)
-                .filter(([pair, count]) => count <= 15)
+                .filter(([pair, count]) => count <= 20)
                 .sort((a, b) => b[1] - a[1]);
             
             
@@ -576,7 +576,7 @@ for (let i = 0; i < numbers.length; i++) {
 
             // הצגת שלשות נפוצות
             const topTriples = Object.entries(tripleStats)
-                .filter(([triple, count]) => count <= 15)
+                .filter(([triple, count]) => count <= 5)
                 .sort((a, b) => b[1] - a[1]);
                 
             
