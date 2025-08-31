@@ -559,64 +559,70 @@ for (let i = 0; i < numbers.length; i++) {
 
                 // הצגת תובנות וצירופים
         function displayInsights() {
-            // הצגת זוגות נפוצים
-            const topPairs = Object.entries(pairStats)
-                .filter(([pair, count]) => count <= 20)
-                .sort((a, b) => b[1] - a[1]);
-            
-            
-            
-            const pairsContainer = document.getElementById('popularPairs');
-            pairsContainer.innerHTML = topPairs.map(([pair, count]) => 
-                `<div class="combination-item">
-                    <span class="combination-numbers">${pair.replace('-', ', ')}</span>
-                    <span class="combination-count">${count} פעמים</span>
-                </div>`
-            ).join('');
+    // הצגת זוגות נפוצים (שחוזרים לפחות 20 פעמים)
+    const topPairs = Object.entries(pairStats)
+        .filter(([pair, count]) => count >= 20)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 100); // מגביל ל-100 הראשונים
+    
+    console.log('Pairs found:', topPairs.length);
+    
+    const pairsContainer = document.getElementById('popularPairs');
+    pairsContainer.innerHTML = topPairs.map(([pair, count]) => 
+        `<div class="combination-item">
+            <span class="combination-numbers">${pair.replace('-', ', ')}</span>
+            <span class="combination-count">${count} פעמים</span>
+        </div>`
+    ).join('');
 
-            // הצגת שלשות נפוצות
-            const topTriples = Object.entries(tripleStats)
-                .filter(([triple, count]) => count <= 5)
-                .sort((a, b) => b[1] - a[1]);
-                
-            
-            const triplesContainer = document.getElementById('popularTriples');
-            triplesContainer.innerHTML = topTriples.map(([triple, count]) => 
-                `<div class="combination-item">
-                    <span class="combination-numbers">${triple.replace(/-/g, ', ')}</span>
-                    <span class="combination-count">${count} פעמים</span>
-                </div>`
-            ).join('');
+    // הצגת שלשות נפוצות (שחוזרות לפחות 5 פעמים)
+    const topTriples = Object.entries(tripleStats)
+        .filter(([triple, count]) => count >= 5)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 100);
+    
+    console.log('Triples found:', topTriples.length);
+    
+    const triplesContainer = document.getElementById('popularTriples');
+    triplesContainer.innerHTML = topTriples.map(([triple, count]) => 
+        `<div class="combination-item">
+            <span class="combination-numbers">${triple.replace(/-/g, ', ')}</span>
+            <span class="combination-count">${count} פעמים</span>
+        </div>`
+    ).join('');
 
-            // הצגת רביעיות נפוצות
-            const topQuads = Object.entries(quadStats)
-                .filter(([quad, count]) => count <= 2)
-                .sort((a, b) => b[1] - a[1]);
-                
-            
-            const quadsContainer = document.getElementById('popularQuads');
-            quadsContainer.innerHTML = topQuads.map(([quad, count]) => 
-                `<div class="combination-item">
-                    <span class="combination-numbers">${quad.replace(/-/g, ', ')}</span>
-                    <span class="combination-count">${count} פעמים</span>
-                </div>`
-            ).join('');
+    // הצגת רביעיות נפוצות (שחוזרות לפחות 2 פעמים)
+    const topQuads = Object.entries(quadStats)
+        .filter(([quad, count]) => count >= 2)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 100);
+    
+    console.log('Quads found:', topQuads.length);
+    
+    const quadsContainer = document.getElementById('popularQuads');
+    quadsContainer.innerHTML = topQuads.map(([quad, count]) => 
+        `<div class="combination-item">
+            <span class="combination-numbers">${quad.replace(/-/g, ', ')}</span>
+            <span class="combination-count">${count} פעמים</span>
+        </div>`
+    ).join('');
 
-                    // הצגת חמישיות שחזרו עד פעמיים
-const topQuints = Object.entries(quintStats)
-    .filter(([quint, count]) => count <= 2)
-    .sort((a, b) => b[1] - a[1]);
+    // הצגת חמישיות שחוזרות לפחות 2 פעמים
+    const topQuints = Object.entries(quintStats)
+        .filter(([quint, count]) => count >= 2)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 100);
+    
+    console.log('Quints found:', topQuints.length);
 
-const quintsContainer = document.getElementById('popularQuints');
-quintsContainer.innerHTML = topQuints.map(([quint, count]) => 
-    `<div class="combination-item">
-        <span class="combination-numbers">${quint.replace(/-/g, ', ')}</span>
-        <span class="combination-count">${count} פעמים</span>
-    </div>`
-).join('');
-            
+    const quintsContainer = document.getElementById('popularQuints');
+    quintsContainer.innerHTML = topQuints.map(([quint, count]) => 
+        `<div class="combination-item">
+            <span class="combination-numbers">${quint.replace(/-/g, ', ')}</span>
+            <span class="combination-count">${count} פעמים</span>
+        </div>`
+    ).join('');
         }
-
 
         
 
