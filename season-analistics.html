@@ -2,7 +2,15 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <link rel="manifest" href="/manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/common.css">
+ 	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2154227955978159"
+     crossorigin="anonymous"></script>
+
+    <meta name="google-adsense-account" content="ca-pub-2154227955978159">
+    
     <title>LottoGun - ניתוח עונתיות מספרים</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
@@ -285,6 +293,7 @@
     </style>
 </head>
 <body>
+    <script src="/common.js" defer></script>
     <div class="container">
         <header>
             <div class="logo">📊 LottoGun</div>
@@ -599,5 +608,12 @@
         // הפעלת הטעינה כשהדף נטען
         window.addEventListener('DOMContentLoaded', loadAndCalculateStats);
     </script>
+    <script>
+  fetch("footer.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    });
+</script>
 </body>
 </html>
