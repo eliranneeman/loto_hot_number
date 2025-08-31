@@ -175,6 +175,25 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 200);
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  // ניגודיות
+  if (localStorage.getItem("highContrast") === "true") {
+    document.body.classList.add("high-contrast");
+  }
+
+  // הדגשת קישורים
+  if (localStorage.getItem("highlightLinks") === "true") {
+    document.body.classList.add("highlight-links");
+  }
+
+  // גודל טקסט
+  const savedSize = localStorage.getItem("fontSize");
+  if (savedSize) {
+    document.body.style.fontSize = savedSize + "%";
+  }
+});
+
+
 /*
 // פונקציה נוספת לוודא שהחלון מוסתר גם לאחר טעינת התפריט
 setTimeout(() => {
