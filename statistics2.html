@@ -72,7 +72,7 @@
   <script>
     async function loadExcel() {
       // שים את הקובץ lotto.xlsx בתיקיית root באתר
-      const response = await fetch('/lotto.xlsx');
+      const response = await fetch('/Lotto.xlsx');
       const data = await response.arrayBuffer();
       const workbook = XLSX.read(data, { type: 'array' });
 
