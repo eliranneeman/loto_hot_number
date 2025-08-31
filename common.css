@@ -95,31 +95,34 @@
   z-index: 1002;
 }
 
-.custom-sidebar .accessibility-menu {
-  display: none;
+/* ❌ מחקתי את .custom-sidebar .accessibility-menu שהיה חוסם */
+
+/* ✅ כפתור נגישות צף */
+#accessibilityBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #0f172a;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 2000; /* מעל התפריט */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  transition: background 0.3s ease;
+}
+#accessibilityBtn:hover {
+  background-color: #2d3748;
 }
 
-/* כללים להדגשת קישורים בתפריט */
-.custom-sidebar.highlight-links a {
-  color: #ffff00;
-  background-color: #333;
-  padding: 2px 4px;
-  border-radius: 3px;
+/* מצב ניגודיות גבוהה */
+.high-contrast {
+  background-color: #000 !important;
+  color: #fff !important;
 }
-
-/* מדיה קווריז – מותאם רק לתפריט */
-@media (max-height: 700px) {
-  .custom-sidebar .sidebar {
-    padding-top: 45px;
-    padding-bottom: 60px;
-  }
-  .custom-sidebar .sidebar nav a {
-    padding: 10px 20px;
-    font-size: 16px;
-  }
-  .custom-sidebar .menu-category h3 {
-    font-size: 12px;
-    padding: 6px 10px;
-    margin-bottom: 6px;
-  }
+.high-contrast a {
+  color: #ff0 !important;
 }
