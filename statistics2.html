@@ -631,7 +631,7 @@ for (let i = 0; i < numbers.length; i++) {
     const topPairs = Object.entries(pairStats)
         .filter(([pair, count]) => count >= 20)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 200); // מגביל ל-100 הראשונים
+        .slice(0, 300); // מגביל ל-100 הראשונים
     
     console.log('Pairs found:', topPairs.length);
     
