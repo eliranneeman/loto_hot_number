@@ -351,54 +351,61 @@
         
         
         
-.combination-buttons {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin: 20px 0;
-    flex-wrap: wrap;
+/* עיצוב עבור 2 צירופים בשורה */
+#popularPairs,
+#popularTriples, 
+#popularQuads,
+#popularQuints {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    padding: 10px;
 }
 
-.combo-btn {
+.combination-item {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border: 2px solid #e0e8f0;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 80px;
+}
+
+.combination-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    border-color: #667eea;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 25px;
-    cursor: pointer;
+}
+
+.combination-numbers {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2d3748;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.combination-item:hover .combination-numbers {
+    color: white;
+}
+
+.combination-count {
     font-size: 14px;
+    color: #718096;
     font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    text-align: center;
 }
 
-.combo-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+.combination-item:hover .combination-count {
+    color: #e2e8f0;
 }
-
-.combo-btn.active {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-}
-
-.combo-btn.active:hover {
-    background: linear-gradient(135deg, #ee5a52 0%, #ff6b6b 100%);
-    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-}
-
-.insights-grid {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-.insight-card {
-    width: 100%;
-    max-width: 800px;
-}
+        
         
 
         
@@ -427,15 +434,33 @@
             .logo {
                 font-size: 2em;
             }
-              .combination-buttons {
-        flex-direction: column;
-        align-items: center;
+                  #popularPairs,
+    #popularTriples, 
+    #popularQuads,
+    #popularQuints {
+        grid-template-columns: 1fr;
+        gap: 10px;
     }
     
-    .combo-btn {
-        width: 100%;
-        max-width: 250px;
+    .combination-numbers {
+        font-size: 16px;
     }
+    
+    .combination-item {
+        padding: 12px;
+        min-height: 70px;
+    }
+        }
+        /* עיצוב עבור מסכים קטנים מאוד */
+@media (max-width: 480px) {
+    .combination-numbers {
+        font-size: 14px;
+    }
+    
+    .combination-count {
+        font-size: 12px;
+    }
+}
         }
     </style>
 </head>
