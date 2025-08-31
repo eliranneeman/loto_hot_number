@@ -519,3 +519,277 @@ body:not(.high-contrast) {
     font-size: 18px;
   }
 }
+
+
+
+
+/* הוסף את הקוד הזה לקובץ ה-CSS של התפריט שלך */
+/* תוספות למצב ניגודיות גבוהה עבור עמוד הצירופים */
+
+/* ==== צירופים וטבלאות נתונים ==== */
+body.high-contrast .combination-item {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+}
+
+body.high-contrast .combination-numbers {
+  color: #ffff00 !important;  /* מספרי הצירופים בצהוב בולט */
+  background: #000 !important;
+  text-shadow: none !important;
+}
+
+body.high-contrast .combination-stats {
+  background: #000 !important;
+}
+
+body.high-contrast .combination-count {
+  color: #00ff00 !important;  /* מספר ההופעות בירוק בולט */
+  background: #000 !important;
+}
+
+body.high-contrast .combination-percentage {
+  background: #fff !important;
+  color: #000 !important;
+  border: 1px solid #fff !important;
+}
+
+/* ==== רשת הצירופים ==== */
+body.high-contrast .combinations-grid {
+  background: #000 !important;
+}
+
+/* ==== סטטיסטיקות ==== */
+body.high-contrast .stats-summary {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+}
+
+body.high-contrast .stat-item {
+  background: #111 !important;
+  border: 1px solid #fff !important;
+  color: #fff !important;
+}
+
+body.high-contrast .stat-number {
+  color: #ffff00 !important;  /* מספרים בסטטיסטיקות בצהוב */
+}
+
+body.high-contrast .stat-label {
+  color: #fff !important;
+}
+
+body.high-contrast .stat-explanation {
+  color: #ccc !important;
+}
+
+body.high-contrast .coverage-text {
+  color: #00ff00 !important;  /* טקסט כיסוי בירוק */
+  background: #000 !important;
+}
+
+/* ==== כפתורי צירופים ==== */
+body.high-contrast .combo-btn {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+body.high-contrast .combo-btn:hover {
+  background: #ffff00 !important;
+  color: #000 !important;
+  border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast .combo-btn.active {
+  background: #00ff00 !important;
+  color: #000 !important;
+  border: 2px solid #00ff00 !important;
+}
+
+/* ==== בקרות ופילטרים ==== */
+body.high-contrast .controls-section {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+}
+
+body.high-contrast .filter-group label {
+  color: #fff !important;
+}
+
+body.high-contrast .filter-group input,
+body.high-contrast .filter-group select {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+body.high-contrast .apply-filters-btn {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+body.high-contrast .apply-filters-btn:hover {
+  background: #ffff00 !important;
+  color: #000 !important;
+  border: 2px solid #ffff00 !important;
+}
+
+/* ==== כרטיסי סוגי צירופים ==== */
+body.high-contrast .type-card {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+  border-top: 4px solid #ffff00 !important;
+}
+
+body.high-contrast .type-pairs { 
+  border-top-color: #ff0000 !important; 
+}
+body.high-contrast .type-triples { 
+  border-top-color: #ffff00 !important; 
+}
+body.high-contrast .type-quads { 
+  border-top-color: #00ff00 !important; 
+}
+body.high-contrast .type-quints { 
+  border-top-color: #0000ff !important; 
+}
+
+/* ==== כותרות ותוצאות ==== */
+body.high-contrast .results-section {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+}
+
+body.high-contrast .results-title {
+  color: #fff !important;
+  background: #000 !important;
+}
+
+body.high-contrast .results-count {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+/* ==== הסבר וחינוכי ==== */
+body.high-contrast .explanation-section {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+}
+
+body.high-contrast .explanation-title {
+  color: #fff !important;
+  border-bottom-color: #fff !important;
+  background: #000 !important;
+}
+
+body.high-contrast .explanation-content {
+  color: #fff !important;
+  background: #000 !important;
+}
+
+body.high-contrast .explanation-content h4 {
+  color: #ffff00 !important;
+  background: #000 !important;
+}
+
+/* ==== הודעות מערכת ==== */
+body.high-contrast .loading {
+  background: #000 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+
+body.high-contrast .no-results {
+  color: #fff !important;
+  background: #000 !important;
+}
+
+/* ==== מיוחד: תיקון גרידיאנטים ==== */
+body.high-contrast *[style*="linear-gradient"],
+body.high-contrast *[style*="background:"],
+body.high-contrast *[class*="gradient"] {
+  background: #000 !important;
+}
+
+/* ==== ARIA ונגישות משופרת ==== */
+body.high-contrast [role="table"],
+body.high-contrast [role="grid"],
+body.high-contrast [role="listbox"] {
+  border: 2px solid #fff !important;
+  background: #000 !important;
+}
+
+body.high-contrast [role="columnheader"],
+body.high-contrast [role="rowheader"] {
+  background: #333 !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+}
+
+body.high-contrast [role="gridcell"],
+body.high-contrast [role="cell"] {
+  background: #000 !important;
+  color: #fff !important;
+  border: 1px solid #666 !important;
+}
+
+/* ==== פוקוס משופר לנגישות ==== */
+body.high-contrast *:focus {
+  outline: 3px solid #ffff00 !important;
+  outline-offset: 2px !important;
+  background: #000 !important;
+  color: #fff !important;
+}
+
+/* ==== לינקים במצב נגישות ==== */
+body.high-contrast .nav-btn {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+  text-shadow: none !important;
+}
+
+body.high-contrast .nav-btn:hover {
+  background: #ffff00 !important;
+  color: #000 !important;
+  border: 2px solid #ffff00 !important;
+}
+
+/* ==== קונטיינר ראשי ==== */
+body.high-contrast .container {
+  background: #000 !important;
+  border: 3px solid #fff !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+body.high-contrast .logo {
+  color: #fff !important;
+  background: #000 !important;
+  text-shadow: none !important;
+  border: 2px solid #fff !important;
+  box-shadow: none !important;
+}
+
+body.high-contrast .subtitle {
+  color: #fff !important;
+  background: #000 !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
+/* ==== ניווט ==== */
+body.high-contrast .nav-buttons {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
