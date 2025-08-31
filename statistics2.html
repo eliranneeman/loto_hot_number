@@ -647,7 +647,7 @@ for (let i = 0; i < numbers.length; i++) {
     const topTriples = Object.entries(tripleStats)
         .filter(([triple, count]) => count >= 5)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 100);
+        .slice(0, 200);
     
     console.log('Triples found:', topTriples.length);
     
@@ -663,7 +663,7 @@ for (let i = 0; i < numbers.length; i++) {
     const topQuads = Object.entries(quadStats)
         .filter(([quad, count]) => count >= 2)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 100);
+        .slice(0, 200);
     
     console.log('Quads found:', topQuads.length);
     
@@ -679,7 +679,7 @@ for (let i = 0; i < numbers.length; i++) {
     const topQuints = Object.entries(quintStats)
         .filter(([quint, count]) => count >= 2)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 100);
+        .slice(0, 200);
     
     console.log('Quints found:', topQuints.length);
 
