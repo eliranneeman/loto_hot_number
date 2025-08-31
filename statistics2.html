@@ -713,8 +713,9 @@ for (let i = 0; i < numbers.length; i++) {
         function displayInsights() {
             // הצגת זוגות נפוצים
             const topPairs = Object.entries(pairStats)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 1000);
+                .filter(([pair, count]) => count <= 15)
+                .sort((a, b) => b[1] - a[1]);
+            
             
             const pairsContainer = document.getElementById('popularPairs');
             pairsContainer.innerHTML = topPairs.map(([pair, count]) => 
@@ -726,8 +727,9 @@ for (let i = 0; i < numbers.length; i++) {
 
             // הצגת שלשות נפוצות
             const topTriples = Object.entries(tripleStats)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 1000);
+                .filter(([triple, count]) => count <= 15)
+                .sort((a, b) => b[1] - a[1]);
+                
             
             const triplesContainer = document.getElementById('popularTriples');
             triplesContainer.innerHTML = topTriples.map(([triple, count]) => 
@@ -739,8 +741,9 @@ for (let i = 0; i < numbers.length; i++) {
 
             // הצגת רביעיות נפוצות
             const topQuads = Object.entries(quadStats)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 100);
+                .filter(([quad, count]) => count <= 2)
+                .sort((a, b) => b[1] - a[1]);
+                
             
             const quadsContainer = document.getElementById('popularQuads');
             quadsContainer.innerHTML = topQuads.map(([quad, count]) => 
@@ -750,6 +753,19 @@ for (let i = 0; i < numbers.length; i++) {
                 </div>`
             ).join('');
         }
+
+        // הצגת חמישיות שחזרו עד פעמיים
+const topQuints = Object.entries(quintStats)
+    .filter(([quint, count]) => count <= 2)
+    .sort((a, b) => b[1] - a[1]);
+
+const quintsContainer = document.getElementById('popularQuints');
+quintsContainer.innerHTML = topQuints.map(([quint, count]) => 
+    `<div class="combination-item">
+        <span class="combination-numbers">${quint.replace(/-/g, ', ')}</span>
+        <span class="combination-count">${count} פעמים</span>
+    </div>`
+).join('');
 
         
 
