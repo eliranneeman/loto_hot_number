@@ -1107,3 +1107,288 @@ body.high-contrast .nav-btn:hover {
     gap: 15px !important;
   }
 }
+
+
+
+
+/* הוסף את הקוד הזה לקובץ ה-CSS של התפריט שלך */
+/* תוספות למצב ניגודיות גבוהה עבור גרפים וחזותיות */
+
+/* ==== גרפים ותרשימים כלליים ==== */
+body.high-contrast canvas,
+body.high-contrast svg {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+/* ==== Chart.js / גרפי JavaScript ==== */
+body.high-contrast .chart-container,
+body.high-contrast .chartjs-render-monitor {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+/* ==== גרפי עמודות ==== */
+body.high-contrast .bar-chart,
+body.high-contrast .column-chart,
+body.high-contrast [class*="chart"] {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+/* עמודות בגרף - צבעים מבדילים */
+body.high-contrast .bar,
+body.high-contrast .column,
+body.high-contrast [class*="bar"]:not(.sidebar):not(.nav-btn) {
+  background: #ffff00 !important; /* צהוב בסיסי */
+  border: 1px solid #fff !important;
+  color: #000 !important;
+}
+
+/* עמודות לפי ערכים - גרדיאנט צבעוני */
+body.high-contrast .bar:nth-child(1) { background: #ff0000 !important; } /* אדום */
+body.high-contrast .bar:nth-child(2) { background: #ff8000 !important; } /* כתום */
+body.high-contrast .bar:nth-child(3) { background: #ffff00 !important; } /* צהוב */
+body.high-contrast .bar:nth-child(4) { background: #80ff00 !important; } /* ירוק בהיר */
+body.high-contrast .bar:nth-child(5) { background: #00ff00 !important; } /* ירוק */
+body.high-contrast .bar:nth-child(6) { background: #00ff80 !important; } /* ירוק כחלחל */
+body.high-contrast .bar:nth-child(7) { background: #00ffff !important; } /* ציאן */
+body.high-contrast .bar:nth-child(8) { background: #0080ff !important; } /* כחול בהיר */
+body.high-contrast .bar:nth-child(9) { background: #0000ff !important; } /* כחול */
+body.high-contrast .bar:nth-child(10) { background: #8000ff !important; } /* סגול */
+
+/* ==== תוויות וערכים בגרפים ==== */
+body.high-contrast .chart-title,
+body.high-contrast .axis-title,
+body.high-contrast .chart-label {
+  color: #fff !important;
+  background: #000 !important;
+  font-weight: bold !important;
+}
+
+/* ערכים על העמודות */
+body.high-contrast .bar-value,
+body.high-contrast .data-label,
+body.high-contrast [class*="value"] {
+  color: #000 !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  padding: 2px 4px !important;
+  border-radius: 3px !important;
+  font-weight: bold !important;
+}
+
+/* ==== צירי הגרף ==== */
+body.high-contrast .x-axis,
+body.high-contrast .y-axis,
+body.high-contrast .axis-line {
+  stroke: #fff !important;
+  color: #fff !important;
+}
+
+body.high-contrast .tick-label,
+body.high-contrast .axis-label {
+  fill: #fff !important;
+  color: #fff !important;
+}
+
+/* ==== קווי רשת ==== */
+body.high-contrast .grid-line,
+body.high-contrast .gridlines {
+  stroke: #444 !important;
+  opacity: 0.7 !important;
+}
+
+/* ==== מקרא הגרף ==== */
+body.high-contrast .chart-legend,
+body.high-contrast .legend {
+  background: #000 !important;
+  border: 1px solid #fff !important;
+  color: #fff !important;
+  padding: 10px !important;
+}
+
+body.high-contrast .legend-item {
+  color: #fff !important;
+}
+
+body.high-contrast .legend-color {
+  border: 1px solid #fff !important;
+}
+
+/* ==== הטבלה שמתחת לגרף ==== */
+body.high-contrast .statistics-table,
+body.high-contrast .data-table {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+}
+
+body.high-contrast .statistics-table th,
+body.high-contrast .data-table th {
+  background: #333 !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+}
+
+body.high-contrast .statistics-table td,
+body.high-contrast .data-table td {
+  background: #000 !important;
+  color: #fff !important;
+  border: 1px solid #666 !important;
+}
+
+/* ==== כפתורי פילטר הגרף ==== */
+body.high-contrast .chart-filter,
+body.high-contrast .graph-controls {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+body.high-contrast .filter-btn,
+body.high-contrast .chart-btn {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+body.high-contrast .filter-btn:hover,
+body.high-contrast .chart-btn:hover {
+  background: #ffff00 !important;
+  color: #000 !important;
+}
+
+body.high-contrast .filter-btn.active,
+body.high-contrast .chart-btn.active {
+  background: #00ff00 !important;
+  color: #000 !important;
+  border-color: #00ff00 !important;
+}
+
+/* ==== תיקון ספציפי לאתר lottogun ==== */
+
+/* גרף התפלגות המספרים */
+body.high-contrast [id*="chart"],
+body.high-contrast [class*="Chart"],
+body.high-contrast [data-chart] {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+/* עמודות ירוקות שהפכו שחורות */
+body.high-contrast rect[fill*="green"],
+body.high-contrast rect[fill*="#0"],
+body.high-contrast rect[fill*="#1"],
+body.high-contrast rect[fill*="#2"],
+body.high-contrast rect[fill*="#3"],
+body.high-contrast rect[fill*="#4"],
+body.high-contrast rect[fill*="#5"] {
+  fill: #ffff00 !important;
+  stroke: #fff !important;
+  stroke-width: 1 !important;
+}
+
+/* עמודות כהות שצריכות להיות בהירות */
+body.high-contrast rect[fill="#008000"],
+body.high-contrast rect[fill="#228B22"],
+body.high-contrast rect[fill="#32CD32"],
+body.high-contrast rect[fill="#7CFC00"] {
+  fill: #ffff00 !important;
+  stroke: #fff !important;
+}
+
+/* תיקון צבעי SVG */
+body.high-contrast svg rect,
+body.high-contrast svg path,
+body.high-contrast svg circle {
+  fill: #ffff00 !important;
+  stroke: #fff !important;
+}
+
+/* טקסט בSVG */
+body.high-contrast svg text {
+  fill: #fff !important;
+  font-weight: bold !important;
+}
+
+/* ==== Canvas charts (Chart.js וכדומה) ==== */
+/* זה ידרוש JavaScript נוסף, אבל הCSS יכסה את המכולה */
+body.high-contrast .chart-canvas-wrapper {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  padding: 10px !important;
+}
+
+/* ==== התוויות מתחת לגרף ==== */
+body.high-contrast .chart-x-labels,
+body.high-contrast .chart-y-labels {
+  color: #fff !important;
+  background: #000 !important;
+}
+
+/* ==== כותרת הגרף ==== */
+body.high-contrast .chart-main-title,
+body.high-contrast h1:contains("התפלגות"),
+body.high-contrast h2:contains("התפלגות"),
+body.high-contrast h3:contains("התפלגות") {
+  color: #fff !important;
+  background: #000 !important;
+  text-shadow: none !important;
+}
+
+/* ==== אלמנטים אינטראקטיביים ==== */
+body.high-contrast .chart-tooltip {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid #000 !important;
+  font-weight: bold !important;
+}
+
+body.high-contrast .hover-info {
+  background: #fff !important;
+  color: #000 !important;
+  border: 1px solid #000 !important;
+}
+
+/* ==== מחוונים ומדדים ==== */
+body.high-contrast .gauge,
+body.high-contrast .meter,
+body.high-contrast .progress-bar {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+body.high-contrast .gauge-fill,
+body.high-contrast .meter-fill,
+body.high-contrast .progress-fill {
+  background: #00ff00 !important;
+}
+
+/* ==== עמודות עם גרדיאנט ==== */
+body.high-contrast [style*="background: linear-gradient"],
+body.high-contrast [style*="background-image"] {
+  background: #ffff00 !important;
+  border: 1px solid #fff !important;
+}
+
+/* ==== פתרון לעמודות דינמיות ==== */
+body.high-contrast .dynamic-bar,
+body.high-contrast [data-value] {
+  background: #ffff00 !important;
+  color: #000 !important;
+  border: 1px solid #fff !important;
+}
+
+/* ערכים גבוהים - אדום */
+body.high-contrast [data-value^="9"],
+body.high-contrast [data-value^="8"] {
+  background: #ff0000 !important;
+}
+
+/* ערכים בינוניים - צהוב */
+body.high-contrast [data-value^="7"],
+body.high-contrast [data-value^="6"],
+body.high-contrast [data-value^="5"] {
+  background: #ffff00 !important;
+}
+
+/* ערכ
