@@ -757,9 +757,8 @@ for (let i = 0; i < numbers.length; i++) {
                     <span class="combination-count">${count} פעמים</span>
                 </div>`
             ).join('');
-        }
 
-        // הצגת חמישיות שחזרו עד פעמיים
+                    // הצגת חמישיות שחזרו עד פעמיים
 const topQuints = Object.entries(quintStats)
     .filter(([quint, count]) => count <= 2)
     .sort((a, b) => b[1] - a[1]);
@@ -771,6 +770,9 @@ quintsContainer.innerHTML = topQuints.map(([quint, count]) =>
         <span class="combination-count">${count} פעמים</span>
     </div>`
 ).join('');
+            
+        }
+
 
         
 
