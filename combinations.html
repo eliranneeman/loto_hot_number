@@ -397,50 +397,66 @@
         </div>
 
         <div id="statsContent" style="display: none;">
-            <!-- הסבר על העמוד -->
             <div class="explanation-section">
-                <div class="explanation-title">🧠 מה זה ניתוח צירופים?</div>
-                <div class="explanation-content">
-                    <p><strong>ניתוח צירופים</strong> בוחן אילו קבוצות מספרים הופיעו יחד בהגרלות העבר בתדירות גבוהה יותר מהצפוי.</p>
-                    
-                    <h4>🎯 סוגי הצירופים:</h4>
-                    <div class="combination-types">
-                        <div class="type-card type-pairs">
-                            <h5>👥 זוגות</h5>
-                            <p>שני מספרים שהופיעו יחד</p>
-                        </div>
-                        <div class="type-card type-triples">
-                            <h5>🔺 שלשות</h5>
-                            <p>שלושה מספרים שהופיעו יחד</p>
-                        </div>
-                        <div class="type-card type-quads">
-                            <h5>💎 רביעיות</h5>
-                            <p>ארבעה מספרים שהופיעו יחד</p>
-                        </div>
-                        <div class="type-card type-quints">
-                            <h5>🔥 חמישיות</h5>
-                            <p>חמישה מספרים שהופיעו יחד</p>
-                        </div>
-                    </div>
-
-                    <h4>📊 איך להשתמש במידע:</h4>
-                    <ul>
-                        <li><strong>תדירות גבוהה:</strong> צירופים שחזרו הרבה פעמים בעבר</li>
-                        <li><strong>סינון גמיש:</strong> ניתן לסנן לפי מספר הופעות מינימלי/מקסימלי</li>
-                        <li><strong>אחוזי הופעה:</strong> כל צירוף מציג את האחוז מסך ההגרלות</li>
-                        <li><strong>מיון דינמי:</strong> התוצאות ממוינות לפי תדירות</li>
-                    </ul>
-
-                    <h4>⚠️ חשוב לזכור:</h4>
-                    <ul>
-                        <li>זהו ניתוח סטטיסטי של העבר בלבד</li>
-                        <li>הגרלות עתידיות אינן תלויות בתוצאות העבר</li>
-                        <li>כל הגרלה היא אקראית לחלוטין ובלתי תלויה</li>
-                        <li>מידע זה מיועד לבידור ולמטרות חינוכיות בלבד</li>
-                    </ul>
-                </div>
+    <div class="explanation-title">🧠 מה זה ניתוח צירופים?</div>
+    <div class="explanation-content">
+        <p><strong>ניתוח צירופים</strong> בוחן אילו קבוצות מספרים הופיעו יחד בהגרלות העבר בתדירות גבוהה יותר מהצפוי.</p>
+        
+        <h4>🎯 סוגי הצירופים:</h4>
+        <div class="combination-types">
+            <div class="type-card type-pairs">
+                <h5>👥 זוגות</h5>
+                <p>שני מספרים שהופיעו יחד</p>
             </div>
+            <div class="type-card type-triples">
+                <h5>🔺 שלשות</h5>
+                <p>שלושה מספרים שהופיעו יחד</p>
+            </div>
+            <div class="type-card type-quads">
+                <h5>💎 רביעיות</h5>
+                <p>ארבעה מספרים שהופיעו יחד</p>
+            </div>
+            <div class="type-card type-quints">
+                <h5>🔥 חמישיות</h5>
+                <p>חמישה מספרים שהופיעו יחד</p>
+            </div>
+        </div>
 
+        <h4>📊 הבנת הנתונים הסטטיסטיים:</h4>
+        <div style="background: #f7fafc; padding: 20px; border-radius: 10px; margin: 15px 0; border-right: 4px solid #667eea;">
+            <p><strong>מה המספרים מציגים:</strong></p>
+            <ul>
+                <li><strong>"זוגות שונים"</strong> - כמה זוגות שונים (יחודיים) הופיעו בפועל מכלל הזוגות האפשריים</li>
+                <li><strong>"כיסוי X%"</strong> - איזה אחוז מכל הצירופים התיאורטיים האפשריים הופיע בפועל</li>
+                <li><strong>לדוגמה:</strong> יש 666 זוגות אפשריים מ-37 מספרים. אם הופיעו 666 זוגות שונים - זה 100% כיסוי</li>
+            </ul>
+        </div>
+
+        <h4>🔢 חישובים תיאורטיים:</h4>
+        <ul>
+            <li><strong>זוגות אפשריים:</strong> 37 מספרים → 666 זוגות שונים (C(37,2))</li>
+            <li><strong>שלשות אפשריות:</strong> 37 מספרים → 7,770 שלשות שונות (C(37,3))</li>
+            <li><strong>רביעיות אפשריות:</strong> 37 מספרים → 66,045 רביעיות שונות (C(37,4))</li>
+            <li><strong>חמישיות אפשריות:</strong> 37 מספרים → 435,897 חמישיות שונות (C(37,5))</li>
+        </ul>
+
+        <h4>📊 איך להשתמש במידע:</h4>
+        <ul>
+            <li><strong>תדירות גבוהה:</strong> צירופים שחזרו הרבה פעמים בעבר</li>
+            <li><strong>סינון גמיש:</strong> ניתן לסנן לפי מספר הופעות מינימלי/מקסימלי</li>
+            <li><strong>אחוזי הופעה:</strong> כל צירוף מציג את האחוז מסך ההגרלות</li>
+            <li><strong>מיון דינמי:</strong> התוצאות ממוינות לפי תדירות</li>
+        </ul>
+
+        <h4>⚠️ חשוב לזכור:</h4>
+        <ul>
+            <li>זהו ניתוח סטטיסטי של העבר בלבד</li>
+            <li>הגרלות עתידיות אינן תלויות בתוצאות העבר</li>
+            <li>כל הגרלה היא אקראית לחלוטין ובלתי תלויה</li>
+            <li>מידע זה מיועד לבידור ולמטרות חינוכיות בלבד</li>
+        </ul>
+    </div>
+            </div>
             <!-- סטטיסטיקות כלליות -->
             <div id="summaryStats" class="stats-summary">
                 <h3 style="text-align: center; margin-bottom: 20px;">📈 סיכום צירופים</h3>
