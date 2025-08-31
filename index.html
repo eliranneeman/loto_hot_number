@@ -551,7 +551,28 @@
     >
 <button class="file-upload-btn" onclick="toggleUploadSection()">📂 הצג / הסתר אפשרות העלאת קובץ</button>
 
-<!-- אזור ההעלאה (סגור כברירת מחדל) -->
+
+
+
+        
+        
+        <div class="stats">
+            <div class="stats-title">📊 המספרים החמים ביותר</div>
+			<h4>(על פי הסטטיסטיקות - משנת 2005 מאתר מפעל הפיס)</h4>
+            <div class="hot-numbers">
+                <div class="hot-category">
+                    <h4>טופ 9 המספרים החמים:</h4>
+                    <div class="hot-list" id="hot-regular-list">
+                        </div>
+                </div>
+                <div class="hot-category">
+                    <h4>טופ 3 המספרים החזקים החמים:</h4>
+                    <div class="hot-list" id="hot-strong-list">
+                        </div>
+                </div>
+            </div>
+
+			<!-- אזור ההעלאה (סגור כברירת מחדל) -->
 <div id="upload-section" style="display: none; margin-top: 15px;">
 
     <div class="stats-title">📊 העלאת קובץ תוצאות הגרלות</div>
@@ -578,30 +599,7 @@
     <input type="file" id="excel-file" class="file-input" accept=".xlsx,.xls" onchange="handleExcelUpload(event)">
     <div id="file-status" class="file-status"></div>
 </div>
-
-
-        
-        
-        <div class="stats">
-            <div class="stats-title">📊 המספרים החמים ביותר</div>
-			<h4>(על פי הסטטיסטיקות - משנת 2005 מאתר מפעל הפיס)</h4>
-            <div class="hot-numbers">
-                <div class="hot-category">
-                    <h4>טופ 9 המספרים החמים:</h4>
-                    <div class="hot-list" id="hot-regular-list">
-                        </div>
-                </div>
-                <div class="hot-category">
-                    <h4>טופ 3 המספרים החזקים החמים:</h4>
-                    <div class="hot-list" id="hot-strong-list">
-                        </div>
-                </div>
-            </div>
-			<div style="text-align: center; margin: 20px 0;">
-    <a href="results.html" style="display: inline-block; padding: 20px 40px; background: linear-gradient(45deg, #FF6B6B, #4ECDC4); color: white; text-decoration: none; border-radius: 15px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s ease;">
-        📋 צפה בתוצאות העבר וסטטיסטיקות
-    </a>
-			</div>
+			
         </div>
 
 		<!-- מסנן היסטוריה -->
