@@ -1360,13 +1360,13 @@ body.high-contrast .progress-bar {
 body.high-contrast .gauge-fill,
 body.high-contrast .meter-fill,
 body.high-contrast .progress-fill {
-  background: #00ff00 !important;
+  background: #000000 !important;
 }
 
 /* ==== עמודות עם גרדיאנט ==== */
 body.high-contrast [style*="background: linear-gradient"],
 body.high-contrast [style*="background-image"] {
-  background: #ffff00 !important;
+  background: #fff !important;
   border: 1px solid #fff !important;
 }
 
