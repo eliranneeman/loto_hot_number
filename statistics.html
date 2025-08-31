@@ -827,7 +827,7 @@
             // הצגת זוגות נפוצים
             const topPairs = Object.entries(pairStats)
                 .sort((a, b) => b[1] - a[1])
-                .slice(0, 15);
+                .slice(0, 5);
             
             const pairsContainer = document.getElementById('popularPairs');
             pairsContainer.innerHTML = topPairs.map(([pair, count]) => 
@@ -840,7 +840,7 @@
             // הצגת שלשות נפוצות
             const topTriples = Object.entries(tripleStats)
                 .sort((a, b) => b[1] - a[1])
-                .slice(0, 15);
+                .slice(0, 5);
             
             const triplesContainer = document.getElementById('popularTriples');
             triplesContainer.innerHTML = topTriples.map(([triple, count]) => 
@@ -853,7 +853,7 @@
             // הצגת רביעיות נפוצות
             const topQuads = Object.entries(quadStats)
                 .sort((a, b) => b[1] - a[1])
-                .slice(0, 15);
+                .slice(0, 5);
             
             const quadsContainer = document.getElementById('popularQuads');
             quadsContainer.innerHTML = topQuads.map(([quad, count]) => 
