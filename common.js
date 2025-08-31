@@ -1,5 +1,5 @@
 // ===== טוען תפריט צדדי =====
-fetch("/menu1.html")
+fetch("/menu.html")
   .then(res => res.text())
   .then(html => {
     // עוטפים את התפריט בתוך DIV ייחודי
