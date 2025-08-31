@@ -793,3 +793,317 @@ body.high-contrast .nav-buttons {
   box-shadow: none !important;
   backdrop-filter: none !important;
 }
+
+
+
+
+
+/* הוסף את הקוד הזה לקובץ ה-CSS של התפריט שלך */
+/* תוספות למצב ניגודיות גבוהה עבור עמוד הניתוח העונתי */
+
+/* ==== ניתוח עונתי ומספרים חמים/קרים ==== */
+body.high-contrast .seasonal-analysis {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+body.high-contrast .seasonal-analysis h3 {
+  color: #fff !important;
+  background: #000 !important;
+  text-shadow: none !important;
+  border-bottom: 2px solid #fff !important;
+  padding-bottom: 15px !important;
+}
+
+/* ==== חלקי חודשים ==== */
+body.high-contrast .month-section {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+body.high-contrast .month-section h4 {
+  background: #111 !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+  box-shadow: none !important;
+}
+
+/* ==== רשת מספרים לפי חודש ==== */
+body.high-contrast .month-numbers {
+  background: #000 !important;
+}
+
+body.high-contrast .seasonal-number {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  box-shadow: none !important;
+  color: #fff !important;
+}
+
+body.high-contrast .seasonal-number:hover {
+  background: #111 !important;
+  border-color: #ffff00 !important;
+  box-shadow: none !important;
+  transform: translateY(-3px);
+}
+
+/* ==== מעגלי מספרים ==== */
+body.high-contrast .seasonal-number .number {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+  box-shadow: none !important;
+  font-weight: bold !important;
+}
+
+/* ==== פרטי מספרים (ציון והופעות) ==== */
+body.high-contrast .seasonal-number .score {
+  color: #ffff00 !important;  /* ציון בצהוב */
+  background: #000 !important;
+}
+
+body.high-contrast .seasonal-number .appearances {
+  background: #fff !important;
+  color: #000 !important;
+  border: 1px solid #fff !important;
+}
+
+/* ==== מקרא ציונים ==== */
+body.high-contrast .score-legend {
+  background: #000 !important;
+}
+
+body.high-contrast .score-item {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+/* צבעי מקרא ספציפיים במצב נגישות */
+body.high-contrast .score-very-hot { 
+  border-right-color: #ff0000 !important; 
+  border-left-color: #ff0000 !important; /* גם משמאל לבולטות */
+}
+body.high-contrast .score-hot { 
+  border-right-color: #ffff00 !important; 
+  border-left-color: #ffff00 !important;
+}
+body.high-contrast .score-normal { 
+  border-right-color: #00ff00 !important; 
+  border-left-color: #00ff00 !important;
+}
+body.high-contrast .score-cold { 
+  border-right-color: #0080ff !important; 
+  border-left-color: #0080ff !important;
+}
+
+/* גבולות צבעוניים למספרים עונתיים */
+body.high-contrast .seasonal-number.very-hot {
+  border-right-color: #ff0000 !important;
+}
+body.high-contrast .seasonal-number.hot {
+  border-right-color: #ffff00 !important;
+}
+body.high-contrast .seasonal-number.normal {
+  border-right-color: #00ff00 !important;
+}
+body.high-contrast .seasonal-number.cold {
+  border-right-color: #0080ff !important;
+}
+
+/* ==== סטטיסטיקות סיכום ==== */
+body.high-contrast .summary-stats {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+body.high-contrast .stats-grid {
+  background: #000 !important;
+}
+
+body.high-contrast .stat-item {
+  background: #111 !important;
+  border: 1px solid #fff !important;
+  color: #fff !important;
+  backdrop-filter: none !important;
+}
+
+body.high-contrast .stat-number {
+  color: #ffff00 !important;  /* מספרים בסטטיסטיקות בצהוב */
+}
+
+body.high-contrast .stat-label {
+  color: #fff !important;
+  opacity: 1 !important;
+}
+
+/* ==== הסבר וחינוכי - עדכון ==== */
+body.high-contrast .explanation-section {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+body.high-contrast .explanation-title {
+  color: #fff !important;
+  border-bottom-color: #fff !important;
+  background: #000 !important;
+  text-shadow: none !important;
+}
+
+body.high-contrast .explanation-content {
+  color: #fff !important;
+  background: #000 !important;
+}
+
+body.high-contrast .explanation-content h4 {
+  color: #ffff00 !important;
+  background: #000 !important;
+}
+
+body.high-contrast .explanation-content ul {
+  color: #fff !important;
+}
+
+body.high-contrast .explanation-content li {
+  color: #fff !important;
+  background: #000 !important;
+}
+
+/* ==== הודעות מערכת ==== */
+body.high-contrast .loading {
+  background: #000 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+  backdrop-filter: none !important;
+}
+
+/* ==== מיוחד: תיקון גרידיאנטים ואפקטים ==== */
+body.high-contrast *[style*="linear-gradient"],
+body.high-contrast *[style*="background:"],
+body.high-contrast *[class*="gradient"] {
+  background: #000 !important;
+}
+
+body.high-contrast *[style*="backdrop-filter"] {
+  backdrop-filter: none !important;
+}
+
+body.high-contrast *[style*="box-shadow"] {
+  box-shadow: none !important;
+}
+
+/* ==== פוקוס משופר לאלמנטים עונתיים ==== */
+body.high-contrast .seasonal-number:focus,
+body.high-contrast .score-item:focus,
+body.high-contrast .stat-item:focus {
+  outline: 3px solid #ffff00 !important;
+  outline-offset: 2px !important;
+  background: #000 !important;
+  color: #fff !important;
+}
+
+/* ==== ARIA ונגישות משופרת לטבלאות עונתיות ==== */
+body.high-contrast [role="grid"],
+body.high-contrast [role="gridcell"] {
+  background: #000 !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+}
+
+body.high-contrast [aria-label*="חם"],
+body.high-contrast [aria-label*="hot"] {
+  border-color: #ff0000 !important;
+}
+
+body.high-contrast [aria-label*="קר"],
+body.high-contrast [aria-label*="cold"] {
+  border-color: #0080ff !important;
+}
+
+body.high-contrast [aria-label*="רגיל"],
+body.high-contrast [aria-label*="normal"] {
+  border-color: #00ff00 !important;
+}
+
+/* ==== קונטיינר ראשי - עדכון ==== */
+body.high-contrast .container {
+  background: #000 !important;
+  border: 3px solid #fff !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+body.high-contrast .logo {
+  color: #fff !important;
+  background: #000 !important;
+  text-shadow: none !important;
+  border: 2px solid #fff !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+body.high-contrast .subtitle {
+  color: #fff !important;
+  background: #000 !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* ==== ניווט - עדכון ==== */
+body.high-contrast .nav-buttons {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+body.high-contrast .nav-btn {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
+body.high-contrast .nav-btn:hover {
+  background: #ffff00 !important;
+  color: #000 !important;
+  border: 2px solid #ffff00 !important;
+  box-shadow: none !important;
+  transform: translateY(-2px);
+}
+
+/* ==== התאמות נוספות למובייל ==== */
+@media (max-width: 768px) {
+  body.high-contrast .month-numbers {
+    gap: 10px !important;
+  }
+  
+  body.high-contrast .seasonal-number {
+    padding: 12px !important;
+  }
+  
+  body.high-contrast .seasonal-number .number {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 18px !important;
+  }
+  
+  body.high-contrast .score-legend {
+    gap: 10px !important;
+  }
+  
+  body.high-contrast .stats-grid {
+    gap: 15px !important;
+  }
+}
