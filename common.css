@@ -95,27 +95,24 @@
   z-index: 1002;
 }
 
-/* ❌ מחקתי את .custom-sidebar .accessibility-menu שהיה חוסם */
+/* הסרה של ההגדרה שחוסמת את הנגישות */
+/* .custom-sidebar .accessibility-menu { display: none; } */
 
-/* ✅ כפתור נגישות צף */
+/* כפתור נגישות צף */
 #accessibilityBtn {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #0f172a;
+  background: #0f172a;
   color: #fff;
   border: none;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  font-size: 22px;
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
   cursor: pointer;
-  z-index: 2000; /* מעל התפריט */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
-  transition: background 0.3s ease;
-}
-#accessibilityBtn:hover {
-  background-color: #2d3748;
+  z-index: 2000; /* תמיד מעל התפריט */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* מצב ניגודיות גבוהה */
@@ -123,6 +120,12 @@
   background-color: #000 !important;
   color: #fff !important;
 }
+
 .high-contrast a {
   color: #ff0 !important;
 }
+
+.high-contrast .sidebar {
+  background-color: #000 !important;
+}
+
