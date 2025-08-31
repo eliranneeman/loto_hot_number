@@ -351,7 +351,55 @@
         
         
         
+.combination-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
 
+.combo-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    text-align: center;
+}
+
+.combo-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.combo-btn.active {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.combo-btn.active:hover {
+    background: linear-gradient(135deg, #ee5a52 0%, #ff6b6b 100%);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.insights-grid {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.insight-card {
+    width: 100%;
+    max-width: 800px;
+}
+        
 
         
         @media (max-width: 768px) {
@@ -379,59 +427,79 @@
             .logo {
                 font-size: 2em;
             }
+              .combination-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .combo-btn {
+        width: 100%;
+        max-width: 250px;
+    }
         }
     </style>
 </head>
 <body>
       <script src="/common.js" defer></script>
-    <div class="container">
-        <header>
-            <div class="logo">📊 LottoGun</div>
-            <div class="subtitle">סטטיסטיקות ומספרים חמים</div>
-        </header>
-        
-        <div class="nav-buttons">
-            <a href="index.html" class="nav-btn">🏠 דף הבית</a>
-            <a href="results.html" class="nav-btn">📋 תוצאות הגרלות</a>
-        </div>
 
+<div class="container">
+    <header>
+        <div class="logo">📊 LottoGun</div>
+        <div class="subtitle">סטטיסטיקות ומספרים חמים</div>
+    </header>
+    
+    <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">🏠 דף הבית</a>
+        <a href="results.html" class="nav-btn">📋 תוצאות הגרלות</a>
+    </div>
 
-        
-        <div id="loadingMessage" class="loading">
-            🔄 טוען נתונים וחושב סטטיסטיקות...
-        </div>
-        
-        <div id="statsContent" style="display: none;">
-            <div class="summary-section">
-                <div class="summary-title">🎯 צירופים נוספים שעלו יחד לאורך השנים</div>
-                
+    <div id="loadingMessage" class="loading">
+        🔄 טוען נתונים וחושב סטטיסטיקות...
+    </div>
+    
+    <div id="statsContent" style="display: none;">
+        <div class="summary-section">
+            <div class="summary-title">🎯 צירופים נוספים שעלו יחד לאורך השנים</div>
+            
+            <!-- כפתורי בחירה -->
+            <div class="combination-buttons">
+                <button class="combo-btn active" onclick="showCombination('pairs')" id="pairsBtn">👥 זוגות נפוצים</button>
+                <button class="combo-btn" onclick="showCombination('triples')" id="triplesBtn">🔺 שלשות נפוצות</button>
+                <button class="combo-btn" onclick="showCombination('quads')" id="quadsBtn">💎 רביעיות נפוצות</button>
+                <button class="combo-btn" onclick="showCombination('quints')" id="quintsBtn">🔥 חמישיות נפוצות</button>
             </div>
+        </div>
 
-            <div class="insights-section">
-                <div class="insights-title">🧠 תובנות וצירופים נפוצים</div>
-                <div class="insights-grid">
-                    <div class="insight-card">
-                        <div class="insight-type">👥 זוגות נפוצים</div>
-                        <div id="popularPairs"></div>
-                    </div>
-                    <div class="insight-card">
-                        <div class="insight-type">🔺 שלשות נפוצות</div>
-                        <div id="popularTriples"></div>
-                    </div>
-                    <div class="insight-card">
-                        <div class="insight-type">💎 רביעיות נפוצות</div>
-                        <div id="popularQuads"></div>
-                    </div>
-                    <div class="insight-card">
-                        <div class="insight-type">🔥 חמישיות נפוצות</div>
-                        <div id="popularQuints"></div>
-                    </div>
+        <div class="insights-section">
+            <div class="insights-title">🧠 תובנות וצירופים נפוצים</div>
+            <div class="insights-grid">
+                <!-- זוגות נפוצים -->
+                <div class="insight-card" id="pairsCard">
+                    <div class="insight-type">👥 זוגות נפוצים</div>
+                    <div id="popularPairs"></div>
+                </div>
+                
+                <!-- שלשות נפוצות -->
+                <div class="insight-card" id="triplesCard" style="display: none;">
+                    <div class="insight-type">🔺 שלשות נפוצות</div>
+                    <div id="popularTriples"></div>
+                </div>
+                
+                <!-- רביעיות נפוצות -->
+                <div class="insight-card" id="quadsCard" style="display: none;">
+                    <div class="insight-type">💎 רביעיות נפוצות</div>
+                    <div id="popularQuads"></div>
+                </div>
+                
+                <!-- חמישיות נפוצות -->
+                <div class="insight-card" id="quintsCard" style="display: none;">
+                    <div class="insight-type">🔥 חמישיות נפוצות</div>
+                    <div id="popularQuints"></div>
                 </div>
             </div>
-
-            </div>
         </div>
-
+    </div>
+</div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
@@ -563,7 +631,7 @@ for (let i = 0; i < numbers.length; i++) {
     const topPairs = Object.entries(pairStats)
         .filter(([pair, count]) => count >= 20)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 100); // מגביל ל-100 הראשונים
+        .slice(0, 200); // מגביל ל-100 הראשונים
     
     console.log('Pairs found:', topPairs.length);
     
@@ -624,7 +692,50 @@ for (let i = 0; i < numbers.length; i++) {
     ).join('');
         }
 
-        
+        // פונקציה להצגת סוג צירוף מסוים
+function showCombination(type) {
+    // הסתרת כל הכרטיסים
+    document.getElementById('pairsCard').style.display = 'none';
+    document.getElementById('triplesCard').style.display = 'none';
+    document.getElementById('quadsCard').style.display = 'none';
+    document.getElementById('quintsCard').style.display = 'none';
+    
+    // הסרת המחלקה active מכל הכפתורים
+    document.querySelectorAll('.combo-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // הצגת הכרטיס המתאים והפעלת הכפתור
+    switch(type) {
+        case 'pairs':
+            document.getElementById('pairsCard').style.display = 'block';
+            document.getElementById('pairsBtn').classList.add('active');
+            break;
+        case 'triples':
+            document.getElementById('triplesCard').style.display = 'block';
+            document.getElementById('triplesBtn').classList.add('active');
+            break;
+        case 'quads':
+            document.getElementById('quadsCard').style.display = 'block';
+            document.getElementById('quadsBtn').classList.add('active');
+            break;
+        case 'quints':
+            document.getElementById('quintsCard').style.display = 'block';
+            document.getElementById('quintsBtn').classList.add('active');
+            break;
+    }
+}
+
+// הצגת זוגות כברירת מחדל כשהדף נטען
+document.addEventListener('DOMContentLoaded', function() {
+    // זה ירוץ רק אחרי שהנתונים ייטענו
+    const checkStatsLoaded = setInterval(() => {
+        if (document.getElementById('statsContent').style.display !== 'none') {
+            showCombination('pairs');
+            clearInterval(checkStatsLoaded);
+        }
+    }, 100);
+});
 
 
         // פורמט תאריך
