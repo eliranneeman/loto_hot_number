@@ -554,7 +554,7 @@
 
             </div>
         </div>
-    </div>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
@@ -575,7 +575,6 @@
                 const jsonData = XLSX.utils.sheet_to_json(worksheet);
                 
                 allResults = jsonData;
-                calculateStatistics();
                 calculateCombinations();
                 displayStatistics();
                 
@@ -588,39 +587,6 @@
             }
         }
 
-        // חישוב הסטטיסטיקות
-        function calculateStatistics() {
-            // איפוס המונים
-            regularStats = {};
-            strongStats = {};
-            
-            // אתחול מספרים רגילים (1-37)
-            for (let i = 1; i <= 37; i++) {
-                regularStats[i] = 0;
-            }
-            
-            // אתחול מספרים חזקים (1-7)
-            for (let i = 1; i <= 7; i++) {
-                strongStats[i] = 0;
-            }
-            
-            // ספירת המספרים בכל הגרלה
-            allResults.forEach(result => {
-                // ספירת מספרים רגילים
-                for (let i = 1; i <= 6; i++) {
-                    const num = parseInt(result[i.toString()] || result[String.fromCharCode(65 + i)]);
-                    if (num && num >= 1 && num <= 37) {
-                        regularStats[num]++;
-                    }
-                }
-                
-                // ספירת מספר חזק
-                const strongNum = parseInt(result['המספר החזק'] || result['7'] || result['H']);
-                if (strongNum && strongNum >= 1 && strongNum <= 7) {
-                    strongStats[strongNum]++;
-                }
-            });
-        }
 
         
         // חישוב צירופים נפוצים
