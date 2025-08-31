@@ -365,6 +365,31 @@
             color: #718096;
             font-size: 18px;
         }
+        .stat-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    min-height: 140px; /* הגדלנו את הגובה */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stat-explanation {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 8px;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.coverage-text {
+    font-weight: bold;
+    color: #ffd93d;
+    font-size: 11px;
+}
 
         @media (max-width: 768px) {
             .container { padding: 15px; }
@@ -378,6 +403,18 @@
             .combination-types { grid-template-columns: 1fr; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
+        .stat-item {
+        min-height: 120px;
+        padding: 15px;
+    }
+    
+    .stat-explanation {
+        font-size: 11px;
+    }
+    
+    .coverage-text {
+        font-size: 10px;
+    }
     </style>
 </head>
 <body>
@@ -617,38 +654,60 @@
                 }
             });
         }
+// הצגת סטטיסטיקות כלליות עם הסברים
+function displaySummaryStats() {
+    const totalDraws = allResults.length;
+    const totalPairs = Object.keys(pairStats).length;
+    const totalTriples = Object.keys(tripleStats).length;
+    const totalQuads = Object.keys(quadStats).length;
+    const totalQuints = Object.keys(quintStats).length;
+    
+    // חישוב כמה צירופים יכולים להיות תיאורטית
+    const maxPossiblePairs = 666; // C(37,2)
+    const maxPossibleTriples = 7770; // C(37,3)
+    const maxPossibleQuads = 66045; // C(37,4)
+    const maxPossibleQuints = 435897; // C(37,5)
 
-        // הצגת סטטיסטיקות כלליות
-        function displaySummaryStats() {
-            const totalDraws = allResults.length;
-            const totalPairs = Object.keys(pairStats).length;
-            const totalTriples = Object.keys(tripleStats).length;
-            const totalQuads = Object.keys(quadStats).length;
-            const totalQuints = Object.keys(quintStats).length;
-
-            document.getElementById('statsGrid').innerHTML = `
-                <div class="stat-item">
-                    <div class="stat-number">${totalDraws}</div>
-                    <div class="stat-label">הגרלות נותחו</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">${totalPairs.toLocaleString()}</div>
-                    <div class="stat-label">זוגות שונים</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">${totalTriples.toLocaleString()}</div>
-                    <div class="stat-label">שלשות שונות</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">${totalQuads.toLocaleString()}</div>
-                    <div class="stat-label">רביעיות שונות</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">${totalQuints.toLocaleString()}</div>
-                    <div class="stat-label">חמישיות שונות</div>
-                </div>
-            `;
-        }
+    document.getElementById('statsGrid').innerHTML = `
+        <div class="stat-item">
+            <div class="stat-number">${totalDraws}</div>
+            <div class="stat-label">הגרלות נותחו</div>
+            <div class="stat-explanation">כל ההגרלות שנמצאו בקובץ הנתונים</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">${totalPairs.toLocaleString()}</div>
+            <div class="stat-label">זוגות שונים</div>
+            <div class="stat-explanation">
+                מתוך ${maxPossiblePairs} זוגות אפשריים<br>
+                <span class="coverage-text">(כיסוי: ${((totalPairs/maxPossiblePairs)*100).toFixed(1)}%)</span>
+            </div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">${totalTriples.toLocaleString()}</div>
+            <div class="stat-label">שלשות שונות</div>
+            <div class="stat-explanation">
+                מתוך ${maxPossibleTriples.toLocaleString()} שלשות אפשריות<br>
+                <span class="coverage-text">(כיסוי: ${((totalTriples/maxPossibleTriples)*100).toFixed(1)}%)</span>
+            </div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">${totalQuads.toLocaleString()}</div>
+            <div class="stat-label">רביעיות שונות</div>
+            <div class="stat-explanation">
+                מתוך ${maxPossibleQuads.toLocaleString()} רביעיות אפשריות<br>
+                <span class="coverage-text">(כיסוי: ${((totalQuads/maxPossibleQuads)*100).toFixed(1)}%)</span>
+            </div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">${totalQuints.toLocaleString()}</div>
+            <div class="stat-label">חמישיות שונות</div>
+            <div class="stat-explanation">
+                מתוך ${maxPossibleQuints.toLocaleString()} חמישיות אפשריות<br>
+                <span class="coverage-text">(כיסוי: ${((totalQuints/maxPossibleQuints)*100).toFixed(1)}%)</span>
+            </div>
+        </div>
+    `;
+}
 
         // בחירת סוג צירוף
         function showCombination(type) {
