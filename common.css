@@ -253,6 +253,7 @@ body.high-contrast input,
 body.high-contrast textarea,
 body.high-contrast month-numbers,
 body.high-contrast seansoal-numbers,
+body.high-contrast seasonal-number .number,
 body.high-contrast select {
   background-color: #fff !important;
   color: #000 !important;
