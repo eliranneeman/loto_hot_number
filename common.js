@@ -117,33 +117,42 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// פונקציות נגישות
-let fontSize = 100;
-
+// גודל טקסט
 function increaseFont() {
-  fontSize += 10;
-  document.body.style.fontSize = fontSize + "%";
+  let size = parseInt(localStorage.getItem("fontSize") || "100");
+  size += 5;
+  document.body.style.fontSize = size + "%";
+  localStorage.setItem("fontSize", size);
 }
 
 function decreaseFont() {
-  fontSize -= 10;
-  if (fontSize < 50) fontSize = 50; // מניעת טקסט קטן מדי
-  document.body.style.fontSize = fontSize + "%";
+  let size = parseInt(localStorage.getItem("fontSize") || "100");
+  size -= 5;
+  if (size < 50) size = 50;
+  document.body.style.fontSize = size + "%";
+  localStorage.setItem("fontSize", size);
 }
 
+// ניגודיות גבוהה
 function toggleContrast() {
   document.body.classList.toggle("high-contrast");
+  localStorage.setItem("highContrast", document.body.classList.contains("high-contrast") ? "true" : "false");
 }
 
+// הדגשת קישורים
 function toggleLinks() {
   document.body.classList.toggle("highlight-links");
+  localStorage.setItem("highlightLinks", document.body.classList.contains("highlight-links") ? "true" : "false");
 }
 
+// איפוס כל ההגדרות
 function resetAccessibility() {
-  fontSize = 100;
   document.body.classList.remove("high-contrast");
   document.body.classList.remove("highlight-links");
   document.body.style.fontSize = "";
+  localStorage.removeItem("highContrast");
+  localStorage.removeItem("highlightLinks");
+  localStorage.removeItem("fontSize");
 }
 
 
