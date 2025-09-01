@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מחולל צירופים מתקדם</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .generator-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid #e0e0e0;
+        }
+
+        h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2em;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #2d3748;
+            font-size: 1.1em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .stats-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stats-box {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .stats-box h3 {
+            margin-top: 0;
+            color: #495057;
+            font-size: 1.2em;
+        }
+
+        .number-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .stat-number {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s;
+        }
+
+        .checkbox-item:hover {
+            background: #e3f2fd;
+            border-color: #667eea;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin-left: 10px;
+            transform: scale(1.2);
+        }
+
+        .generate-btn, .load-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 30px auto;
+            min-width: 200px;
+        }
+
+        .load-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+        }
+
+        .generate-btn:hover, .load-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .results {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid #e0e0e0;
+        }
+
+        .combination {
+            background: linear-gradient(45deg, #f8f9ff, #fff);
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .combination-numbers {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .number {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            min-width: 30px;
+            text-align: center;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .strategy-info {
+            background: #e8f4fd;
+            border: 1px solid #bee5eb;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.9em;
+            color: #0c5460;
+            text-align: center;
+        }
+
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .success {
+            color: #155724;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 מחולל צירופים מתקדם</h1>
+        
+        <!-- טעינת נתונים -->
+        <div class="generator-section">
+            <h2>📊 טעינת נתוני לוטו</h2>
+            <div class="form-group">
+                <label for="githubUrl">קישור לקובץ Excel ב-GitHub:</label>
+                <input type="url" id="githubUrl" value="https://github.com/USERNAME/REPOSITORY/raw/main/lotto.xlsx" placeholder="הכנס קישור לקובץ lotto.xlsx">
+            </div>
+            <button class="load-btn" onclick="loadLottoData()">📥 טען נתונים מ-GitHub</button>
+            
+            <div id="loadingStatus" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>טוען נתונים מהקובץ...</p>
+            </div>
+        </div>
+
+        <!-- הצגת סטטיסטיקות -->
+        <div id="statsSection" class="generator-section" style="display: none;">
+            <h2>📈 סטטיסטיקות מהנתונים</h2>
+            <div id="statsDisplay" class="stats-display"></div>
+        </div>
+
+        <!-- בחירת אסטרטגיות -->
+        <div id="strategiesSection" class="generator-section" style="display: none;">
+            <h2>🎯 בחירת אסטרטגיות</h2>
+            
+            <div class="form-group">
+                <label>בחר את האסטרטגיות הרצויות:</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="pairStrategy" checked>
+                        <label for="pairStrategy">צירופי זוגות נפוצים</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="tripletStrategy" checked>
+                        <label for="tripletStrategy">צירופי שלשות נפוצות</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="mixedStrategy" checked>
+                        <label for="mixedStrategy">ערבוב זוג + שלשה + מספר חם</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="quartetStrategy" checked>
+                        <label for="quartetStrategy">רביעיות + זוגות</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="quintetStrategy" checked>
+                        <label for="quintetStrategy">חמישיות + מספר חם</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="hotNumbersOnly" checked>
+                        <label for="hotNumbersOnly">מספרים חמים בלבד</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="combinationsCount">כמה צירופים לייצר:</label>
+                <input type="number" id="combinationsCount" value="5" min="1" max="50">
+            </div>
+
+            <button class="generate-btn" onclick="generateCombinations()">🚀 צור צירופים</button>
+        </div>
+
+        <div id="results" class="results" style="display: none;">
+            <h2>🎰 הצירופים שנוצרו</h2>
+            <div id="combinationsList"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        // נתונים גלובליים
+        let lottoData = [];
+        let hotNumbers = [];
+        let popularPairs = [];
+        let popularTriplets = [];
+        let totalNumbers = 37;
+        let pickedNumbers = 6;
+
+        // טעינת נתונים מ-GitHub
+        async function loadLottoData() {
+            const githubUrl = document.getElementById('githubUrl').value;
+            const loadingStatus = document.getElementById('loadingStatus');
+            const statsSection = document.getElementById('statsSection');
+            const strategiesSection = document.getElementById('strategiesSection');
+            
+            if (!githubUrl) {
+                alert('אנא הזן קישור לקובץ Excel');
+                return;
+            }
+
+            try {
+                loadingStatus.style.display = 'block';
+                statsSection.style.display = 'none';
+                strategiesSection.style.display = 'none';
+
+                // טעינת הקובץ
+                const response = await fetch(githubUrl);
+                if (!response.ok) {
+                    throw new Error('לא ניתן לטעון את הקובץ מ-GitHub');
+                }
+
+                const arrayBuffer = await response.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+                
+                // קריאת הגיליון הראשון
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                // עיבוד הנתונים
+                processLottoData(data);
+                
+                // הצגת סטטיסטיקות
+                displayStatistics();
+                
+                loadingStatus.style.display = 'none';
+                statsSection.style.display = 'block';
+                strategiesSection.style.display = 'block';
+
+            } catch (error) {
+                loadingStatus.style.display = 'none';
+                alert('שגיאה בטעינת הנתונים: ' + error.message);
+                console.error('Error loading data:', error);
+            }
+        }
+
+        // עיבוד נתוני הלוטו
+        function processLottoData(data) {
+            lottoData = [];
+            const numberFrequency = {};
+            const pairFrequency = {};
+            const tripletFrequency = {};
+
+            // הנחה: העמודות הן תאריך ואז המספרים הזוכים
+            for (let i = 1; i < data.length; i++) { // מתחיל מ-1 לדלג על כותרות
+                const row = data[i];
+                if (!row || row.length < 2) continue;
+
+                // חילוץ המספרים הזוכים (מעמודה 1 והלאה)
+                const numbers = [];
+                for (let j = 1; j < row.length; j++) {
+                    const num = parseInt(row[j]);
+                    if (!isNaN(num) && num > 0) {
+                        numbers.push(num);
+                    }
+                }
+
+                if (numbers.length >= 6) {
+                    numbers.sort((a, b) => a - b);
+                    lottoData.push({
+                        date: row[0],
+                        numbers: numbers
+                    });
+
+                    // ספירת תדירות מספרים
+                    numbers.forEach(num => {
+                        numberFrequency[num] = (numberFrequency[num] || 0) + 1;
+                    });
+
+                    // ספירת זוגות
+                    for (let a = 0; a < numbers.length; a++) {
+                        for (let b = a + 1; b < numbers.length; b++) {
+                            const pair = `${numbers[a]},${numbers[b]}`;
+                            pairFrequency[pair] = (pairFrequency[pair] || 0) + 1;
+                        }
+                    }
+
+                    // ספירת שלשות
+                    for (let a = 0; a < numbers.length; a++) {
+                        for (let b = a + 1; b < numbers.length; b++) {
+                            for (let c = b + 1; c < numbers.length; c++) {
+                                const triplet = `${numbers[a]},${numbers[b]},${numbers[c]}`;
+                                tripletFrequency[triplet] = (tripletFrequency[triplet] || 0) + 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // חישוב מספרים חמים (20% העליונים)
+            const sortedNumbers = Object.entries(numberFrequency)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, Math.ceil(Object.keys(numberFrequency).length * 0.2));
+            hotNumbers = sortedNumbers.map(([num, freq]) => parseInt(num));
+
+            // חישוב זוגות פופולריים (10 העליונים)
+            const sortedPairs = Object.entries(pairFrequency)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 10);
+            popularPairs = sortedPairs.map(([pair, freq]) => pair.split(',').map(n => parseInt(n)));
+
+            // חישוב שלשות פופולריות (8 העליונות)
+            const sortedTriplets = Object.entries(tripletFrequency)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 8);
+            popularTriplets = sortedTriplets.map(([triplet, freq]) => triplet.split(',').map(n => parseInt(n)));
+
+            // קביעת פרמטרים בסיסיים
+            if (lottoData.length > 0) {
+                pickedNumbers = lottoData[0].numbers.length;
+                totalNumbers = Math.max(...lottoData.flatMap(draw => draw.numbers));
+            }
+        }
+
+        // הצגת סטטיסטיקות
+        function displayStatistics() {
+            const statsDisplay = document.getElementById('statsDisplay');
+            
+            let html = `
+                <div class="stats-box">
+                    <h3>📊 נתונים כלליים</h3>
+                    <p><strong>סך הגרלות:</strong> ${lottoData.length}</p>
+                    <p><strong>מספרים בהגרלה:</strong> ${pickedNumbers}</p>
+                    <p><strong>טווח מספרים:</strong> 1-${totalNumbers}</p>
+                </div>
+                
+                <div class="stats-box">
+                    <h3>🔥 מספרים חמים</h3>
+                    <div class="number-list">
+                        ${hotNumbers.slice(0, 10).map(num => `<span class="stat-number">${num}</span>`).join('')}
+                    </div>
+                </div>
+                
+                <div class="stats-box">
+                    <h3>👥 זוגות פופולריים</h3>
+                    <div class="number-list">
+                        ${popularPairs.slice(0, 5).map(pair => `<span class="stat-number">${pair[0]},${pair[1]}</span>`).join('')}
+                    </div>
+                </div>
+                
+                <div class="stats-box">
+                    <h3>🎯 שלשות פופולריות</h3>
+                    <div class="number-list">
+                        ${popularTriplets.slice(0, 4).map(triplet => `<span class="stat-number">${triplet.join(',')}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+            
+            statsDisplay.innerHTML = html;
+        }
+
+        // פונקציות עזר
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function getRandomElements(array, count) {
+            const shuffled = shuffleArray(array);
+            return shuffled.slice(0, count);
+        }
+
+        function fillToSize(numbers, targetSize, totalNumbers) {
+            const result = [...new Set(numbers)]; // הסר כפילויות
+            
+            // אם יש יותר מדי מספרים, קח רק את הכמות הנדרשת
+            if (result.length > targetSize) {
+                return getRandomElements(result, targetSize);
+            }
+            
+            // אם חסרים מספרים, השלם עם מספרים רנדומליים
+            while (result.length < targetSize) {
+                const randomNum = Math.floor(Math.random() * totalNumbers) + 1;
+                if (!result.includes(randomNum)) {
+                    result.push(randomNum);
+                }
+            }
+            
+            return result.sort((a, b) => a - b);
+        }
+
+        // אסטרטגיות יצירת צירופים
+        function createPairStrategy(targetSize, totalNumbers) {
+            if (popularPairs.length === 0) return [];
+            
+            const selectedPairs = getRandomElements(popularPairs, Math.ceil(targetSize / 2));
+            let numbers = [];
+            
+            selectedPairs.forEach(pair => {
+                numbers.push(...pair);
+            });
+            
+            return fillToSize(numbers, targetSize, totalNumbers);
+        }
+
+        function createTripletStrategy(targetSize, totalNumbers) {
+            if (popularTriplets.length === 0) return [];
+            
+            const selectedTriplets = getRandomElements(popularTriplets, Math.ceil(targetSize / 3));
+            let numbers = [];
+            
+            selectedTriplets.forEach(triplet => {
+                numbers.push(...triplet);
+            });
+            
+            return fillToSize(numbers, targetSize, totalNumbers);
+        }
+
+        function createMixedStrategy(targetSize, totalNumbers) {
+            let numbers = [];
+            
+            // הוסף זוג פופולרי
+            if (popularPairs.length > 0) {
+                const randomPair = popularPairs[Math.floor(Math.random() * popularPairs.length)];
+                numbers.push(...randomPair);
+            }
+            
+            // הוסף שלשה פופולרית
+            if (popularTriplets.length > 0) {
+                const randomTriplet = popularTriplets[Math.floor(Math.random() * popularTriplets.length)];
+                numbers.push(...randomTriplet);
+            }
+         
