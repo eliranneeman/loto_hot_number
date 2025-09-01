@@ -353,9 +353,10 @@
                 // הצגת סטטיסטיקות
                 displayStatistics();
                 
+                loadingStatus.style.display = 'none';
+                statsSection.style.display = 'block';
+                strategiesSection.style.display = 'block';
                 
-                document.getElementById('loadingMessage').style.display = 'none';
-                document.getElementById('statsContent').style.display = 'block';
                 
             } catch (error) {
                 console.error('שגיאה בטעינת הנתונים:', error);
