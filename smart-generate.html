@@ -438,19 +438,19 @@
             // חישוב מספרים חמים (20% העליונים)
             const sortedNumbers = Object.entries(numberFrequency)
                 .sort(([,a], [,b]) => b - a)
-                .slice(0, Math.ceil(Object.keys(numberFrequency).length * 0.2));
+                .slice(0, Math.ceil(Object.keys(numberFrequency).length * 0.3));
             hotNumbers = sortedNumbers.map(([num, freq]) => parseInt(num));
 
             // חישוב זוגות פופולריים (10 העליונים)
             const sortedPairs = Object.entries(pairFrequency)
                 .sort(([,a], [,b]) => b - a)
-                .slice(0, 10);
+                .slice(0, 300);
             popularPairs = sortedPairs.map(([pair, freq]) => pair.split(',').map(n => parseInt(n)));
 
             // חישוב שלשות פופולריות (8 העליונות)
             const sortedTriplets = Object.entries(tripletFrequency)
                 .sort(([,a], [,b]) => b - a)
-                .slice(0, 8);
+                .slice(0, 200);
             popularTriplets = sortedTriplets.map(([triplet, freq]) => triplet.split(',').map(n => parseInt(n)));
 
             // קביעת פרמטרים בסיסיים
