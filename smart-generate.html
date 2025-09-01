@@ -553,4 +553,137 @@
                 const randomTriplet = popularTriplets[Math.floor(Math.random() * popularTriplets.length)];
                 numbers.push(...randomTriplet);
             }
+            // הוסף מספר חם
+            if (hotNumbers.length > 0) {
+                const randomHot = hotNumbers[Math.floor(Math.random() * hotNumbers.length)];
+                numbers.push(randomHot);
+            }
+            
+            return fillToSize(numbers, targetSize, totalNumbers);
+        }
+
+        function createQuartetStrategy(targetSize, totalNumbers) {
+            let numbers = [];
+            
+            // צור רביעייה מזוגות פופולריים
+            if (popularPairs.length >= 2) {
+                const selectedPairs = getRandomElements(popularPairs, 2);
+                selectedPairs.forEach(pair => {
+                    numbers.push(...pair);
+                });
+            }
+            
+            return fillToSize(numbers, targetSize, totalNumbers);
+        }
+
+        function createQuintetStrategy(targetSize, totalNumbers) {
+            let numbers = [];
+            
+            // קח 5 מספרים חמים
+            if (hotNumbers.length >= 5) {
+                numbers = getRandomElements(hotNumbers, 5);
+            }
+            
+            // הוסף מספר חם נוסף
+            if (hotNumbers.length > 0) {
+                const additionalHot = hotNumbers[Math.floor(Math.random() * hotNumbers.length)];
+                if (!numbers.includes(additionalHot)) {
+                    numbers.push(additionalHot);
+                }
+            }
+            
+            return fillToSize(numbers, targetSize, totalNumbers);
+        }
+
+        function createHotNumbersOnlyStrategy(targetSize, totalNumbers) {
+            if (hotNumbers.length === 0) return [];
+            return fillToSize(hotNumbers, targetSize, totalNumbers);
+        }
+
+        function generateCombinations() {
+            if (lottoData.length === 0) {
+                alert('אנא טען נתונים מהקובץ תחילה');
+                return;
+            }
+
+            const combinationsCount = parseInt(document.getElementById('combinationsCount').value);
+
+            // יצירת צירופים
+            const combinations = [];
+            const strategies = [];
+
+            if (document.getElementById('pairStrategy').checked) {
+                strategies.push({ name: 'צירופי זוגות נפוצים', func: createPairStrategy });
+            }
+            if (document.getElementById('tripletStrategy').checked) {
+                strategies.push({ name: 'צירופי שלשות נפוצות', func: createTripletStrategy });
+            }
+            if (document.getElementById('mixedStrategy').checked) {
+                strategies.push({ name: 'ערבוב זוג + שלשה + מספר חם', func: createMixedStrategy });
+            }
+            if (document.getElementById('quartetStrategy').checked) {
+                strategies.push({ name: 'רביעיות + זוגות', func: createQuartetStrategy });
+            }
+            if (document.getElementById('quintetStrategy').checked) {
+                strategies.push({ name: 'חמישיות + מספר חם', func: createQuintetStrategy });
+            }
+            if (document.getElementById('hotNumbersOnly').checked) {
+                strategies.push({ name: 'מספרים חמים בלבד', func: createHotNumbersOnlyStrategy });
+            }
+
+            if (strategies.length === 0) {
+                alert('אנא בחר לפחות אסטרטגיה אחת');
+                return;
+            }
+
+            // יצירת צירופים
+            for (let i = 0; i < combinationsCount; i++) {
+                const strategy = strategies[i % strategies.length];
+                const combination = strategy.func(pickedNumbers, totalNumbers);
+                
+                if (combination.length > 0) {
+                    combinations.push({
+                        numbers: combination,
+                        strategy: strategy.name
+                    });
+                }
+            }
+
+            // הצגת תוצאות
+            displayResults(combinations);
+        }
+
+        function displayResults(combinations) {
+            const resultsDiv = document.getElementById('results');
+            const combinationsListDiv = document.getElementById('combinationsList');
+            
+            if (combinations.length === 0) {
+                combinationsListDiv.innerHTML = '<div class="error">לא ניתן היה ליצור צירופים עם הנתונים הנוכחיים</div>';
+                resultsDiv.style.display = 'block';
+                return;
+            }
+
+            let html = '<div class="success">נוצרו ' + combinations.length + ' צירופים בהצלחה על בסיס ' + lottoData.length + ' הגרלות!</div>';
+            
+            combinations.forEach((combo, index) => {
+                html += '<div class="combination">';
+                html += '<div class="combination-numbers">';
+                html += '<strong>צירוף ' + (index + 1) + ':</strong> ';
+                
+                combo.numbers.forEach(number => {
+                    html += '<span class="number">' + number + '</span>';
+                });
+                
+                html += '</div>';
+                html += '<div class="strategy-info">אסטרטגיה: ' + combo.strategy + '</div>';
+                html += '</div>';
+            });
+
+            combinationsListDiv.innerHTML = html;
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
          
