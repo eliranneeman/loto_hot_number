@@ -345,6 +345,10 @@
         // טעינת הנתונים
         async function loadLottoData() {
             try {
+                loadingStatus.style.display = 'block';
+                statsSection.style.display = 'none';
+                strategiesSection.style.display = 'none';
+                
                 const response = await fetch('Lotto.xlsx');
                 if (!response.ok) throw new Error('לא ניתן לטעון את קובץ הנתונים');
                 
@@ -367,6 +371,7 @@
                 
                 
             } catch (error) {
+                loadingStatus.style.display = 'none';   
                 console.error('שגיאה בטעינת הנתונים:', error);
                 document.getElementById('loadingMessage').innerHTML = '❌ שגיאה בטעינת הנתונים. אנא ודא שקובץ Lotto.xlsx קיים.';
             }
