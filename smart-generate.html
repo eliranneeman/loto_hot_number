@@ -261,20 +261,7 @@
     <div class="container">
         <h1>🎲 מחולל צירופים מתקדם</h1>
         
-        <!-- טעינת נתונים -->
-        <div class="generator-section">
-            <h2>📊 טעינת נתוני לוטו</h2>
-            <div class="form-group">
-                <label for="githubUrl">קישור לקובץ Excel ב-GitHub:</label>
-                <input type="url" id="githubUrl" value="https://github.com/USERNAME/REPOSITORY/raw/main/lotto.xlsx" placeholder="הכנס קישור לקובץ lotto.xlsx">
-            </div>
-            <button class="load-btn" onclick="loadLottoData()">📥 טען נתונים מ-GitHub</button>
-            
-            <div id="loadingStatus" class="loading" style="display: none;">
-                <div class="spinner"></div>
-                <p>טוען נתונים מהקובץ...</p>
-            </div>
-        </div>
+
 
         <!-- הצגת סטטיסטיקות -->
         <div id="statsSection" class="generator-section" style="display: none;">
@@ -339,55 +326,43 @@
         let popularTriplets = [];
         let totalNumbers = 37;
         let pickedNumbers = 6;
+        let allResults = [];
+        let monthlyStats = {};
+        let seasonalNumberStats = {};
+        
 
-        // טעינת נתונים מ-GitHub
+        
+
+
+        // טעינת הנתונים
         async function loadLottoData() {
-            const githubUrl = document.getElementById('githubUrl').value;
-            const loadingStatus = document.getElementById('loadingStatus');
-            const statsSection = document.getElementById('statsSection');
-            const strategiesSection = document.getElementById('strategiesSection');
-            
-            if (!githubUrl) {
-                alert('אנא הזן קישור לקובץ Excel');
-                return;
-            }
-
             try {
-                loadingStatus.style.display = 'block';
-                statsSection.style.display = 'none';
-                strategiesSection.style.display = 'none';
-
-                // טעינת הקובץ
-                const response = await fetch(githubUrl);
-                if (!response.ok) {
-                    throw new Error('לא ניתן לטעון את הקובץ מ-GitHub');
-                }
-
-                const arrayBuffer = await response.arrayBuffer();
-                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+                const response = await fetch('Lotto.xlsx');
+                if (!response.ok) throw new Error('לא ניתן לטעון את קובץ הנתונים');
                 
-                // קריאת הגיליון הראשון
-                const firstSheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[firstSheetName];
-                const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
+                const data = await response.arrayBuffer();
+                const workbook = XLSX.read(data, {type: 'array'});
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                
+                allResults = jsonData;
                 // עיבוד הנתונים
                 processLottoData(data);
                 
                 // הצגת סטטיסטיקות
                 displayStatistics();
                 
-                loadingStatus.style.display = 'none';
-                statsSection.style.display = 'block';
-                strategiesSection.style.display = 'block';
-
+                
+                document.getElementById('loadingMessage').style.display = 'none';
+                document.getElementById('statsContent').style.display = 'block';
+                
             } catch (error) {
-                loadingStatus.style.display = 'none';
-                alert('שגיאה בטעינת הנתונים: ' + error.message);
-                console.error('Error loading data:', error);
+                console.error('שגיאה בטעינת הנתונים:', error);
+                document.getElementById('loadingMessage').innerHTML = '❌ שגיאה בטעינת הנתונים. אנא ודא שקובץ Lotto.xlsx קיים.';
             }
         }
-
+        
         // עיבוד נתוני הלוטו
         function processLottoData(data) {
             lottoData = [];
