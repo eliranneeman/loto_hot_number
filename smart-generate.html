@@ -344,6 +344,10 @@
 
         // טעינת הנתונים
         async function loadLottoData() {
+            const loadingStatus = document.getElementById('loadingStatus');
+            const statsSection = document.getElementById('statsSection');
+            const strategiesSection = document.getElementById('strategiesSection');
+            
             try {
                 loadingStatus.style.display = 'block';
                 statsSection.style.display = 'none';
@@ -352,7 +356,7 @@
                 const response = await fetch('Lotto.xlsx');
                 if (!response.ok) throw new Error('לא ניתן לטעון את קובץ הנתונים');
                 
-                const data = await response.arrayBuffer();
+                const arrayBuffer = await response.arrayBuffer();
                 const workbook = XLSX.read(data, {type: 'array'});
                 const sheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[sheetName];
