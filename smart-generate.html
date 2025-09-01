@@ -360,7 +360,7 @@
                 const workbook = XLSX.read(data, {type: 'array'});
                 const sheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[sheetName];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                const data = XLSX.utils.sheet_to_json(worksheet);
                 
                 allResults = jsonData;
                 // עיבוד הנתונים
