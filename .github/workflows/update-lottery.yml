@@ -26,6 +26,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
+    - name: Test connection to Pais website
+      run: |
+        echo "Testing connection to Pais website..."
+        curl -I --connect-timeout 10 --max-time 30 "https://www.pais.co.il/lotto/" || echo "Connection failed, but continuing..."
+    
     - name: Run lottery scraper
       run: |
         python lottery_scraper.py
