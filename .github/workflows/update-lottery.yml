@@ -2,7 +2,7 @@ name: Update Lottery Results
 
 on:
   schedule:
-    # כל יום בשעה 21:59 UTC (23:59 זמן ישראל)
+    # כל יום בחצות (23:59 בישראל ≈ 21:59 UTC)
     - cron: '59 21 * * *'
   workflow_dispatch: # אפשרות להרצה ידנית
 
@@ -25,23 +25,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    
-    - name: Test connection to Pais website
-      run: |
-        echo "Testing connection to Pais website..."
-        echo "Current time: $(date)"
-        echo "Testing with curl..."
-        curl -I --connect-timeout 30 --max-time 60 "https://www.pais.co.il/lotto/" || echo "Connection failed, but continuing..."
-        echo "Testing with wget..."
-        wget --spider --timeout=30 --tries=3 "https://www.pais.co.il/lotto/" || echo "Wget test failed, but continuing..."
+        pip install playwright
+        playwright install --with-deps chromium
     
     - name: Run lottery scraper
       run: |
         echo "Starting lottery scraper..."
-        echo "Current directory: $(pwd)"
-        echo "Files in directory: $(ls -la)"
-        echo "Python version: $(python --version)"
-        echo "Running scraper..."
         python lottery_scraper.py
     
     - name: Commit changes
