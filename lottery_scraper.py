@@ -15,6 +15,10 @@ import sys
 from datetime import datetime
 from bs4 import BeautifulSoup
 import os
+import urllib3
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class LotteryScraper:
     def __init__(self):
@@ -49,15 +53,20 @@ class LotteryScraper:
                     
                     # הוספת headers כדי להיראות כמו דפדפן רגיל
                     headers = {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                        'Accept-Language': 'he-IL,he;q=0.9,en;q=0.8',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                        'Accept-Language': 'he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7',
                         'Accept-Encoding': 'gzip, deflate, br',
                         'Connection': 'keep-alive',
-                        'Upgrade-Insecure-Requests': '1'
+                        'Upgrade-Insecure-Requests': '1',
+                        'Sec-Fetch-Dest': 'document',
+                        'Sec-Fetch-Mode': 'navigate',
+                        'Sec-Fetch-Site': 'none',
+                        'Sec-Fetch-User': '?1',
+                        'Cache-Control': 'max-age=0'
                     }
                     
-                    response = session.get(url, timeout=30, headers=headers)
+                    response = session.get(url, timeout=60, headers=headers, verify=False)
                 
                     if response.status_code == 200:
                         print("✅ האתר נטען בהצלחה")
@@ -82,13 +91,45 @@ class LotteryScraper:
         print("🔄 מנסה חלופה עם wget...")
         try:
             import subprocess
-            result = subprocess.run(['wget', '-q', '-O', '-', 'https://www.pais.co.il/lotto/'], 
-                                  capture_output=True, text=True, timeout=30)
+            # ננסה עם wget עם headers
+            cmd = [
+                'wget', 
+                '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                '--timeout=60',
+                '--tries=3',
+                '-q', '-O', '-', 
+                'https://www.pais.co.il/lotto/'
+            ]
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=90)
             if result.returncode == 0:
                 print("✅ האתר נטען בהצלחה עם wget")
                 return result.stdout
+            else:
+                print(f"❌ wget נכשל: {result.stderr}")
         except Exception as e:
             print(f"❌ שגיאה עם wget: {e}")
+        
+        # ננסה גם עם curl
+        print("🔄 מנסה חלופה עם curl...")
+        try:
+            import subprocess
+            cmd = [
+                'curl', 
+                '-L',  # follow redirects
+                '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                '--connect-timeout', '30',
+                '--max-time', '60',
+                '--retry', '3',
+                'https://www.pais.co.il/lotto/'
+            ]
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=90)
+            if result.returncode == 0:
+                print("✅ האתר נטען בהצלחה עם curl")
+                return result.stdout
+            else:
+                print(f"❌ curl נכשל: {result.stderr}")
+        except Exception as e:
+            print(f"❌ שגיאה עם curl: {e}")
         
         return None
     
