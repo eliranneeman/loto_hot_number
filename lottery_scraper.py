@@ -12,8 +12,8 @@ import sys
 from datetime import datetime
 from bs4 import BeautifulSoup
 import os
-from playwright.sync_api import sync_playwright
-
+from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
+import requests
 
 class LotteryScraper:
     def __init__(self):
@@ -22,23 +22,54 @@ class LotteryScraper:
 
     def get_website_content(self):
         """
-        מקבל את תוכן האתר באמצעות Playwright (כמו דפדפן אמיתי)
+        מנסה להביא את תוכן האתר עם Playwright. אם נכשל — תחזור לבקשת requests רגילה.
         """
         print("🌐 טוען את האתר עם Playwright...")
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            page = browser.new_page()
-            page.goto(self.url, timeout=60000)
-            page.wait_for_timeout(5000)  # המתנה לטעינת JS
-            html = page.content()
-            browser.close()
-        print("✅ האתר נטען בהצלחה עם Playwright")
-        return html
+        try:
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=True)
+                page = browser.new_page()
+
+                # הגדרת headers כדי להיראות כמו דפדפן אמיתי
+                page.set_extra_http_headers({
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                    "Accept-Language": "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",
+                })
+
+                # לטעון את הדף, לחכות לרשת להיות שקטה
+                page.goto(self.url, timeout=120000, wait_until="networkidle")
+                page.wait_for_timeout(5000)  # המתנה נוספת ל־JS להסתיים
+                html = page.content()
+                browser.close()
+                print("✅ האתר נטען בהצלחה עם Playwright")
+                return html
+
+        except PlaywrightTimeoutError as e:
+            print(f"⚠️ Playwright TimeoutError: {e}")
+        except Exception as e:
+            print(f"⚠️ Playwright Error: {e}")
+
+        print("🔄 ננסה גיבוי עם requests...")
+        try:
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7',
+            }
+            resp = requests.get(self.url, timeout=60, headers=headers, verify=True)
+            if resp.status_code == 200:
+                print("✅ האתר נטען בגיבוי עם requests")
+                return resp.text
+            else:
+                print(f"❌ בקשת requests נכשלה: סטטוס {resp.status_code}")
+        except Exception as e:
+            print(f"❌ בקשת גיבוי עם requests נכשלה: {e}")
+
+        print("❌ לא הצלחנו לטעון את האתר בכלל")
+        return None
 
     def extract_lottery_numbers(self, html_content):
-        """
-        מחלץ מספרי לוטו מהאתר
-        """
+        # (השאר את הקוד שלך כמו שהיה)
         print("🔍 מחפש מספרי לוטו באתר...")
         try:
             soup = BeautifulSoup(html_content, 'html.parser')
@@ -63,10 +94,10 @@ class LotteryScraper:
             print(f"❌ שגיאה בחילוץ: {e}")
             return None, None
 
+    # שאר הפונקציות שלך (find_numbers_near_text, find_strong_number_near_text,
+    # get_lottery_date, load_existing_data, is_duplicate, update_excel, update_statistics, run) כמו שהיו
+
     def find_numbers_near_text(self, soup, target_text):
-        """
-        מוצא מספרים ליד טקסט מסוים
-        """
         numbers = []
         elements_with_text = soup.find_all(string=re.compile(target_text, re.I))
 
@@ -92,9 +123,6 @@ class LotteryScraper:
         return numbers[:6] if len(numbers) >= 6 else []
 
     def find_strong_number_near_text(self, soup, target_text):
-        """
-        מוצא מספר חזק ליד טקסט מסוים
-        """
         elements_with_text = soup.find_all(string=re.compile(target_text, re.I))
 
         for text_element in elements_with_text:
@@ -114,9 +142,6 @@ class LotteryScraper:
         return None
 
     def get_lottery_date(self, html_content):
-        """
-        מקבל את תאריך ההגרלה מהאתר
-        """
         try:
             soup = BeautifulSoup(html_content, 'html.parser')
             date_elements = soup.find_all(string=re.compile(r'מיום.*בשעה', re.I))
@@ -138,9 +163,6 @@ class LotteryScraper:
             return datetime.now().strftime('%d/%m/%Y')
 
     def load_existing_data(self):
-        """
-        טוען נתונים קיימים
-        """
         if os.path.exists(self.excel_file):
             try:
                 df = pd.read_excel(self.excel_file)
@@ -154,12 +176,9 @@ class LotteryScraper:
             return pd.DataFrame()
 
     def is_duplicate(self, new_numbers, new_strong, existing_df):
-        """
-        בודק אם התוצאה כבר קיימת
-        """
         if existing_df.empty:
             return False
-        latest = existing_df.iloc[0]  # השורה הראשונה היא האחרונה
+        latest = existing_df.iloc[0]  # השורה הראשונה היא ההגרלה האחרונה
         existing_numbers = [latest[1], latest[2], latest[3],
                             latest[4], latest[5], latest[6]]
         existing_strong = latest['המספר החזק']
@@ -167,9 +186,6 @@ class LotteryScraper:
                 and new_strong == existing_strong)
 
     def update_excel(self, numbers, strong_number, html_content):
-        """
-        מעדכן את קובץ האקסל
-        """
         existing_df = self.load_existing_data()
         if self.is_duplicate(numbers, strong_number, existing_df):
             print("ℹ️ התוצאה כבר קיימת - לא מעדכן")
@@ -189,9 +205,6 @@ class LotteryScraper:
         return True
 
     def update_statistics(self):
-        """
-        מעדכן סטטיסטיקות
-        """
         try:
             df = pd.read_excel(self.excel_file)
             regular_stats = {i: int(sum((df[col] == i).sum() for col in [1, 2, 3, 4, 5, 6]))
@@ -217,6 +230,7 @@ class LotteryScraper:
         print("="*50)
         html_content = self.get_website_content()
         if not html_content:
+            print("❌ לא נמצאה תוצאה מהאתר")
             return False
         numbers, strong_number = self.extract_lottery_numbers(html_content)
         if not numbers or not strong_number:
@@ -227,12 +241,10 @@ class LotteryScraper:
         print("\n🎉 העדכון הושלם בהצלחה!")
         return True
 
-
 def main():
     scraper = LotteryScraper()
     success = scraper.run()
     sys.exit(0 if success else 1)
-
 
 if __name__ == "__main__":
     main()
