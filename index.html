@@ -979,41 +979,120 @@ id="no-sequences"> בלי רצפים של 3 מספרים עוקבים ומעלה
             }
         }
 
-        // נתוני הסטטיסטיקות
-        const regularStats = {
-    1: 390, 2: 365, 3: 387, 4: 346, 5: 355, 6: 377, 7: 355, 8: 382,
-    9: 359, 10: 381, 11: 410, 12: 394, 13: 361, 14: 339, 15: 355,
-    16: 348, 17: 370, 18: 348, 19: 345, 20: 375, 21: 396, 22: 365,
-    23: 360, 24: 371, 25: 393, 26: 388, 27: 376, 28: 382, 29: 386,
-    30: 372, 31: 358, 32: 348, 33: 366, 34: 373, 35: 317, 36: 280, 37: 297
-};
+        // נתוני הסטטיסטיקות - יטענו דינמית
+        let regularStats = {};
+        let strongStats = {};
+        
+        // פונקציות לקבלת מספרים מסודרים לפי תדירות
+        function getHotRegular() {
+            return Object.entries(regularStats)
+                .sort((a, b) => b[1] - a[1])
+                .map(([num]) => parseInt(num));
+        }
+        
+        function getColdRegular() {
+            return Object.entries(regularStats)
+                .sort((a, b) => a[1] - b[1])
+                .map(([num]) => parseInt(num));
+        }
+        
+        function getHotStrong() {
+            return Object.entries(strongStats)
+                .sort((a, b) => b[1] - a[1])
+                .map(([num]) => parseInt(num));
+        }
+        
+        function getColdStrong() {
+            return Object.entries(strongStats)
+                .sort((a, b) => a[1] - b[1])
+                .map(([num]) => parseInt(num));
+        }
+        
+        // פונקציה לטעינת סטטיסטיקות מהקובץ
+        async function loadStatistics() {
+            try {
+                const response = await fetch('lottery_stats.json');
+                if (response.ok) {
+                    const stats = await response.json();
+                    regularStats = stats.regular_stats || {};
+                    strongStats = stats.strong_stats || {};
+                    
+                    console.log('סטטיסטיקות נטענו בהצלחה:', stats);
+                    updateHotNumbersDisplay();
+                } else {
+                    console.warn('לא ניתן לטעון סטטיסטיקות, משתמש בנתונים ברירת מחדל');
+                    loadDefaultStatistics();
+                }
+            } catch (error) {
+                console.error('שגיאה בטעינת סטטיסטיקות:', error);
+                loadDefaultStatistics();
+            }
+        }
 
-const strongStats = {
-    1: 264, 2: 254, 3: 269, 4: 246, 5: 261, 6: 266, 7: 250, 8: 22
-};
-        
-        // מספרים מסודרים לפי תדירות
-        const hotRegular = Object.entries(regularStats)
-            .sort((a, b) => b[1] - a[1])
-            .map(([num]) => parseInt(num));
-        
-        const coldRegular = Object.entries(regularStats)
-            .sort((a, b) => a[1] - b[1])
-            .map(([num]) => parseInt(num));
-        
-        const hotStrong = Object.entries(strongStats)
-            .sort((a, b) => b[1] - a[1])
-            .map(([num]) => parseInt(num));
-        
-        const coldStrong = Object.entries(strongStats)
-            .sort((a, b) => a[1] - b[1])
-            .map(([num]) => parseInt(num));
-        
+        // פונקציה לעדכון סטטיסטיקות מ-Google Cloud
+        async function updateFromCloud() {
+            try {
+                console.log('🔄 מעדכן סטטיסטיקות מ-Google Cloud...');
+                
+                // כאן תוכל להחליף את הכתובת לכתובת ה-Cloud Function שלך
+                const cloudUrl = 'https://your-cloud-function-url/lottery-scraper';
+                
+                const response = await fetch(cloudUrl);
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        console.log('✅ סטטיסטיקות עודכנו מ-Google Cloud');
+                        
+                        // עדכון הסטטיסטיקות
+                        regularStats = data.stats.regular_stats || {};
+                        strongStats = data.stats.strong_stats || {};
+                        
+                        // עדכון התצוגה
+                        updateHotNumbersDisplay();
+                        
+                        // עדכון מונה ההיסטוריה
+                        document.getElementById('history-counter').textContent = data.stats.total_draws;
+                        
+                        return true;
+                    }
+                }
+                
+                console.warn('לא ניתן לעדכן מ-Google Cloud');
+                return false;
+                
+            } catch (error) {
+                console.error('שגיאה בעדכון מ-Google Cloud:', error);
+                return false;
+            }
+        }
+
+        // פונקציה לטעינת נתונים ברירת מחדל
+        function loadDefaultStatistics() {
+            regularStats = {
+                1: 390, 2: 365, 3: 387, 4: 346, 5: 355, 6: 377, 7: 355, 8: 382,
+                9: 359, 10: 381, 11: 410, 12: 394, 13: 361, 14: 339, 15: 355,
+                16: 348, 17: 370, 18: 348, 19: 345, 20: 375, 21: 396, 22: 365,
+                23: 360, 24: 371, 25: 393, 26: 388, 27: 376, 28: 382, 29: 386,
+                30: 372, 31: 358, 32: 348, 33: 366, 34: 373, 35: 317, 36: 280, 37: 297
+            };
+
+            strongStats = {
+                1: 264, 2: 254, 3: 269, 4: 246, 5: 261, 6: 266, 7: 250, 8: 22
+            };
+            
+            updateHotNumbersDisplay();
+        }
+
         // פונקציה לעדכון תצוגת המספרים החמים בדף
         function updateHotNumbersDisplay() {
+            // עדכון רשימות המספרים החמים
+            const hotRegular = getHotRegular();
+            const hotStrong = getHotStrong();
+
             const hotRegularList = document.getElementById('hot-regular-list');
             hotRegularList.innerHTML = '';
-            for (let i = 0; i < 9; i++) {
+            for (let i = 0; i < Math.min(9, hotRegular.length); i++) {
                 const num = hotRegular[i];
                 const count = regularStats[num];
                 const span = document.createElement('span');
@@ -1024,7 +1103,7 @@ const strongStats = {
 
             const hotStrongList = document.getElementById('hot-strong-list');
             hotStrongList.innerHTML = '';
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < Math.min(3, hotStrong.length); i++) {
                 const num = hotStrong[i];
                 const count = strongStats[num];
                 const span = document.createElement('span');
@@ -1175,6 +1254,7 @@ if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
             const remainingCount = 6 - hotCount;
             
             let numbers = [];
+            const hotRegular = getHotRegular();
             
             // בחירת מספרים חמים (מהטופ 15)
             if (hotCount > 0) {
@@ -1201,6 +1281,7 @@ if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
         }
         
         function generateHotStrongNumber(weight) {
+            const hotStrong = getHotStrong();
             return Math.random() < weight 
                 ? hotStrong[Math.floor(Math.random() * Math.min(3, hotStrong.length))]
                 : hotStrong[Math.floor(Math.random() * hotStrong.length)];
@@ -1208,6 +1289,7 @@ if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
         
         function generateBalancedNumbers() {
             let numbers = [];
+            const hotRegular = getHotRegular();
             
             // 3 מספרים חמים מהטופ 10
             const hotPool = hotRegular.slice(0, 10);
@@ -1236,11 +1318,14 @@ if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
         }
         
         function generateBalancedStrongNumber() {
+            const hotStrong = getHotStrong();
             return hotStrong[Math.floor(Math.random() * hotStrong.length)];
         }
         
         function generateColdNumbers() {
             let numbers = [];
+            const coldRegular = getColdRegular();
+            const hotRegular = getHotRegular();
             
             // 4 מספרים קרים ביותר
             const coldPool = coldRegular.slice(0, 10);
@@ -1263,6 +1348,7 @@ if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
         }
         
         function generateColdStrongNumber() {
+            const coldStrong = getColdStrong();
             return coldStrong[Math.floor(Math.random() * Math.min(3, coldStrong.length))];
         }
         
@@ -1397,8 +1483,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // העלאת מונה הביקורים ב-Firebase
    // incrementVisitInFirebase();
     
+    // טעינת סטטיסטיקות דינמית
+    loadStatistics();
+    
     loadExcelFromSite();
-    updateHotNumbersDisplay();
     generateNumbers();
 });
     </script>

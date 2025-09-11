@@ -1,0 +1,4 @@
+requests==2.*
+pandas==2.*
+openpyxl==3.*
+beautifulsoup4==4.*
