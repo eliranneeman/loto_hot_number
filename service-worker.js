@@ -1,5 +1,5 @@
 // service-worker.js
-const CACHE_NAME = 'loto-hot-v1';
+const CACHE_NAME = 'loto-hot-v2';
 const urlsToCache = [
   '/',
   '/index.html',

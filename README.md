@@ -1,72 +1,28 @@
-# מערכת עדכון תוצאות לוטו
+# LottoGun
 
-## תיאור המערכת
-
-מערכת פשוטה לעדכון תוצאות לוטו מהאתר של מפעל הפיס.
+אתר הצעות צירופים ללוטו הישראלי, על בסיס כל הגרלות השיטה הנוכחית (6 מתוך 37 + מספר חזק 1-7, מאז מאי 2011).
 
 ## איך זה עובד
 
-1. **סקריפט מקומי** - `lottery_scraper.py` מזהה תוצאות מהאתר
-2. **עדכון קובץ אקסל** - התוצאות נשמרות ב-`Lotto.xlsx`
-3. **עדכון סטטיסטיקות** - נוצר קובץ `lottery_stats.json`
-4. **האתר קורא מהקובץ** - האתר מציג את הנתונים המעודכנים
+1. הארכיון הרשמי יורד מאתר מפעל הפיס: `https://www.pais.co.il/Lotto/lotto_resultsDownload.aspx`
+2. נשמרות רק הגרלות השיטה הנוכחית ב-`lottery_results.json`
+3. האתר מציג הצעות צירופים, סטטיסטיקות ואת כל התוצאות
+4. Firebase Function רצה כל יום בחצות שעון ישראל, בודקת אם יצאה הגרלה חדשה ומעדכנת את Realtime Database
 
-## התקנה והפעלה
+## עדכון מקומי
 
-### 1. התקנת תלויות
 ```bash
-pip install -r requirements.txt
+python3 scripts/sync_pais_results.py
 ```
 
-### 2. הפעלת הסקריפט
+## פריסת פונקציית Firebase
+
 ```bash
-python lottery_scraper.py
+npm install -g firebase-tools
+firebase login
+cd functions && npm install && cd ..
+firebase deploy --only functions,database
 ```
 
-## Google Cloud Functions
-
-### הגדרה
-1. העלה את הקבצים `main.py` ו-`requirements_cloud.txt` ל-Google Cloud Functions
-2. הגדר תזמון להפעלה בימי שלישי, חמישי ושבת
-3. עדכן את הכתובת ב-`index.html`
-
-### קבצים נדרשים
-- `main.py` - Cloud Function
-- `requirements_cloud.txt` - תלויות
-
-## קבצים במערכת
-
-- `lottery_scraper.py` - סקריפט מקומי
-- `main.py` - Google Cloud Function
-- `requirements.txt` - תלויות מקומיות
-- `requirements_cloud.txt` - תלויות Cloud
-- `Lotto.xlsx` - קובץ תוצאות (נוצר אוטומטית)
-- `lottery_stats.json` - סטטיסטיקות (נוצר אוטומטית)
-
-## יתרונות
-
-✅ **פשוט** - סקריפט אחד עושה הכל  
-✅ **יעיל** - מזהה תוצאות מהאתר אוטומטית  
-✅ **חכם** - לא מעדכן אם התוצאה כבר קיימת  
-✅ **מהיר** - עדכון מיידי של האתר  
-
-## פתרון בעיות
-
-### שגיאות נפוצות
-
-1. **"מודולים חסרים"**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. **"לא נמצאו מספרים"**
-   - האתר לא מעודכן או השתנה
-   - נסה שוב מאוחר יותר
-
-3. **"שגיאה בחיבור"**
-   - בדוק חיבור לאינטרנט
-   - האתר זמנית לא זמין
-
----
-
-**הערה**: המערכת מיועדת לשימוש אישי בלבד.
+הפונקציה `checkLotteryResults` רצה כל לילה ב-00:00 לפי `Asia/Jerusalem`.
+אפשר גם להריץ ידנית דרך `checkLotteryNow`.

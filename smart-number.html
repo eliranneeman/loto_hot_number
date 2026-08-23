@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>צירופים מנצחים - LottoGun</title>
+    <script src="/js/lottery-data.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -443,14 +444,8 @@
         // טעינת הנתונים מקובץ האקסל
         async function loadAndAnalyzeData() {
             try {
-                const response = await fetch('Lotto.xlsx');
-                if (!response.ok) throw new Error('לא ניתן לטעון את קובץ הנתונים');
-                
-                const data = await response.arrayBuffer();
-                const workbook = XLSX.read(data, {type: 'array'});
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[sheetName];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                const archive = await LottoData.load();
+                const jsonData = LottoData.toLegacyRows(archive.results);
                 
                 allResults = jsonData;
                 calculateStatistics();
@@ -463,7 +458,7 @@
                 
             } catch (error) {
                 console.error('שגיאה בטעינת הנתונים:', error);
-                document.getElementById('loadingMessage').innerHTML = '❌ שגיאה בטעינת הנתונים. אנא ודא שקובץ Lotto.xlsx קיים.';
+                document.getElementById('loadingMessage').innerHTML = '❌ שגיאה בטעינת ארכיון התוצאות.';
             }
         }
 

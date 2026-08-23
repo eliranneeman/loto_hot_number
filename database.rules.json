@@ -1,0 +1,12 @@
+{
+  "rules": {
+    "counters": {
+      ".read": true,
+      ".write": true
+    },
+    "lotto": {
+      ".read": true,
+      ".write": false
+    }
+  }
+}

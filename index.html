@@ -6,11 +6,12 @@
 <meta name="theme-color" content="#1976d2">
 	<link rel="icon" type="image/png" href="/image.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>הלוטו איי.איי</title>
+    <title>LottoGun | הצעות צירופים ללוטו הישראלי</title>
      <link rel="stylesheet" href="/common.css">
  	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2154227955978159"
      crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="/js/lottery-data.js"></script>
 
 <meta name="google-adsense-account" content="ca-pub-2154227955978159">
 	
@@ -544,22 +545,24 @@
 
 		
         <section class="content">
-  <h1>ברוכים הבאים ל־LottoGun</h1>
+  <h1>המקום לקבל הצעות צירופים ללוטו</h1>
   <p>
-    האתר  נבנה כדי לעזור לחובבי הגרלות הלוטו להבין טוב יותר את המספרים
-    שחוזרים ונשנים. בעזרת הכלי שלנו תוכלו ליצור צירופים בעלי פוטנציאל גבוהה יותר לזכיה.
+    LottoGun מנתח את כל הגרלות הלוטו בשיטה הנוכחית — 6 מספרים מתוך 37 ומספר חזק מ-1 עד 7 —
+    ומציע צירופים על בסיס המספרים החמים, הקרים והדפוסים שחוזרים לאורך השנים.
   </p>
-  <h2>מה תוכלו למצוא באתר?</h2>
+  <div id="latest-draw-card" class="stats" style="display:none; margin-top: 16px;">
+    <div class="stats-title">ההגרלה האחרונה במפעל הפיס</div>
+    <div id="latest-draw-body"></div>
+  </div>
+  <h2>מה יש כאן?</h2>
   <ul>
-    <li>מספרים חמים וסטטיסטיקות עדכניות</li>
-    <li>אפשרות להעלות קובץ אקסל עם תוצאות העבר לפי בחירתכם</li>
-    <li>הורדה של קבצים עם נתוני העבר שהאתר משתמש בו</li>
-    <li>סטטיסטיקות של מספרים שעלו יחד לאורך השנים</li>
+    <li>הצעות צירופים לפי אסטרטגיה: חם, מאוזן, קר או אקראי</li>
+    <li>ארכיון מלא של כל התוצאות מאז תחילת השיטה הנוכחית במאי 2011</li>
+    <li>עדכון אוטומטי בכל לילה מאתר מפעל הפיס</li>
+    <li>סטטיסטיקות, זוגות נפוצים ובדיקה אם צירוף שלכם כבר יצא</li>
   </ul>
   <p>
-    המטרה שלנו היא לספק כלי פשוט, ברור ונגיש – כדי שתוכלו להפיק את המירב
-    מהתחביב שלכם. חשוב להדגיש: האתר מיועד למטרות בידור וסטטיסטיקה בלבד,
-    ואינו מבטיח זכייה או תוצאה כלשהי.
+    האתר מיועד לניתוח סטטיסטי ולשעשוע בלבד. הגרלת הלוטו אקראית, ואין כאן הבטחת זכייה.
   </p>
 		</section>
 
@@ -598,11 +601,11 @@
     <!-- כפתור הורדה -->
     <div style="text-align: center; margin-bottom: 20px;">
         <a href="#" id="download-sample-btn" class="file-upload-btn" onclick="downloadSampleFile()" style="text-decoration: none; display: inline-block;">
-          הורדת קובץ עם תוצאות ההגרלות מתאריך 28/02/2009
+          הורדת קובץ עם כל תוצאות השיטה הנוכחית
         </a>
         <div style="font-size: 12px; color: #666; margin-top: 5px;">
-            קובץ Excel מעודכן עם כל תוצאות הלוטו מהשנים האחרונות נטען אוטומטית בכניסה לאתר.<br>
-            במידה ויש בידכם קובץ אחר שתרצו להפיק ממנו צירופים ניתן לטעון אותו כאן על פי הפרמטרים הרשומים מטה.
+            האתר טוען אוטומטית את כל הגרלות הלוטו מאז מאי 2011, כולל עדכון יומי מאתר הפיס.<br>
+            אם יש לכם קובץ אחר שתרצו להפיק ממנו צירופים, אפשר לטעון אותו כאן.
         </div>
     </div>
     
@@ -689,7 +692,7 @@ id="no-sequences"> בלי רצפים של 3 מספרים עוקבים ומעלה
             </div>
             <div class="counter">
                 <div class="counter-number" id="history-counter">0</div>
-                <div class="counter-label">הגרלות בהיסטוריה משנת 2009</div>
+                <div class="counter-label">הגרלות בשיטה הנוכחית מאז 2011</div>
             </div>
 		</div>
 		
@@ -765,7 +768,7 @@ id="no-sequences"> בלי רצפים של 3 מספרים עוקבים ומעלה
         // פונקציה להורדת קובץ הדוגמה
         function downloadSampleFile() {
             // כאן תוכל להחליף את הקישור לקישור האמיתי שלך ב-GitHub
-            const githubUrl = 'https://github.com/eliranneeman/loto_hot_number/raw/refs/heads/main/Lotto.xlsx';
+            const githubUrl = '/lottery_results.json';
             
             // יצירת אלמנט a זמני להורדה
             const link = document.createElement('a');
@@ -1007,19 +1010,56 @@ id="no-sequences"> בלי רצפים של 3 מספרים עוקבים ומעלה
                 .map(([num]) => parseInt(num));
         }
         
-        // פונקציה לטעינת סטטיסטיקות מהקובץ
+        function applyArchiveStats(stats) {
+            regularStats = stats.regular_stats || {};
+            strongStats = stats.strong_stats || {};
+            updateHotNumbersDisplay();
+        }
+
+        function computeStatsFromHistory(history) {
+            const regular = {};
+            const strong = {};
+            for (let i = 1; i <= 37; i++) regular[i] = 0;
+            for (let i = 1; i <= 7; i++) strong[i] = 0;
+            history.forEach((draw, index) => {
+                const recencyBonus = index < 60 ? 2 : 1;
+                (draw.numbers || []).forEach((num) => {
+                    if (num >= 1 && num <= 37) regular[num] += recencyBonus;
+                });
+                if (draw.strong >= 1 && draw.strong <= 7) {
+                    strong[draw.strong] += recencyBonus;
+                }
+            });
+            return { regular_stats: regular, strong_stats: strong };
+        }
+
+        function renderLatestDraw(draw) {
+            const card = document.getElementById('latest-draw-card');
+            const body = document.getElementById('latest-draw-body');
+            if (!card || !body || !draw) return;
+            const balls = (draw.numbers || []).map((num) => `<span class="number regular">${num}</span>`).join('');
+            body.innerHTML = `
+                <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+                    <div class="numbers">${balls}<span class="number strong">${draw.strong}</span></div>
+                    <div>
+                        <div><strong>הגרלה ${draw.id || ''}</strong></div>
+                        <div>${draw.dateDisplay || draw.date || ''}</div>
+                    </div>
+                </div>
+            `;
+            card.style.display = 'block';
+        }
+
         async function loadStatistics() {
             try {
+                if (lotteryHistory.length) {
+                    applyArchiveStats(computeStatsFromHistory(lotteryHistory));
+                    return;
+                }
                 const response = await fetch('lottery_stats.json');
                 if (response.ok) {
-                    const stats = await response.json();
-                    regularStats = stats.regular_stats || {};
-                    strongStats = stats.strong_stats || {};
-                    
-                    console.log('סטטיסטיקות נטענו בהצלחה:', stats);
-                    updateHotNumbersDisplay();
+                    applyArchiveStats(await response.json());
                 } else {
-                    console.warn('לא ניתן לטעון סטטיסטיקות, משתמש בנתונים ברירת מחדל');
                     loadDefaultStatistics();
                 }
             } catch (error) {
@@ -1425,43 +1465,28 @@ function hasSequenceOfTwo(numbers) {
     return false;
 }
 
-     const excelUrl = "https://github.com/eliranneeman/loto_hot_number/raw/refs/heads/main/Lotto.xlsx";
-    fetch(excelUrl)
-    function loadExcelFromSite() {
+    async function loadExcelFromSite() {
     const status = document.getElementById('file-status');
     status.style.display = 'block';
     status.className = 'file-status';
-    status.textContent = '🔄 טוען קובץ מהאתר...';
+    status.textContent = '🔄 טוען את כל תוצאות השיטה הנוכחית...';
 
-    // כאן יש להכניס את המיקום המדויק של הקובץ באתר
-    const excelPath = 'Lotto.xlsx'; // אם הקובץ בתיקיית הראשית של האתר
-    // אם בתיקייה אחרת, למשל 'assets/Lotto.xlsx', שנה ל- 'assets/Lotto.xlsx'
+    try {
+        const archive = await LottoData.load();
+        lotteryHistory = LottoData.toHistory(archive.results);
+        buildWinningCombinations();
+        applyArchiveStats(archive.stats || computeStatsFromHistory(lotteryHistory));
+        renderLatestDraw(archive.lastDraw || lotteryHistory[0]);
 
-    fetch(excelPath)
-        .then(res => {
-            if (!res.ok) throw new Error('Failed to fetch Excel file');
-            return res.arrayBuffer();
-        })
-        .then(ab => {
-            const workbook = XLSX.read(ab, { type: "array" });
-            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-            const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-
-            // הפונקציה הקיימת שלך שמעבדת את הנתונים
-            processLotteryData(jsonData);
-
-            status.className = 'file-status success';
-            status.textContent = `✅ הקובץ נטען בהצלחה! נטענו ${lotteryHistory.length} הגרלות`;
-
-            // עדכון מונה היסטוריה
-            document.getElementById('history-counter').textContent = lotteryHistory.length;
-            document.getElementById('history-filter').style.display = 'flex';
-        })
-        .catch(error => {
-            status.className = 'file-status error';
-            status.textContent = '❌ שגיאה בטעינת הקובץ האוטומטי';
-            console.error("Error loading Excel file:", error);
-        });
+        status.className = 'file-status success';
+        status.textContent = `✅ נטענו ${lotteryHistory.length} הגרלות מהשיטה הנוכחית`;
+        document.getElementById('history-counter').textContent = lotteryHistory.length.toLocaleString('he-IL');
+        document.getElementById('history-filter').style.display = 'flex';
+    } catch (error) {
+        status.className = 'file-status error';
+        status.textContent = '❌ שגיאה בטעינת ארכיון התוצאות';
+        console.error("Error loading lottery archive:", error);
+    }
 }
 
 
@@ -1475,17 +1500,9 @@ function toggleUploadSection() {
 
 
 // אתחול האתר
-document.addEventListener('DOMContentLoaded', function() {
-    // טעינת מונים בזמן אמת
-   // loadCounters();   // מאזין לשינויים בפיירבייס
-    
-    // העלאת מונה הביקורים ב-Firebase
-   // incrementVisitInFirebase();
-    
-    // טעינת סטטיסטיקות דינמית
-    loadStatistics();
-    
-    loadExcelFromSite();
+document.addEventListener('DOMContentLoaded', async function() {
+    await loadExcelFromSite();
+    await loadStatistics();
     generateNumbers();
 });
     </script>

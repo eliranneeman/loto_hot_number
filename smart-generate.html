@@ -326,6 +326,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="/js/lottery-data.js"></script>
     <script>
         // נתונים גלובליים
         let lottoData = [];
@@ -353,15 +354,8 @@
                 statsSection.style.display = 'none';
                 strategiesSection.style.display = 'none';
                 
-                const response = await fetch('Lotto.xlsx');
-                if (!response.ok) throw new Error('לא ניתן לטעון את קובץ הנתונים');
-                
-                const arrayBuffer = await response.arrayBuffer();
-                const workbook = XLSX.read(arrayBuffer, {type: 'array'});
-                // קריאת הגיליון הראשון
-                const firstSheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[firstSheetName];
-                const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                const archive = await LottoData.load();
+                const data = LottoData.toHeaderRows(archive.results);
 
                 
                 // עיבוד הנתונים
@@ -378,7 +372,7 @@
             } catch (error) {
                 loadingStatus.style.display = 'none';   
                 console.error('שגיאה בטעינת הנתונים:', error);
-                document.getElementById('loadingMessage').innerHTML = '❌ שגיאה בטעינת הנתונים. אנא ודא שקובץ Lotto.xlsx קיים.';
+                document.getElementById('loadingMessage').innerHTML = '❌ שגיאה בטעינת ארכיון התוצאות.';
             }
         }
         

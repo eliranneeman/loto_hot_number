@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>תוצאות הגרלות - LottoGun</title>
   <link rel="stylesheet" href="/common.css">
+    <script src="/js/lottery-data.js"></script>
     
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2154227955978159"
      crossorigin="anonymous"></script>
@@ -362,7 +363,7 @@ header {
     <div class="container">
         <header>
             <div class="logo">🎯 LottoGun</div>
-            <div class="subtitle">תוצאות הגרלות הלוטו</div>
+            <div class="subtitle">כל תוצאות הלוטו בשיטה הנוכחית, מעודכנות כל לילה מאתר הפיס</div>
         </header>
         
         <div class="nav-buttons">
@@ -421,12 +422,14 @@ header {
         <div id="searchResult"></div>
         
         <div class="results-section">
-            <div class="results-title">📋 כל תוצאות ההגרלות</div>
+            <div class="results-title">📋 כל תוצאות ההגרלות בשיטה הנוכחית</div>
+            <div id="archiveSummary" style="text-align:center; margin-bottom:16px;"></div>
             <div id="loadingMessage" class="loading">טוען נתונים...</div>
             
             <table class="results-table" id="resultsTable" style="display: none;">
                 <thead>
                     <tr>
+                        <th>הגרלה</th>
                         <th>תאריך</th>
                         <th>1</th>
                         <th>2</th>
@@ -442,7 +445,7 @@ header {
             </table>
             
             <div id="noDataMessage" class="no-results" style="display: none;">
-                לא נמצאו נתונים. אנא ודא שקובץ Lotto.xlsx קיים בתיקייה הראשית.
+                לא נמצאו נתונים. נסו לרענן את העמוד.
             </div>
         </div>
     </div>
@@ -451,19 +454,14 @@ header {
     <script>
         let allResults = [];
 
-        // טעינת הנתונים מקובץ האקסל
         async function loadExcelData() {
             try {
-                const response = await fetch('Lotto.xlsx');
-                if (!response.ok) throw new Error('לא ניתן לטעון את קובץ הנתונים');
-                
-                const data = await response.arrayBuffer();
-                const workbook = XLSX.read(data, {type: 'array'});
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[sheetName];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                
-                allResults = jsonData;
+                const archive = await LottoData.load();
+                allResults = LottoData.toLegacyRows(archive.results);
+                const summary = document.getElementById('archiveSummary');
+                if (summary && archive.lastDraw) {
+                    summary.innerHTML = `ארכיון מעודכן: <strong>${archive.totalDraws.toLocaleString('he-IL')}</strong> הגרלות · אחרונה #${archive.lastDraw.id} ב-${archive.lastDraw.dateDisplay}`;
+                }
                 displayResults(allResults);
                 
                 document.getElementById('loadingMessage').style.display = 'none';
@@ -485,7 +483,10 @@ header {
                 const row = document.createElement('tr');
                 row.id = `row-${index}`;
                 
-                // תאריך
+                const idCell = document.createElement('td');
+                idCell.textContent = result.drawId || result['הגרלה'] || '';
+                row.appendChild(idCell);
+
                 const dateCell = document.createElement('td');
                 dateCell.textContent = formatDate(result['תאריך'] || result['Date'] || '');
                 row.appendChild(dateCell);
