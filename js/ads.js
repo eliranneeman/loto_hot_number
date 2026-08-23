@@ -1,11 +1,18 @@
 (function (global) {
   const FIREBASE_ADS_URL = "https://loto-hot-default-rtdb.firebaseio.com/ads.json";
   const SESSION_KEY = "lottogun:ads:v2";
-  const IMPRESSION_KEY = "lottogun:ad-impressions:v1";
   const SESSION_TTL_MS = 3 * 60 * 1000;
 
   let memory = null;
   let inflight = null;
+  /** Prevent double-count when renderAll runs more than once on the same page */
+  const impressedThisPage = new Set();
+
+  try {
+    sessionStorage.removeItem("lottogun:ad-impressions:v1");
+  } catch {
+    /* ignore */
+  }
 
   const DEFAULT_SETTINGS = {
     advertiseBanner: {
@@ -182,28 +189,15 @@
   }
 
   function wasImpressionTracked(adId) {
-    try {
-      const raw = sessionStorage.getItem(IMPRESSION_KEY);
-      const seen = raw ? JSON.parse(raw) : {};
-      return Boolean(seen[adId]);
-    } catch {
-      return false;
-    }
+    return impressedThisPage.has(adId);
   }
 
   function markImpressionTracked(adId) {
-    try {
-      const raw = sessionStorage.getItem(IMPRESSION_KEY);
-      const seen = raw ? JSON.parse(raw) : {};
-      seen[adId] = Date.now();
-      sessionStorage.setItem(IMPRESSION_KEY, JSON.stringify(seen));
-    } catch {
-      /* ignore */
-    }
+    impressedThisPage.add(adId);
   }
 
   function bumpStat(kind, adId) {
-    if (!adId) return;
+    if (!adId) return Promise.resolve(false);
     const url =
       "https://loto-hot-default-rtdb.firebaseio.com/ads/stats/" +
       kind +
@@ -219,27 +213,30 @@
         keepalive: true,
       });
 
-    fetch(url, {
+    return fetch(url, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ".sv": { increment: 1 } }),
       keepalive: true,
     })
       .then(async (response) => {
-        if (response.ok) return;
+        if (response.ok) return true;
         console.warn("[LottoAds] increment failed, falling back", kind, adId, response.status);
-        const current = await fetch(url + "?cache=no-store").then((r) => r.json());
+        const current = await fetch(url + "?nocache=" + Date.now()).then((r) => r.json());
         const next = (typeof current === "number" ? current : 0) + 1;
-        await writeNumber(next);
+        const fallback = await writeNumber(next);
+        return fallback.ok;
       })
       .catch(async (error) => {
         console.warn("[LottoAds] stats write error, falling back", kind, adId, error);
         try {
-          const current = await fetch(url + "?cache=no-store").then((r) => r.json());
+          const current = await fetch(url + "?nocache=" + Date.now()).then((r) => r.json());
           const next = (typeof current === "number" ? current : 0) + 1;
-          await writeNumber(next);
+          const fallback = await writeNumber(next);
+          return fallback.ok;
         } catch (fallbackError) {
           console.warn("[LottoAds] stats fallback failed", fallbackError);
+          return false;
         }
       });
   }
