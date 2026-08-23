@@ -96,7 +96,7 @@ body.app #mySidebar .close-btn {
   top: 0;
   z-index: 900;
   backdrop-filter: blur(14px);
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.92);
   border-bottom: 1px solid rgba(226, 232, 240, 0.9);
 }
 
@@ -146,24 +146,44 @@ body.app #mySidebar .close-btn {
 .site-nav {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  gap: 6px;
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 0 0 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
 .site-nav a {
   text-decoration: none;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: var(--radius-pill);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 600;
   color: var(--text-muted);
   transition: 0.2s ease;
+  white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .site-nav a:hover,
 .site-nav a.active {
   background: var(--primary-soft);
   color: var(--primary-dark);
+}
+
+.site-nav a.nav-hot {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  color: #9a3412;
+  border: 1px solid #fdba74;
+  font-weight: 800;
+}
+
+.site-nav a.nav-hot:hover,
+.site-nav a.nav-hot.active {
+  background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+  color: #7c2d12;
 }
 
 .hero {
@@ -721,7 +741,14 @@ body.app #mySidebar .close-btn {
   }
 
   .site-nav {
-    display: none;
+    width: min(100%, calc(100% - 16px));
+    padding-bottom: 10px;
+    gap: 4px;
+  }
+
+  .site-nav a {
+    padding: 8px 10px;
+    font-size: 0.82rem;
   }
 
   .hero-card,
