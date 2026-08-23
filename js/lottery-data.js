@@ -2,18 +2,28 @@
   const FIREBASE_LOTTO_URL = "https://loto-hot-default-rtdb.firebaseio.com/lotto.json";
   const LOCAL_RESULTS_URL = "/lottery_results.json";
   const SESSION_KEY = "lottogun:lotto-archive:v1";
+  const FETCH_TIMEOUT_MS = 12000;
 
   /** @type {{ archive: object, legacyRows: object[], history: object[], headerRows: any[][], stats: object } | null} */
   let memory = null;
   /** @type {Promise<object> | null} */
   let inflight = null;
 
-  async function fetchJson(url, useNetworkOnly) {
-    const response = await fetch(url, useNetworkOnly ? { cache: "no-store" } : undefined);
-    if (!response.ok) {
-      throw new Error("Failed to load " + url);
+  async function fetchJson(url, useNetworkOnly, timeoutMs) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs || FETCH_TIMEOUT_MS);
+    try {
+      const response = await fetch(url, {
+        signal: controller.signal,
+        cache: useNetworkOnly ? "no-store" : "default",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to load " + url);
+      }
+      return response.json();
+    } finally {
+      clearTimeout(timer);
     }
-    return response.json();
   }
 
   function normalizePayload(payload) {

@@ -1,7 +1,8 @@
 (function (global) {
   const FIREBASE_ADS_URL = "https://loto-hot-default-rtdb.firebaseio.com/ads.json";
-  const SESSION_KEY = "lottogun:ads:v1";
+  const SESSION_KEY = "lottogun:ads:v2";
   const IMPRESSION_KEY = "lottogun:ad-impressions:v1";
+  const SESSION_TTL_MS = 3 * 60 * 1000;
 
   let memory = null;
   let inflight = null;
@@ -16,10 +17,32 @@
     },
   };
 
+  function slimPayload(payload) {
+    const creatives = {};
+    Object.entries(payload.creatives || {}).forEach(([id, creative]) => {
+      const imageUrl = creative.imageUrl || "";
+      creatives[id] = Object.assign({}, creative, {
+        imageUrl: imageUrl.indexOf("data:") === 0 ? "" : imageUrl,
+      });
+    });
+    return {
+      campaigns: payload.campaigns || {},
+      creatives,
+      settings: payload.settings || DEFAULT_SETTINGS,
+      stats: payload.stats || {},
+    };
+  }
+
   function readSessionCache() {
     try {
       const raw = sessionStorage.getItem(SESSION_KEY);
-      return raw ? JSON.parse(raw) : null;
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (!parsed || !parsed.savedAt || Date.now() - parsed.savedAt > SESSION_TTL_MS) {
+        sessionStorage.removeItem(SESSION_KEY);
+        return null;
+      }
+      return normalizePayload(parsed.payload);
     } catch {
       return null;
     }
@@ -27,7 +50,13 @@
 
   function writeSessionCache(payload) {
     try {
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify(payload));
+      sessionStorage.setItem(
+        SESSION_KEY,
+        JSON.stringify({
+          savedAt: Date.now(),
+          payload: slimPayload(payload),
+        })
+      );
     } catch {
       /* quota exceeded — memory cache still works */
     }
@@ -40,7 +69,7 @@
     return {
       campaigns: raw.campaigns || {},
       creatives: raw.creatives || {},
-      settings: { ...DEFAULT_SETTINGS, ...(raw.settings || {}) },
+      settings: Object.assign({}, DEFAULT_SETTINGS, raw.settings || {}),
       stats: raw.stats || {},
     };
   }
@@ -53,14 +82,20 @@
     return normalizePayload(await response.json());
   }
 
-  function load() {
-    if (memory) {
-      return Promise.resolve(memory);
+  function load(options) {
+    const force = !!(options && options.force);
+
+    if (force) {
+      memory = null;
+      inflight = null;
+      try {
+        sessionStorage.removeItem(SESSION_KEY);
+      } catch {
+        /* ignore */
+      }
     }
 
-    const cached = readSessionCache();
-    if (cached) {
-      memory = cached;
+    if (memory && !force) {
       return Promise.resolve(memory);
     }
 
@@ -94,6 +129,16 @@
     return true;
   }
 
+  function getActiveCampaignIds(now) {
+    const ids = new Set();
+    Object.entries(memory.campaigns || {}).forEach(([key, campaign]) => {
+      if (isCampaignActive(campaign, now)) {
+        ids.add(campaign.id || key);
+      }
+    });
+    return ids;
+  }
+
   function pickWeighted(items) {
     const total = items.reduce((sum, item) => sum + (item.weight || 1), 0);
     if (!total) {
@@ -115,11 +160,7 @@
     }
 
     const now = Date.now();
-    const activeCampaignIds = new Set(
-      Object.values(memory.campaigns)
-        .filter((campaign) => isCampaignActive(campaign, now))
-        .map((campaign) => campaign.id)
-    );
+    const activeCampaignIds = getActiveCampaignIds(now);
 
     return Object.values(memory.creatives).filter((creative) => {
       if (!creative || creative.active === false) {
@@ -202,10 +243,19 @@
       .replace(/"/g, "&quot;");
   }
 
+  function safeImageUrl(value) {
+    const url = String(value || "").trim();
+    if (!url) return "";
+    if (/^https?:\/\//i.test(url) || url.indexOf("data:image/") === 0) {
+      return url.replace(/"/g, "%22");
+    }
+    return "";
+  }
+
   function renderCreative(creative) {
     const title = escapeHtml(creative.title);
     const description = escapeHtml(creative.description);
-    const imageUrl = escapeHtml(creative.imageUrl);
+    const imageUrl = safeImageUrl(creative.imageUrl);
     const linkUrl = escapeHtml(creative.linkUrl || "#");
     const sponsored = creative.sponsoredLabel || "מודעה";
 
@@ -264,17 +314,17 @@
   function mountPlacement(placement, containerId) {
     const mount = document.getElementById(containerId);
     if (!mount) {
-      return;
+      return false;
     }
 
     const creative = pickCreative(placement);
     if (!creative) {
       mount.innerHTML = "";
-      mount.hidden = true;
-      return;
+      mount.setAttribute("hidden", "");
+      return false;
     }
 
-    mount.hidden = false;
+    mount.removeAttribute("hidden");
     mount.innerHTML = renderCreative(creative);
     trackImpression(creative.id);
 
@@ -282,6 +332,7 @@
     if (link) {
       link.addEventListener("click", () => trackClick(creative.id));
     }
+    return true;
   }
 
   function renderAll() {
@@ -303,16 +354,46 @@
     inflight = null;
     try {
       sessionStorage.removeItem(SESSION_KEY);
+      sessionStorage.removeItem("lottogun:ads:v1");
     } catch {
       /* ignore */
     }
   }
 
   function ready() {
-    return load().then(() => {
+    const cached = readSessionCache();
+    if (cached) {
+      memory = cached;
       renderAll();
-      return memory;
-    });
+    }
+
+    if (inflight) {
+      return inflight.then((payload) => {
+        renderAll();
+        return payload;
+      });
+    }
+
+    inflight = fetchAds()
+      .then((payload) => {
+        memory = payload;
+        writeSessionCache(payload);
+        renderAll();
+        return payload;
+      })
+      .catch((error) => {
+        console.warn("[LottoAds] failed to refresh ads", error);
+        if (memory) {
+          renderAll();
+          return memory;
+        }
+        throw error;
+      })
+      .finally(() => {
+        inflight = null;
+      });
+
+    return inflight;
   }
 
   global.LottoAds = {

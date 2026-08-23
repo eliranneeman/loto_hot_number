@@ -111,7 +111,7 @@
                 <input type="hidden" id="creativeId">
                 <label>כותרת<input type="text" id="creativeTitle" required></label>
                 <label>תיאור<textarea id="creativeDescription"></textarea></label>
-                <label>קישור (URL)<input type="url" id="creativeLink" required placeholder="https://"></label>
+                <label>קישור (URL)<input type="text" id="creativeLink" required placeholder="https://example.com"></label>
                 <div class="admin-row">
                   <label>מיקום
                     <select id="creativePlacement">
@@ -131,14 +131,15 @@
                   <input type="file" id="creativeImage" accept="image/jpeg,image/png,image/webp,image/gif">
                 </label>
                 <p style="margin:0;color:var(--admin-muted);font-size:0.88rem;">
-                  אם העלאה ל-Storage נכשלת — התמונה תידחס ותישמר אוטומטית. אפשר גם להדביק קישור URL למטה.
+                  התמונה תועלה ל-Firebase Storage (מומלץ). אם העלאה נכשלת — תידחס ותישמר. אפשר גם קישור URL חיצוני.
                 </p>
                 <img id="creativeImagePreview" class="admin-image-preview admin-hidden" alt="תצוגה מקדימה">
                 <label>או קישור לתמונה (URL)<input type="url" id="creativeImageUrl" placeholder="https://"></label>
                 <div class="admin-actions">
-                  <button type="submit" class="admin-btn admin-btn-primary">שמירת מודעה</button>
+                  <button type="submit" class="admin-btn admin-btn-primary" id="saveCreativeBtn">שמירת מודעה</button>
                   <button type="button" class="admin-btn admin-btn-danger" id="deleteCreativeBtn">מחיקת מודעה</button>
                 </div>
+                <div id="creativeSaveStatus"></div>
               </form>
 
               <div class="admin-preview admin-hidden" id="creativePreview"></div>
@@ -302,6 +303,13 @@
       return "גישה נדחתה. החשבון " + email + " אינו מורשה. רק " + ADMIN_EMAIL + ".";
     }
 
+    function normalizeLinkUrl(value) {
+      const url = String(value || "").trim();
+      if (!url) return "";
+      if (/^https?:\/\//i.test(url)) return url;
+      return "https://" + url;
+    }
+
     function compressImageToDataUrl(file, maxDim, quality) {
       maxDim = maxDim || 800;
       quality = quality || 0.82;
@@ -339,28 +347,37 @@
       });
     }
 
+    function withTimeout(promise, ms) {
+      return Promise.race([
+        promise,
+        new Promise((_, reject) => {
+          setTimeout(() => reject(new Error("timeout")), ms);
+        }),
+      ]);
+    }
+
     async function resolveCreativeImageUrl(campaignId, creativeId, imageFile, imageUrlInput) {
+      if (imageFile) {
+        if (imageFile.size > 5 * 1024 * 1024) {
+          throw new Error("גודל מקסימלי לתמונה: 5MB");
+        }
+
+        try {
+          const safeName = imageFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+          const path = "ads/" + campaignId + "/" + creativeId + "_" + safeName;
+          const uploaded = await withTimeout(
+            uploadBytes(storageRef(storage, path), imageFile),
+            15000
+          );
+          return await getDownloadURL(uploaded.ref);
+        } catch (storageError) {
+          console.warn("Storage upload failed, using compressed image", storageError);
+          return compressImageToDataUrl(imageFile);
+        }
+      }
+
       if (imageUrlInput) return imageUrlInput;
-      if (!imageFile) return "";
-
-      if (imageFile.size > 5 * 1024 * 1024) {
-        throw new Error("גודל מקסימלי לתמונה: 5MB");
-      }
-
-      try {
-        const safeName = imageFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-        const path = "ads/" + campaignId + "/" + creativeId + "_" + safeName;
-        const uploaded = await uploadBytes(storageRef(storage, path), imageFile);
-        return await getDownloadURL(uploaded.ref);
-      } catch (storageError) {
-        console.warn("Storage upload failed, using compressed embedded image", storageError);
-        showStatus(
-          els.adminStatus,
-          "Storage לא זמין — שומרים תמונה דחוסה ישירות במודעה.",
-          true
-        );
-        return compressImageToDataUrl(imageFile);
-      }
+      return "";
     }
 
     function bindTabs() {
@@ -687,49 +704,76 @@
       const file = event.target.files && event.target.files[0];
       const preview = document.getElementById("creativeImagePreview");
       if (!file) return;
+      document.getElementById("creativeImageUrl").value = "";
       preview.src = URL.createObjectURL(file);
       preview.classList.remove("admin-hidden");
     });
 
     document.getElementById("creativeForm").addEventListener("submit", async (event) => {
       event.preventDefault();
-      if (!selectedCampaignId) return;
+      const saveBtn = document.getElementById("saveCreativeBtn");
+      const creativeStatus = document.getElementById("creativeSaveStatus");
+
+      if (!selectedCampaignId) {
+        showStatus(creativeStatus, "שמור/י קודם את הקמפיין לפני הוספת מודעה.", false);
+        return;
+      }
 
       const id = document.getElementById("creativeId").value || uid("ad");
       const imageFile = document.getElementById("creativeImage").files[0];
       let imageUrl = document.getElementById("creativeImageUrl").value.trim();
 
+      const payload = {
+        id,
+        campaignId: selectedCampaignId,
+        title: document.getElementById("creativeTitle").value.trim(),
+        description: document.getElementById("creativeDescription").value.trim(),
+        linkUrl: normalizeLinkUrl(document.getElementById("creativeLink").value),
+        placement: document.getElementById("creativePlacement").value,
+        weight: Number(document.getElementById("creativeWeight").value) || 1,
+        active: document.getElementById("creativeActive").value === "true",
+        updatedAt: new Date().toISOString(),
+      };
+
+      if (!payload.title || !payload.linkUrl) {
+        showStatus(creativeStatus, "חובה כותרת וקישור", false);
+        return;
+      }
+
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = imageFile ? "מעבד תמונה..." : "שומר...";
+      }
+      showStatus(
+        creativeStatus,
+        imageFile ? "מעבד ושומר תמונה (עד 10 שניות)..." : "שומר מודעה...",
+        true
+      );
+
       try {
         imageUrl = await resolveCreativeImageUrl(selectedCampaignId, id, imageFile, imageUrl);
+        payload.imageUrl = imageUrl;
 
-        const payload = {
-          id,
-          campaignId: selectedCampaignId,
-          title: document.getElementById("creativeTitle").value.trim(),
-          description: document.getElementById("creativeDescription").value.trim(),
-          linkUrl: document.getElementById("creativeLink").value.trim(),
-          placement: document.getElementById("creativePlacement").value,
-          weight: Number(document.getElementById("creativeWeight").value) || 1,
-          active: document.getElementById("creativeActive").value === "true",
-          imageUrl,
-          updatedAt: new Date().toISOString(),
-        };
-
-        if (!payload.title || !payload.linkUrl) {
-          showStatus(els.adminStatus, "חובה כותרת וקישור", false);
-          return;
-        }
         if (!adsData.creatives[id]) payload.createdAt = new Date().toISOString();
 
         await set(ref(db, "ads/creatives/" + id), payload);
+        selectedCreativeId = id;
         showStatus(
-          els.adminStatus,
-          "המודעה נשמרה! תופיע בתחתית האתר (רענון קשיח בדפדפן).",
+          creativeStatus,
+          "המודעה נשמרה! רענון קשיח באתר (Cmd+Shift+R) כדי לראות אותה מיד.",
           true
         );
+        showStatus(els.adminStatus, "המודעה נשמרה בהצלחה.", true);
         selectCreative(id);
       } catch (error) {
-        showStatus(els.adminStatus, error.message, false);
+        console.error("Creative save failed:", error);
+        showStatus(creativeStatus, error.message || "שגיאה בשמירה", false);
+        showStatus(els.adminStatus, error.message || "שגיאה בשמירה", false);
+      } finally {
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = "שמירת מודעה";
+        }
       }
     });
 

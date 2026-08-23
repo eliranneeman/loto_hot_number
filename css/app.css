@@ -47,7 +47,42 @@ body.app {
 }
 
 body.app a {
+  color: var(--primary);
+}
+
+body.app .brand,
+body.app .site-nav a,
+body.app .lottogun-ad-card {
   color: inherit;
+}
+
+/* תפריט צד — רקע כהה, טקסט בהיר (לא לדרוס ב-body.app a) */
+body.app .sidebar,
+body.app #mySidebar {
+  color: #f1f5f9;
+}
+
+body.app .sidebar nav a,
+body.app #mySidebar nav a {
+  color: #f1f5f9 !important;
+}
+
+body.app .sidebar nav a:hover,
+body.app #mySidebar nav a:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.app .sidebar .menu-category h3,
+body.app #mySidebar .menu-category h3 {
+  color: #e2e8f0 !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+body.app .sidebar .close-btn,
+body.app #mySidebar .close-btn {
+  color: #f1f5f9 !important;
 }
 
 .app-shell {

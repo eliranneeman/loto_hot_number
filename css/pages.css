@@ -75,8 +75,7 @@ body.app .nav-btn:hover {
 body.app .loading,
 body.app .page-loading,
 body.app #loadingMessage,
-body.app #loadingStatus,
-body.app .loading-banner {
+body.app #loadingStatus {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,6 +86,23 @@ body.app .loading-banner {
   color: var(--primary-dark);
   font-weight: 600;
   border: 1px solid rgba(79, 70, 229, 0.15);
+}
+
+body.app .loading-banner {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 18px 20px;
+  border-radius: var(--radius);
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+  font-weight: 600;
+  border: 1px solid rgba(79, 70, 229, 0.15);
+}
+
+body.app .loading-banner.show {
+  display: flex;
 }
 
 body.app .summary-section,

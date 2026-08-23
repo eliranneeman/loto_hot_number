@@ -113,7 +113,7 @@
 <main class="app-shell">
     <div id="loading-banner" class="loading-banner show">
         <span class="spinner" aria-hidden="true"></span>
-        <span>טוען את ארכיון ההגרלות...</span>
+        <span id="loading-banner-text">טוען את ארכיון ההגרלות...</span>
     </div>
 
     <section class="hero">
@@ -952,12 +952,19 @@ function hasSequenceOfTwo(numbers) {
 
     async function loadLotteryArchive() {
     const status = document.getElementById('file-status');
+    const bannerText = document.getElementById('loading-banner-text');
+    const loadingBanner = document.getElementById('loading-banner');
+
+    if (bannerText) {
+      bannerText.textContent = LottoData.isCached()
+        ? 'טוען מהזיכרון המקומי...'
+        : 'טוען ארכיון (1–3 שניות)...';
+    }
+
     if (status) {
         status.style.display = 'block';
         status.className = 'file-status';
-        status.textContent = LottoData.isCached()
-            ? '🔄 טוען נתונים מהזיכרון המקומי...'
-            : '🔄 טוען את ארכיון ההגרלות (פעם אחת לביקור)...';
+        status.textContent = bannerText ? bannerText.textContent : '🔄 טוען...';
     }
 
     try {
@@ -973,15 +980,13 @@ function hasSequenceOfTwo(numbers) {
         }
         document.getElementById('history-counter').textContent = lotteryHistory.length.toLocaleString('he-IL');
         document.getElementById('history-filter').style.display = 'block';
-        const loadingBanner = document.getElementById('loading-banner');
         if (loadingBanner) loadingBanner.classList.remove('show');
     } catch (error) {
         if (status) {
             status.className = 'file-status error';
-            status.textContent = '❌ שגיאה בטעינת ארכיון התוצאות';
+            status.textContent = '❌ שגיאה בטעינה — מנסה שוב מהקובץ המקומי. רענן/י את הדף.';
         }
         console.error("Error loading lottery archive:", error);
-        const loadingBanner = document.getElementById('loading-banner');
         if (loadingBanner) loadingBanner.classList.remove('show');
     }
 }

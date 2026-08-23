@@ -105,17 +105,21 @@
   justify-content: center;
   padding: 12px 20px;
   border-radius: 999px;
-  background: #fff;
-  color: #312e81;
+  background: #ffffff;
+  color: #1e1b4b !important;
   font-weight: 800;
   text-decoration: none;
   white-space: nowrap;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .lottogun-advertise-cta:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.22);
+  background: #f8fafc;
+  color: #312e81 !important;
 }
 
 @media (max-width: 640px) {

@@ -4,6 +4,7 @@
     "/css/app.css",
     "/css/pages.css",
     "/css/site-a11y.css",
+    "/css/ads.css",
   ].forEach((href) => {
     if (!document.querySelector('link[href="' + href + '"]')) {
       const link = document.createElement("link");
@@ -247,14 +248,24 @@ function initPwaInstallButton() {
 }
 
 function bootAds() {
+  function runAds() {
+    if (!window.LottoAds) return;
+    window.LottoAds.ready()
+      .then(() => {
+        window.LottoAds.renderAll();
+        setTimeout(() => window.LottoAds.renderAll(), 400);
+      })
+      .catch((err) => console.warn("[LottoAds] boot failed", err));
+  }
+
   if (window.LottoAds) {
-    window.LottoAds.ready().catch(() => {});
+    runAds();
     return;
   }
   if (document.querySelector('script[src="/js/ads.js"]')) return;
   const script = document.createElement("script");
   script.src = "/js/ads.js";
-  script.onload = () => window.LottoAds && window.LottoAds.ready().catch(() => {});
+  script.onload = runAds;
   document.body.appendChild(script);
 }
 

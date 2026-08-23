@@ -104,12 +104,20 @@
   display: none; /* מוסתר - כעת נעביר לתחתית */
 }
 
-/* כללים חדשים עבור הדגשת קישורים */
-body.highlight-links a {
+/* כללים חדשים עבור הדגשת קישורים — לא בתפריט הצד */
+body.highlight-links a:not(.sidebar nav a):not(#mySidebar nav a) {
     color: #ffff00;
     background-color: #333;
     padding: 2px 4px;
     border-radius: 3px;
+}
+
+body.highlight-links .sidebar nav a,
+body.highlight-links #mySidebar nav a {
+  color: #ffff00 !important;
+  background-color: transparent !important;
+  text-decoration: underline !important;
+  padding: 16px 24px;
 }
 
 /* התאמות נגישות במצב מרחף */
@@ -301,9 +309,34 @@ body.high-contrast .container {
 }
 
 /* תפריט במצב ניגודיות גבוהה */
-body.high-contrast .sidebar {
+body.high-contrast .sidebar,
+body.high-contrast #mySidebar {
   background-color: #000 !important;
   border-left: 2px solid #fff !important;
+}
+
+body.high-contrast .sidebar nav a,
+body.high-contrast #mySidebar nav a {
+  color: #ffff00 !important;
+  background-color: transparent !important;
+}
+
+body.high-contrast .sidebar nav a:hover,
+body.high-contrast #mySidebar nav a:hover {
+  background-color: #222 !important;
+  color: #fff !important;
+}
+
+body.high-contrast .sidebar .menu-category h3,
+body.high-contrast #mySidebar .menu-category h3 {
+  color: #fff !important;
+  background: #111 !important;
+  border-color: #fff !important;
+}
+
+body.high-contrast .sidebar .close-btn,
+body.high-contrast #mySidebar .close-btn {
+  color: #fff !important;
 }
 
 body.high-contrast .menu-btn {
