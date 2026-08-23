@@ -202,37 +202,61 @@
     }
   }
 
+  function bumpStat(kind, adId) {
+    if (!adId) return;
+    const url =
+      "https://loto-hot-default-rtdb.firebaseio.com/ads/stats/" +
+      kind +
+      "/" +
+      encodeURIComponent(adId) +
+      ".json";
+
+    const writeNumber = (value) =>
+      fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(value),
+        keepalive: true,
+      });
+
+    fetch(url, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ".sv": { increment: 1 } }),
+      keepalive: true,
+    })
+      .then(async (response) => {
+        if (response.ok) return;
+        console.warn("[LottoAds] increment failed, falling back", kind, adId, response.status);
+        const current = await fetch(url + "?cache=no-store").then((r) => r.json());
+        const next = (typeof current === "number" ? current : 0) + 1;
+        await writeNumber(next);
+      })
+      .catch(async (error) => {
+        console.warn("[LottoAds] stats write error, falling back", kind, adId, error);
+        try {
+          const current = await fetch(url + "?cache=no-store").then((r) => r.json());
+          const next = (typeof current === "number" ? current : 0) + 1;
+          await writeNumber(next);
+        } catch (fallbackError) {
+          console.warn("[LottoAds] stats fallback failed", fallbackError);
+        }
+      });
+  }
+
   function trackImpression(adId) {
     if (!adId || wasImpressionTracked(adId)) {
       return;
     }
     markImpressionTracked(adId);
-    fetch(
-      "https://loto-hot-default-rtdb.firebaseio.com/ads/stats/impressions/" +
-        encodeURIComponent(adId) +
-        ".json",
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ".sv": "increment" }),
-      }
-    ).catch(() => {});
+    bumpStat("impressions", adId);
   }
 
   function trackClick(adId) {
     if (!adId) {
       return;
     }
-    fetch(
-      "https://loto-hot-default-rtdb.firebaseio.com/ads/stats/clicks/" +
-        encodeURIComponent(adId) +
-        ".json",
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ".sv": "increment" }),
-      }
-    ).catch(() => {});
+    bumpStat("clicks", adId);
   }
 
   function escapeHtml(value) {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 	<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#4f46e5">
+<meta name="theme-color" content="#0b1f33">
 	<link rel="icon" type="image/png" href="/image.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LottoGun | הצעות צירופים ללוטו הישראלי</title>
@@ -19,9 +19,10 @@
     
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&family=Rubik:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/app.css">
 <link rel="stylesheet" href="/css/pages.css">
+<link rel="stylesheet" href="/css/home.css">
 <meta name="description" content="LottoGun - הצעות צירופים ללוטו הישראלי על בסיס כל ההגרלות בשיטה הנוכחית. מהיר, פשוט ונוח.">
 
 
@@ -106,31 +107,43 @@
 	
 
 </head>
-<body class="app">
+<body class="app home">
 <div id="site-header"></div>
 <script src="/common.js" defer></script>
 
-<main class="app-shell">
+<section class="home-hero" aria-label="פתיח LottoGun">
+    <div class="home-hero-bg" aria-hidden="true"></div>
+    <div class="home-hero-inner">
+        <div class="home-hero-copy">
+            <p class="home-brand">LottoGun</p>
+            <h1 class="home-headline">צירופי לוטו חכמים — מהארכיון עד ההצעה</h1>
+            <p class="home-lead">
+                מנתחים את הגרלות מפעל הפיס ומציעים לכם צירופים לפי מספרים חמים, קרים או מאוזנים.
+            </p>
+            <div class="home-hero-actions">
+                <button class="btn btn-primary home-cta" type="button" onclick="quickGenerate('hot')">צור צירופים עכשיו</button>
+                <a class="btn btn-secondary home-cta-secondary" href="/check-ticket.html">בדקו את הטופס שלכם</a>
+            </div>
+            <p class="home-disclaimer">לניתוח סטטיסטי ושעשוע בלבד · אין הבטחת זכייה</p>
+        </div>
+        <div class="home-hero-visual" aria-hidden="true">
+            <div class="home-ball home-ball-a">7</div>
+            <div class="home-ball home-ball-b">14</div>
+            <div class="home-ball home-ball-c">23</div>
+            <div class="home-ball home-ball-d">31</div>
+            <div class="home-ball home-ball-e strong">★</div>
+            <div class="home-orbit"></div>
+        </div>
+    </div>
+</section>
+
+<main class="app-shell home-shell">
     <div id="loading-banner" class="loading-banner show">
         <span class="spinner" aria-hidden="true"></span>
         <span id="loading-banner-text">טוען את ארכיון ההגרלות...</span>
     </div>
 
-    <section class="hero">
-        <div class="hero-card">
-            <div class="hero-badge">מעודכן מדי לילה מאתר מפעל הפיס</div>
-            <h1>קבלו צירופי לוטו חכמים בלחיצה אחת</h1>
-            <p class="hero-lead">
-                LottoGun מנתח אלפי הגרלות בשיטה הנוכחית ומציע צירופים
-                על בסיס מספרים חמים, מאוזנים או קרים — בלי Excel, בלי התעסקות.
-            </p>
-            <div class="hero-actions">
-                <button class="btn btn-primary" type="button" onclick="quickGenerate('hot')">🎯 צור לי צירופים עכשיו</button>
-                <a class="btn btn-secondary" href="/results.html">כל התוצאות</a>
-            </div>
-            <p class="disclaimer">האתר לניתוח סטטיסטי ושעשוע בלבד. אין הבטחת זכייה.</p>
-        </div>
-
+    <section class="home-trust" aria-label="נתוני האתר">
         <div class="stat-grid">
             <div class="stat-card">
                 <div class="stat-value" id="history-counter">—</div>
@@ -159,7 +172,7 @@
         <div id="latest-draw-body"></div>
     </section>
 
-    <section class="generator-panel panel">
+    <section class="generator-panel panel" id="generator">
         <div class="section-head">
             <div>
                 <h2 class="section-title">בחרו אסטרטגיה</h2>
@@ -220,7 +233,7 @@
         </div>
 
         <div class="generate-row">
-            <button class="btn btn-primary generate-btn" type="button" onclick="generateNumbers()">🚀 צור צירופים</button>
+            <button class="btn btn-primary generate-btn" type="button" onclick="generateNumbers()">צור צירופים</button>
             <span class="generate-hint">טיפ: "חם" מתאים למי שרוצה ללכת עם הסטטיסטיקה</span>
         </div>
         <div id="file-status" class="file-status"></div>

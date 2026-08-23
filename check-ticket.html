@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>בדיקת טופס | LottoGun</title>
+  <meta name="description" content="בדקו כמה פעמים זוגות, שלשות, רביעיות וחמישיות מהטופס שלכם הופיעו בהגרלות הלוטו.">
+  <meta name="theme-color" content="#0b1f33">
+  <link rel="icon" type="image/png" href="/image.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&family=Rubik:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/common.css">
+  <link rel="stylesheet" href="/css/app.css">
+  <link rel="stylesheet" href="/css/pages.css">
+  <link rel="stylesheet" href="/css/check-ticket.css">
+  <script src="/js/lottery-data.js"></script>
+  <script src="/js/ticket-check.js"></script>
+</head>
+<body class="app check-ticket-page">
+  <div id="site-header"></div>
+  <script src="/common.js" defer></script>
+
+  <main class="app-shell check-shell">
+    <header class="check-intro">
+      <p class="check-kicker">כלי חדש ב-LottoGun</p>
+      <h1>בדיקת טופס</h1>
+      <p class="check-lead">
+        הזינו את 6 המספרים והמספר החזק — ונראה כמה פעמים
+        <strong>זוגות, שלשות, רביעיות וחמישיות</strong>
+        מהטופס שלכם כבר הופיעו יחד בהגרלות העבר.
+      </p>
+    </header>
+
+    <div id="check-loading" class="loading-banner show">
+      <span class="spinner" aria-hidden="true"></span>
+      <span>טוען ארכיון הגרלות...</span>
+    </div>
+
+    <section class="panel check-form-panel">
+      <h2 class="section-title">הטופס שלכם</h2>
+      <p class="section-subtitle">בחרו 6 מספרים רגילים (1–37) ומספר חזק אחד (1–7)</p>
+
+      <div class="check-pick-block">
+        <div class="check-pick-head">
+          <span>מספרים רגילים</span>
+          <span id="regular-picked-count" class="check-count-pill">0 / 6</span>
+        </div>
+        <div id="regular-grid" class="check-number-grid" role="group" aria-label="בחירת מספרים רגילים"></div>
+      </div>
+
+      <div class="check-pick-block">
+        <div class="check-pick-head">
+          <span>מספר חזק</span>
+          <span id="strong-picked-label" class="check-count-pill">לא נבחר</span>
+        </div>
+        <div id="strong-grid" class="check-number-grid check-strong-grid" role="group" aria-label="בחירת מספר חזק"></div>
+      </div>
+
+      <div class="check-selected" id="selected-preview" aria-live="polite">
+        עדיין לא נבחרו מספרים
+      </div>
+
+      <div class="check-actions">
+        <button type="button" class="btn btn-primary" id="analyze-btn" disabled>בדוק מול הארכיון</button>
+        <button type="button" class="btn btn-secondary" id="clear-btn">נקה בחירה</button>
+      </div>
+      <p id="check-error" class="check-error" hidden></p>
+    </section>
+
+    <section id="check-results" class="check-results" hidden>
+      <section class="panel">
+        <h2 class="section-title">סיכום מהיר</h2>
+        <p class="section-subtitle" id="summary-subtitle"></p>
+        <div class="check-summary-grid" id="summary-grid"></div>
+      </section>
+
+      <section class="panel" id="exact-panel" hidden>
+        <h2 class="section-title">התאמה מלאה (6 מספרים)</h2>
+        <div id="exact-body"></div>
+      </section>
+
+      <section class="panel" id="latest-panel" hidden>
+        <h2 class="section-title">מול ההגרלה האחרונה</h2>
+        <div id="latest-body"></div>
+      </section>
+
+      <section class="panel">
+        <h2 class="section-title">פירוט זוגות · שלשות · רביעיות · חמישיות</h2>
+        <p class="section-subtitle">
+          לכל סוג צירוף: כמה פעמים כל קבוצה מהטופס שלכם הופיעה יחד בהגרלה כלשהי.
+        </p>
+        <div class="check-level-tabs" id="level-tabs" role="tablist"></div>
+        <div id="level-panels"></div>
+      </section>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+
+  <script>
+    (function () {
+      const regularSelected = new Set();
+      let strongSelected = null;
+      let history = [];
+      let lastAnalysis = null;
+      let activeLevel = "pairs";
+
+      const regularGrid = document.getElementById("regular-grid");
+      const strongGrid = document.getElementById("strong-grid");
+      const analyzeBtn = document.getElementById("analyze-btn");
+      const clearBtn = document.getElementById("clear-btn");
+      const errorEl = document.getElementById("check-error");
+      const resultsEl = document.getElementById("check-results");
+      const loadingEl = document.getElementById("check-loading");
+
+      function ballClass(selected) {
+        return "check-ball" + (selected ? " is-selected" : "");
+      }
+
+      function buildGrids() {
+        regularGrid.innerHTML = "";
+        for (let i = 1; i <= 37; i += 1) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = ballClass(false);
+          btn.textContent = String(i);
+          btn.dataset.value = String(i);
+          btn.addEventListener("click", () => toggleRegular(i));
+          regularGrid.appendChild(btn);
+        }
+
+        strongGrid.innerHTML = "";
+        for (let i = 1; i <= 7; i += 1) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = ballClass(false) + " is-strong";
+          btn.textContent = String(i);
+          btn.dataset.value = String(i);
+          btn.addEventListener("click", () => toggleStrong(i));
+          strongGrid.appendChild(btn);
+        }
+      }
+
+      function syncGridSelection() {
+        regularGrid.querySelectorAll(".check-ball").forEach((btn) => {
+          const value = Number(btn.dataset.value);
+          btn.classList.toggle("is-selected", regularSelected.has(value));
+          btn.setAttribute("aria-pressed", regularSelected.has(value) ? "true" : "false");
+        });
+        strongGrid.querySelectorAll(".check-ball").forEach((btn) => {
+          const value = Number(btn.dataset.value);
+          btn.classList.toggle("is-selected", strongSelected === value);
+          btn.setAttribute("aria-pressed", strongSelected === value ? "true" : "false");
+        });
+      }
+
+      function updatePreview() {
+        const countEl = document.getElementById("regular-picked-count");
+        const strongLabel = document.getElementById("strong-picked-label");
+        const preview = document.getElementById("selected-preview");
+        const nums = [...regularSelected].sort((a, b) => a - b);
+
+        countEl.textContent = nums.length + " / 6";
+        strongLabel.textContent = strongSelected ? String(strongSelected) : "לא נבחר";
+
+        if (!nums.length && !strongSelected) {
+          preview.textContent = "עדיין לא נבחרו מספרים";
+        } else {
+          preview.innerHTML =
+            '<span class="check-preview-nums">' +
+            nums.map((n) => '<span class="check-mini-ball">' + n + "</span>").join("") +
+            "</span>" +
+            (strongSelected
+              ? '<span class="check-mini-ball is-strong">' + strongSelected + "</span>"
+              : '<span class="check-preview-hint">חסר מספר חזק</span>');
+        }
+
+        analyzeBtn.disabled = !(nums.length === 6 && strongSelected);
+        syncGridSelection();
+      }
+
+      function toggleRegular(value) {
+        hideError();
+        if (regularSelected.has(value)) {
+          regularSelected.delete(value);
+        } else if (regularSelected.size < 6) {
+          regularSelected.add(value);
+        } else {
+          showError("כבר נבחרו 6 מספרים. בטלו אחד כדי לבחור אחר.");
+          return;
+        }
+        updatePreview();
+      }
+
+      function toggleStrong(value) {
+        hideError();
+        strongSelected = strongSelected === value ? null : value;
+        updatePreview();
+      }
+
+      function showError(message) {
+        errorEl.hidden = false;
+        errorEl.textContent = message;
+      }
+
+      function hideError() {
+        errorEl.hidden = true;
+        errorEl.textContent = "";
+      }
+
+      function formatNumbers(nums) {
+        return nums
+          .map((n) => '<span class="check-mini-ball">' + n + "</span>")
+          .join("");
+      }
+
+      function renderSummary(analysis) {
+        document.getElementById("summary-subtitle").textContent =
+          "על בסיס " + analysis.totalDraws.toLocaleString("he-IL") + " הגרלות בארכיון";
+
+        const cards = analysis.levels.map((level) => {
+          const data = analysis.subsetResults[level.key];
+          return (
+            '<article class="check-summary-card">' +
+            "<strong>" + data.totalHits.toLocaleString("he-IL") + "</strong>" +
+            "<span>סה״כ הופעות של " + data.label + "</span>" +
+            '<small>' + data.withHits + " מתוך " + data.totalSubsets + " " + data.label + " הופיעו לפחות פעם אחת</small>" +
+            "</article>"
+          );
+        });
+
+        cards.unshift(
+          '<article class="check-summary-card accent">' +
+          "<strong>" + analysis.exactMatches.length + "</strong>" +
+          "<span>פעמים שהטופס המלא עלה</span>" +
+          "<small>מספר חזק זהה ב-" + analysis.strongHitsCount + " הגרלות</small>" +
+          "</article>"
+        );
+
+        document.getElementById("summary-grid").innerHTML = cards.join("");
+      }
+
+      function renderExact(analysis) {
+        const panel = document.getElementById("exact-panel");
+        const body = document.getElementById("exact-body");
+        if (!analysis.exactMatches.length) {
+          panel.hidden = false;
+          body.innerHTML = '<p class="check-empty">הצירוף המלא שלכם (6 המספרים) <strong>לא עלה אף פעם</strong> בארכיון.</p>';
+          return;
+        }
+        panel.hidden = false;
+        body.innerHTML =
+          '<p class="check-ok">הצירוף המלא הופיע <strong>' +
+          analysis.exactMatches.length +
+          "</strong> פעמים:</p><ul class=\"check-match-list\">" +
+          analysis.exactMatches
+            .map(
+              (item) =>
+                "<li>הגרלה " +
+                (item.id || "—") +
+                " · " +
+                (item.date || "") +
+                (item.strongMatch ? " · גם החזק תאם" : " · חזק שונה (" + item.strong + ")") +
+                "</li>"
+            )
+            .join("") +
+          "</ul>";
+      }
+
+      function renderLatest(analysis) {
+        const panel = document.getElementById("latest-panel");
+        const body = document.getElementById("latest-body");
+        const latest = analysis.latestOverlap;
+        if (!latest) {
+          panel.hidden = true;
+          return;
+        }
+        panel.hidden = false;
+        body.innerHTML =
+          "<p>הגרלה אחרונה: <strong>" +
+          (latest.date || latest.id || "") +
+          "</strong></p>" +
+          '<div class="check-selected">' +
+          formatNumbers(latest.numbers || []) +
+          '<span class="check-mini-ball is-strong">' +
+          (latest.strong || "") +
+          "</span></div>" +
+          "<p>מהטופס שלכם תאמו <strong>" +
+          latest.overlapCount +
+          "</strong> מספרים" +
+          (latest.overlapCount
+            ? ": " + formatNumbers(latest.overlap)
+            : "") +
+          (latest.strongMatch ? " · גם המספר החזק תאם" : " · המספר החזק לא תאם") +
+          "</p>";
+      }
+
+      function renderLevelTabs(analysis) {
+        const tabs = document.getElementById("level-tabs");
+        tabs.innerHTML = analysis.levels
+          .map((level) => {
+            const data = analysis.subsetResults[level.key];
+            return (
+              '<button type="button" class="check-tab' +
+              (level.key === activeLevel ? " is-active" : "") +
+              '" data-level="' +
+              level.key +
+              '" role="tab">' +
+              data.label +
+              ' <em>' +
+              data.totalHits.toLocaleString("he-IL") +
+              "</em></button>"
+            );
+          })
+          .join("");
+
+        tabs.querySelectorAll(".check-tab").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            activeLevel = btn.dataset.level;
+            renderLevelTabs(analysis);
+            renderLevelPanel(analysis);
+          });
+        });
+      }
+
+      function renderLevelPanel(analysis) {
+        const data = analysis.subsetResults[activeLevel];
+        const root = document.getElementById("level-panels");
+        if (!data) {
+          root.innerHTML = "";
+          return;
+        }
+
+        const rows = data.subsets
+          .map((item) => {
+            const barWidth = data.maxCount ? Math.round((item.count / data.maxCount) * 100) : 0;
+            return (
+              '<li class="check-subset-row">' +
+              '<div class="check-subset-nums">' +
+              formatNumbers(item.numbers) +
+              "</div>" +
+              '<div class="check-subset-meta">' +
+              '<span class="check-subset-count">' +
+              item.count.toLocaleString("he-IL") +
+              " פעמים</span>" +
+              '<div class="check-bar"><span style="width:' +
+              barWidth +
+              '%"></span></div>' +
+              (item.count
+                ? '<small>לדוגמה: ' +
+                  item.examples
+                    .map((ex) => (ex.date || ex.id || ""))
+                    .filter(Boolean)
+                    .slice(0, 3)
+                    .join(" · ") +
+                  "</small>"
+                : "<small>לא הופיע יחד בארכיון</small>") +
+              "</div></li>"
+            );
+          })
+          .join("");
+
+        root.innerHTML =
+          '<div class="check-level-intro">' +
+          "<p>נבדקו <strong>" +
+          data.totalSubsets +
+          "</strong> " +
+          data.label +
+          " אפשריות מהטופס שלכם.</p>" +
+          "<p>סה״כ הופעות בארכיון: <strong>" +
+          data.totalHits.toLocaleString("he-IL") +
+          "</strong> · " +
+          data.withHits +
+          " " +
+          data.label +
+          " הופיעו לפחות פעם אחת.</p>" +
+          "</div>" +
+          '<ul class="check-subset-list">' +
+          rows +
+          "</ul>";
+      }
+
+      function runAnalysis() {
+        hideError();
+        try {
+          const analysis = TicketCheck.analyzeTicket(
+            [...regularSelected],
+            strongSelected,
+            history
+          );
+          lastAnalysis = analysis;
+          activeLevel = "pairs";
+          resultsEl.hidden = false;
+          renderSummary(analysis);
+          renderExact(analysis);
+          renderLatest(analysis);
+          renderLevelTabs(analysis);
+          renderLevelPanel(analysis);
+          resultsEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        } catch (error) {
+          showError(error.message || "שגיאה בבדיקה");
+        }
+      }
+
+      clearBtn.addEventListener("click", () => {
+        regularSelected.clear();
+        strongSelected = null;
+        resultsEl.hidden = true;
+        hideError();
+        updatePreview();
+      });
+
+      analyzeBtn.addEventListener("click", runAnalysis);
+
+      buildGrids();
+      updatePreview();
+
+      LottoData.load()
+        .then(() => {
+          history = LottoData.getHistory();
+          loadingEl.classList.remove("show");
+          loadingEl.hidden = true;
+        })
+        .catch((error) => {
+          loadingEl.classList.remove("show");
+          showError("לא הצלחנו לטעון את הארכיון. רענו את הדף.");
+          console.error(error);
+        });
+    })();
+  </script>
+</body>
+</html>
