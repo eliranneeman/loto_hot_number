@@ -67,5 +67,5 @@ https://europe-west1-loto-hot.cloudfunctions.net/checkLotteryNow
 ### תצוגה באתר
 
 - **מודעה בתחתית** — נבחרת מקמפיין פעיל (רוטציה לפי משקל)
-- **באנר לעסקים** — מעודד פרסום, מוביל ל-`/contact.html?topic=advertise`
+- **באנר לעסקים** — מעודד פרסום, מוביל ל-`/advertise.html` עם המייל `lottogun.office@gmail.com`
 - נתוני פרסומות נטענים **פעם אחת לביקור** (`sessionStorage`) — חיסכון במכסת Firebase

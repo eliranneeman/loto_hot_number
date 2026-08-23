@@ -11,8 +11,8 @@
       enabled: true,
       title: "יש לכם עסק? פרסמו אצלנו",
       subtitle: "הגיעו לאלפי חובבי לוטו בכל שבוע — פרסום ממוקד, תמחור גמיש",
-      ctaText: "פרסמו אצלנו",
-      ctaLink: "/contact.html?topic=advertise",
+      ctaText: "לפרטים על פרסום",
+      ctaLink: "/advertise.html",
     },
   };
 
@@ -253,7 +253,7 @@
       "</p>" +
       "</div>" +
       '<a class="lottogun-advertise-cta" href="' +
-      escapeHtml(banner.ctaLink || "/contact.html?topic=advertise") +
+      escapeHtml(banner.ctaLink || "/advertise.html") +
       '">' +
       escapeHtml(banner.ctaText || "פרסמו אצלנו") +
       "</a>" +
