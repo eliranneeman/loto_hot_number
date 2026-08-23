@@ -545,8 +545,19 @@
     }
 
     function renderStats() {
-      const impressions = (adsData.stats && adsData.stats.impressions) || {};
-      const clicks = (adsData.stats && adsData.stats.clicks) || {};
+      const stats = adsData.stats || {};
+      const impressions = Object.assign({}, stats.impressions || {}, stats.views || {});
+      const clicks = Object.assign({}, stats.clicks || {}, stats.taps || {});
+
+      // Fallback keys written under clicks/v_{adId} when primary path is blocked
+      Object.keys(stats.clicks || {}).forEach((key) => {
+        if (key.indexOf("v_") === 0) {
+          const adId = key.slice(2);
+          impressions[adId] = (Number(impressions[adId]) || 0) + (Number(stats.clicks[key]) || 0);
+          delete clicks[key];
+        }
+      });
+
       const creatives = Object.values(adsData.creatives || {});
 
       els.statsGrid.innerHTML = creatives.length

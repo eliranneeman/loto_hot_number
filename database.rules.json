@@ -21,6 +21,16 @@
       },
       "stats": {
         ".read": true,
+        "views": {
+          "$adId": {
+            ".write": true
+          }
+        },
+        "taps": {
+          "$adId": {
+            ".write": true
+          }
+        },
         "impressions": {
           "$adId": {
             ".write": true

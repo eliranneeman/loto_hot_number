@@ -198,46 +198,65 @@
 
   function bumpStat(kind, adId) {
     if (!adId) return Promise.resolve(false);
-    const url =
+
+    // Avoid the word "impressions" in the URL — ad blockers often drop those requests.
+    // Primary: ads/stats/views|taps (needs rules). Fallback: ads/stats/clicks/v_*|c_* (already allowed).
+    const primaryKind = kind === "impressions" ? "views" : "taps";
+    const fallbackKey = kind === "impressions" ? "v_" + adId : adId;
+    const primaryUrl =
       "https://loto-hot-default-rtdb.firebaseio.com/ads/stats/" +
-      kind +
+      primaryKind +
       "/" +
       encodeURIComponent(adId) +
       ".json";
+    const fallbackUrl =
+      "https://loto-hot-default-rtdb.firebaseio.com/ads/stats/clicks/" +
+      encodeURIComponent(fallbackKey) +
+      ".json";
 
-    const writeNumber = (value) =>
-      fetch(url, {
+    function putIncrement(url) {
+      return fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ".sv": { increment: 1 } }),
+        keepalive: true,
+        cache: "no-store",
+      });
+    }
+
+    function putNumber(url, value) {
+      return fetch(url, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(value),
         keepalive: true,
+        cache: "no-store",
       });
+    }
 
-    return fetch(url, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ".sv": { increment: 1 } }),
-      keepalive: true,
-    })
-      .then(async (response) => {
-        if (response.ok) return true;
-        console.warn("[LottoAds] increment failed, falling back", kind, adId, response.status);
-        const current = await fetch(url + "?nocache=" + Date.now()).then((r) => r.json());
-        const next = (typeof current === "number" ? current : 0) + 1;
-        const fallback = await writeNumber(next);
-        return fallback.ok;
+    async function bumpAt(url) {
+      const response = await putIncrement(url);
+      if (response.ok) return true;
+      const current = await fetch(url + "?t=" + Date.now(), { cache: "no-store" }).then((r) =>
+        r.json()
+      );
+      const next = (typeof current === "number" ? current : 0) + 1;
+      const fallback = await putNumber(url, next);
+      return fallback.ok;
+    }
+
+    return bumpAt(primaryUrl)
+      .then((ok) => {
+        if (ok) return true;
+        console.warn("[LottoAds] primary stats path failed, using fallback", primaryKind, adId);
+        return bumpAt(fallbackUrl);
       })
-      .catch(async (error) => {
-        console.warn("[LottoAds] stats write error, falling back", kind, adId, error);
-        try {
-          const current = await fetch(url + "?nocache=" + Date.now()).then((r) => r.json());
-          const next = (typeof current === "number" ? current : 0) + 1;
-          const fallback = await writeNumber(next);
-          return fallback.ok;
-        } catch (fallbackError) {
+      .catch((error) => {
+        console.warn("[LottoAds] stats write error, using fallback", primaryKind, adId, error);
+        return bumpAt(fallbackUrl).catch((fallbackError) => {
           console.warn("[LottoAds] stats fallback failed", fallbackError);
           return false;
-        }
+        });
       });
   }
 
