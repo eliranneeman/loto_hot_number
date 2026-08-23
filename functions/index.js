@@ -26,6 +26,13 @@ async function syncLotteryResults() {
   });
 
   const stats = computeStats(current);
+  const byId = {};
+  current.forEach((draw) => {
+    if (draw && draw.id != null) {
+      byId[String(draw.id)] = draw;
+    }
+  });
+
   const payload = {
     method: "current",
     methodLabel: "6 מתוך 37 + מספר חזק 1-7",
@@ -35,6 +42,7 @@ async function syncLotteryResults() {
     totalDraws: current.length,
     lastDraw: latest,
     results: current,
+    byId,
     stats,
     meta: {
       lastChecked: new Date().toISOString(),
@@ -42,8 +50,10 @@ async function syncLotteryResults() {
       lastDrawDate: latest.date,
       lastNumbers: latest.numbers,
       lastStrong: latest.strong,
+      totalDraws: current.length,
       addedNewDraw: isNew,
       homepageMatched: homepageDraw ? sameDraw(latest, homepageDraw) : false,
+      archiveFormat: 2,
     },
   };
 
@@ -85,6 +95,42 @@ exports.checkLotteryNow = onRequest(
     try {
       const result = await syncLotteryResults();
       res.status(200).json(result);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  }
+);
+
+/** Incremental draws since a given draw id — tiny response when up to date */
+exports.lottoDelta = onRequest(
+  {
+    region: REGION,
+    runtime: "nodejs22",
+    timeoutSeconds: 60,
+    cors: true,
+  },
+  async (req, res) => {
+    try {
+      const sinceId = Number(req.query.since || 0) || 0;
+      const db = getDatabase();
+      const [metaSnap, resultsSnap, statsSnap] = await Promise.all([
+        db.ref("lotto/meta").get(),
+        db.ref("lotto/results").get(),
+        db.ref("lotto/stats").get(),
+      ]);
+      const meta = metaSnap.val() || {};
+      const results = resultsSnap.val() || [];
+      const draws = results.filter((draw) => draw && Number(draw.id) > sinceId);
+      res.status(200).json({
+        success: true,
+        sinceId,
+        meta,
+        stats: statsSnap.val() || null,
+        totalDraws: results.length,
+        added: draws.length,
+        draws,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({ success: false, error: error.message });

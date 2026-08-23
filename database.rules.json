@@ -6,7 +6,10 @@
     },
     "lotto": {
       ".read": true,
-      ".write": false
+      ".write": false,
+      "byId": {
+        ".indexOn": ["id"]
+      }
     },
     "ads": {
       ".read": true,

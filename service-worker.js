@@ -1,5 +1,5 @@
 // service-worker.js
-const CACHE_NAME = 'lottogun-v19';
+const CACHE_NAME = 'lottogun-v20';
 const STATIC_ASSETS = [
   '/js/lottery-data.js',
   '/js/ads.js',
@@ -20,7 +20,8 @@ const STATIC_ASSETS = [
 function isLiveDataRequest(url) {
   return url.includes('firebaseio.com/lotto') ||
     url.includes('firebaseio.com/ads') ||
-    url.includes('cloudfunctions.net/checkLotteryNow');
+    url.includes('cloudfunctions.net/checkLotteryNow') ||
+    url.includes('cloudfunctions.net/lottoDelta');
 }
 
 function isHtmlRequest(request) {
