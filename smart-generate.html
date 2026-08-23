@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+<link rel="stylesheet" href="/css/pages.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>מחולל צירופים מתקדם</title>
@@ -257,11 +263,14 @@
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>🎲 מחולל צירופים מתקדם</h1>
-        
-
+<body class="app">
+<div id="site-header"></div>
+<script src="/common.js" defer></script>
+<div class="app-shell">
+        <header class="page-hero">
+            <h1>🎲 מחולל צירופים מתקדם</h1>
+            <p>יצירת צירופים לפי אסטרטגיות סטטיסטיות</p>
+        </header>
    <!-- טעינת נתונים -->
         <div class="generator-section">
             <h2>📊 טעינת נתוני לוטו</h2>
@@ -699,6 +708,7 @@
         window.addEventListener('DOMContentLoaded', loadLottoData);
         
     </script>
+<div id="footer"></div>
 </body>
 </html>
          

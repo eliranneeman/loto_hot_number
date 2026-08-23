@@ -51,6 +51,8 @@ function bootAds() {
     return;
   }
 
+  if (document.querySelector('script[src="/js/ads.js"]')) return;
+
   const script = document.createElement("script");
   script.src = "/js/ads.js";
   script.onload = () => window.LottoAds && window.LottoAds.ready().catch(() => {});
@@ -62,7 +64,10 @@ function loadSiteFooter() {
   if (!mount || mount.dataset.footerLoaded === "true") return;
 
   fetch("/footer.html")
-    .then((res) => res.text())
+    .then((res) => {
+      if (!res.ok) throw new Error("footer " + res.status);
+      return res.text();
+    })
     .then((html) => {
       mount.innerHTML = html;
       mount.dataset.footerLoaded = "true";
@@ -73,4 +78,8 @@ function loadSiteFooter() {
     .catch((err) => console.error("שגיאה בטעינת footer:", err));
 }
 
-document.addEventListener("DOMContentLoaded", loadSiteFooter);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadSiteFooter);
+} else {
+  loadSiteFooter();
+}

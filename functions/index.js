@@ -63,6 +63,7 @@ exports.checkLotteryResults = onSchedule(
     schedule: "0 0 * * *",
     timeZone: "Asia/Jerusalem",
     region: REGION,
+    runtime: "nodejs22",
     timeoutSeconds: 120,
     memory: "256MiB",
   },
@@ -76,6 +77,7 @@ exports.checkLotteryResults = onSchedule(
 exports.checkLotteryNow = onRequest(
   {
     region: REGION,
+    runtime: "nodejs22",
     timeoutSeconds: 120,
     cors: true,
   },

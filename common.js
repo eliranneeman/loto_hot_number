@@ -85,8 +85,8 @@ function initAccessibilityEvents() {
   // סגירה בלחיצה מחוץ לתפריט
   document.addEventListener('click', (e) => {
     if (floatingAccessibility && floatingAccessibility.classList.contains('show')) {
-      if (!floatingAccessibility.contains(e.target) && 
-          !accessibilityToggle.contains(e.target)) {
+      if (!floatingAccessibility.contains(e.target) &&
+          !(accessibilityToggle && accessibilityToggle.contains(e.target))) {
         floatingAccessibility.classList.remove('show');
       }
     }
@@ -208,12 +208,68 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ===== footer + פרסומות =====
-(function loadFooterScript() {
+function initPwaInstallButton() {
+  const btn = document.getElementById("installBtn");
+  if (!btn) return;
+  btn.hidden = false;
+  let deferredPrompt;
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredPrompt = event;
+  });
+  btn.addEventListener("click", async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      if (choice.outcome === "accepted") btn.hidden = true;
+      deferredPrompt = null;
+      return;
+    }
+    alert("להתקנת האפליקציה: חפש בתפריט הדפדפן 'Install' או 'Add to Home Screen'");
+  });
+  window.addEventListener("appinstalled", () => { btn.hidden = true; });
+}
+
+function bootAds() {
+  if (window.LottoAds) {
+    window.LottoAds.ready().catch(() => {});
+    return;
+  }
+  if (document.querySelector('script[src="/js/ads.js"]')) return;
   const script = document.createElement("script");
-  script.src = "/js/site-footer.js";
-  script.defer = true;
-  document.head.appendChild(script);
-})();
+  script.src = "/js/ads.js";
+  script.onload = () => window.LottoAds && window.LottoAds.ready().catch(() => {});
+  document.body.appendChild(script);
+}
+
+function loadSiteFooter() {
+  const mount = document.getElementById("footer");
+  if (!mount || mount.dataset.footerLoaded === "true") return;
+  fetch("/footer.html")
+    .then((res) => {
+      if (!res.ok) throw new Error("footer " + res.status);
+      return res.text();
+    })
+    .then((html) => {
+      mount.innerHTML = html;
+      mount.dataset.footerLoaded = "true";
+      if (!document.querySelector('link[href="/css/ads.css"]')) {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = "/css/ads.css";
+        document.head.appendChild(link);
+      }
+      initPwaInstallButton();
+      bootAds();
+    })
+    .catch((err) => console.error("שגיאה בטעינת footer:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadSiteFooter);
+} else {
+  loadSiteFooter();
+}
 
 
 /*

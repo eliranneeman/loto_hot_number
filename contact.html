@@ -3,6 +3,7 @@
 <head>
   <link rel="stylesheet" href="/common.css">
   <link rel="stylesheet" href="/css/app.css">
+<link rel="stylesheet" href="/css/pages.css">
   <meta charset="UTF-8">
   <title>צור קשר - LottoGun</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,9 +70,9 @@
   </style>
 </head>
 <body class="app">
-  <script src="/common.js" defer></script>
-
-  <div class="container">
+<div id="site-header"></div>
+<script src="/common.js" defer></script>
+<div class="container">
     <h1 id="pageTitle">צור קשר</h1>
     <p id="pageIntro">נשמח לשמוע מכם! מלאו את הטופס ונחזור אליכם בהקדם.</p>
     <div class="advertise-note" id="advertiseNote" hidden>
@@ -133,6 +134,6 @@
       window.location.href = "mailto:lottogun.office@gmail.com?subject=" + subject + "&body=" + body;
     });
   </script>
-  <div id="footer"></div>
+<div id="footer"></div>
 </body>
 </html>

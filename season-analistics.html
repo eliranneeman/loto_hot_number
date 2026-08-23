@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="/common.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+<link rel="stylesheet" href="/css/pages.css">
+
  	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2154227955978159"
      crossorigin="anonymous"></script>
 
@@ -313,20 +319,21 @@ header {
         }
     </style>
 </head>
-<body>
-    <script src="/common.js" defer></script>
-    <div class="container">
-        <header>
-            <div class="logo">📊 LottoGun</div>
-            <div class="subtitle">ניתוח עונתיות מספרים לפי חודשי השנה</div>
+<body class="app">
+<div id="site-header"></div>
+<script src="/common.js" defer></script>
+<div class="app-shell">
+        <header class="page-hero">
+            <h1>📊 ניתוח עונתיות</h1>
+            <p>מספרים לפי חודשי השנה — על בסיס כל ההגרלות בשיטה הנוכחית</p>
+        </header>
+
         <div class="nav-buttons">
             <a href="index.html" class="nav-btn">🏠 דף הבית</a>
             <a href="results.html" class="nav-btn">📋 תוצאות הגרלות</a>
             <a href="statistics.html" class="nav-btn">📊 סטטיסטיקות</a>
             <a href="combinations.html" class="nav-btn">🔢 ניתוח צירופים</a>
         </div>
-
-        </header>
 
         <div id="loadingMessage" class="loading">
             🔄 טוען נתונים ומבצע ניתוח עונתיות...
@@ -623,6 +630,6 @@ header {
         // הפעלת הטעינה כשהדף נטען
         window.addEventListener('DOMContentLoaded', loadAndCalculateStats);
     </script>
-    <div id="footer"></div>
+<div id="footer"></div>
 </body>
 </html>

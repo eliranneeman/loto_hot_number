@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+<link rel="stylesheet" href="/css/pages.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>צירופים מנצחים - LottoGun</title>
@@ -328,10 +334,11 @@
 </head>
 <body class="app">
 <div id="site-header"></div>
-    <div class="app-shell">
-        <header>
-            <div class="logo">🏆 LottoGun</div>
-            <div class="subtitle">צירופים מנצחים וחכמים</div>
+<script src="/common.js" defer></script>
+<div class="app-shell">
+        <header class="page-hero">
+            <h1>🏆 צירופים מנצחים</h1>
+            <p>צירופים חכמים על בסיס ניתוח סטטיסטי</p>
         </header>
         
         <div class="nav-buttons">
@@ -734,5 +741,6 @@
         // טעינה כשהדף נטען
         window.addEventListener('load', loadAndAnalyzeData);
     </script>
+<div id="footer"></div>
 </body>
 </html>

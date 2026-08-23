@@ -1,0 +1,284 @@
+/* Unified styling for inner pages inside body.app */
+body.app .container,
+body.app .app-shell {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 24px 0 48px;
+}
+
+body.app .page-hero {
+  margin-bottom: 24px;
+}
+
+body.app .page-hero h1,
+body.app header .logo {
+  margin: 0 0 8px;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 800;
+  color: var(--text);
+  text-shadow: none;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  border-radius: 0;
+}
+
+body.app .page-hero p,
+body.app header .subtitle {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  border-radius: 0;
+}
+
+body.app header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+body.app .nav-buttons,
+body.app .page-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 24px;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  border-radius: 0;
+}
+
+body.app .nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+body.app .nav-btn:hover {
+  border-color: rgba(79, 70, 229, 0.4);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+body.app .loading,
+body.app .page-loading,
+body.app #loadingMessage,
+body.app #loadingStatus,
+body.app .loading-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 18px 20px;
+  border-radius: var(--radius);
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+  font-weight: 600;
+  border: 1px solid rgba(79, 70, 229, 0.15);
+}
+
+body.app .summary-section,
+body.app .insights-section,
+body.app .stats-summary,
+body.app .winning-combinations,
+body.app .generator-section,
+body.app .explanation-section,
+body.app .search-section,
+body.app section.content,
+body.app .page-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+body.app .summary-title,
+body.app .insights-title,
+body.app .stats-title,
+body.app .winning-title,
+body.app .explanation-title {
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text);
+  background: none;
+  -webkit-text-fill-color: initial;
+}
+
+body.app .summary-stats,
+body.app .stats-grid,
+body.app .insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+}
+
+body.app .summary-item,
+body.app .stats-item,
+body.app .insight-card,
+body.app .stat-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  text-align: center;
+}
+
+body.app .summary-value,
+body.app .stats-value,
+body.app .number-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+body.app .summary-label,
+body.app .stats-label {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+body.app .numbers-grid,
+body.app .hot-numbers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 10px;
+}
+
+body.app .number-item,
+body.app .hot-number {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+}
+
+body.app .combo-ball {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 4px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  font-weight: 800;
+}
+
+body.app .combo-strong {
+  background: linear-gradient(135deg, var(--gold), #d97706);
+}
+
+body.app .results-table,
+body.app table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+body.app .results-table th,
+body.app .results-table td,
+body.app table th,
+body.app table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+
+body.app .results-table thead,
+body.app table thead {
+  background: var(--primary-soft);
+}
+
+body.app .content h1,
+body.app .content h2,
+body.app .page-hero h1 {
+  color: var(--text);
+}
+
+body.app .content p,
+body.app .content li {
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+body.app .error,
+body.app .file-status.error {
+  color: var(--danger);
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-sm);
+  padding: 12px;
+}
+
+body.app .success,
+body.app .file-status.success {
+  color: #047857;
+  background: var(--success-soft);
+  border: 1px solid #a7f3d0;
+  border-radius: var(--radius-sm);
+  padding: 12px;
+}
+
+/* Legacy pages had purple body backgrounds in inline styles */
+body.app {
+  background:
+    radial-gradient(circle at top right, rgba(79, 70, 229, 0.08), transparent 28%),
+    radial-gradient(circle at bottom left, rgba(245, 158, 11, 0.08), transparent 24%),
+    linear-gradient(180deg, #f8fafc 0%, var(--bg) 100%) !important;
+}
+
+body.app .container {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  padding-top: 8px;
+}
+
+body.app .legal-page,
+body.app .about-page {
+  max-width: 760px;
+  margin: 24px auto 48px;
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+body.app .legal-page h1,
+body.app .about-page h1 {
+  text-align: center;
+  margin-top: 0;
+}
+
+@media (max-width: 640px) {
+  body.app .nav-buttons,
+  body.app .page-pills {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  body.app .nav-btn {
+    width: 100%;
+  }
+}
