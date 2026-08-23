@@ -1,3 +1,19 @@
+(function ensureGlobalStyles() {
+  [
+    "/common.css",
+    "/css/app.css",
+    "/css/pages.css",
+    "/css/site-a11y.css",
+  ].forEach((href) => {
+    if (!document.querySelector('link[href="' + href + '"]')) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = href;
+      document.head.appendChild(link);
+    }
+  });
+})();
+
 // ===== טוען כותרת עליונה =====
 fetch("/header.html")
   .then(res => res.text())
@@ -137,18 +153,18 @@ document.addEventListener('click', (e) => {
 
 // גודל טקסט
 function increaseFont() {
-  let size = parseInt(localStorage.getItem("fontSize") || "100");
+  let size = parseInt(localStorage.getItem("fontSize") || "100", 10);
   size += 5;
-  document.body.style.fontSize = size + "%";
-  localStorage.setItem("fontSize", size);
+  document.documentElement.style.fontSize = size + "%";
+  localStorage.setItem("fontSize", String(size));
 }
 
 function decreaseFont() {
-  let size = parseInt(localStorage.getItem("fontSize") || "100");
+  let size = parseInt(localStorage.getItem("fontSize") || "100", 10);
   size -= 5;
   if (size < 50) size = 50;
-  document.body.style.fontSize = size + "%";
-  localStorage.setItem("fontSize", size);
+  document.documentElement.style.fontSize = size + "%";
+  localStorage.setItem("fontSize", String(size));
 }
 
 // ניגודיות גבוהה
@@ -203,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   const savedSize = localStorage.getItem("fontSize");
   if (savedSize) {
-    document.body.style.fontSize = savedSize + "%";
+    document.documentElement.style.fontSize = savedSize + "%";
   }
 });
 

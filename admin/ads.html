@@ -99,6 +99,14 @@
               </div>
               <div class="admin-list" id="creativeList"></div>
 
+              <div class="admin-status ok" style="margin-bottom:16px;">
+                <strong>איפה המודעה מופיעה?</strong><br>
+                • <strong>תחתית האתר</strong> — מעל באנר "פרסמו אצלנו", בכל הדפים<br>
+                • <strong>בתוך התוכן</strong> — כרגע בדף הבית בלבד<br>
+                • ודא/י: <strong>קמפיין פעיל</strong> + <strong>מודעה פעילה</strong><br>
+                • אחרי שמירה: רענון קשיח באתר (<kbd>Cmd+Shift+R</kbd>)
+              </div>
+
               <form class="admin-form admin-hidden" id="creativeForm" style="margin-top: 18px;">
                 <input type="hidden" id="creativeId">
                 <label>כותרת<input type="text" id="creativeTitle" required></label>
@@ -119,11 +127,14 @@
                     <option value="false">מושהה</option>
                   </select>
                 </label>
-                <label>תמונה
-                  <input type="file" id="creativeImage" accept="image/*">
+                <label>תמונה (עד 5MB)
+                  <input type="file" id="creativeImage" accept="image/jpeg,image/png,image/webp,image/gif">
                 </label>
-                <img id="creativeImagePreview" class="admin-image-preview admin-hidden" alt="">
-                <label>או קישור לתמונה<input type="url" id="creativeImageUrl" placeholder="https://"></label>
+                <p style="margin:0;color:var(--admin-muted);font-size:0.88rem;">
+                  אם העלאה ל-Storage נכשלת — התמונה תידחס ותישמר אוטומטית. אפשר גם להדביק קישור URL למטה.
+                </p>
+                <img id="creativeImagePreview" class="admin-image-preview admin-hidden" alt="תצוגה מקדימה">
+                <label>או קישור לתמונה (URL)<input type="url" id="creativeImageUrl" placeholder="https://"></label>
                 <div class="admin-actions">
                   <button type="submit" class="admin-btn admin-btn-primary">שמירת מודעה</button>
                   <button type="button" class="admin-btn admin-btn-danger" id="deleteCreativeBtn">מחיקת מודעה</button>
@@ -289,6 +300,67 @@
     function rejectUnauthorizedUser(user) {
       const email = getUserEmail(user) || "לא ידוע";
       return "גישה נדחתה. החשבון " + email + " אינו מורשה. רק " + ADMIN_EMAIL + ".";
+    }
+
+    function compressImageToDataUrl(file, maxDim, quality) {
+      maxDim = maxDim || 800;
+      quality = quality || 0.82;
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        const objectUrl = URL.createObjectURL(file);
+        img.onload = () => {
+          URL.revokeObjectURL(objectUrl);
+          let width = img.width;
+          let height = img.height;
+          const scale = Math.min(1, maxDim / Math.max(width, height));
+          width = Math.max(1, Math.round(width * scale));
+          height = Math.max(1, Math.round(height * scale));
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) {
+            reject(new Error("לא ניתן לעבד את התמונה"));
+            return;
+          }
+          ctx.drawImage(img, 0, 0, width, height);
+          const dataUrl = canvas.toDataURL("image/jpeg", quality);
+          if (dataUrl.length > 900000) {
+            reject(new Error("התמונה גדולה מדי. נסה/י קובץ קטן יותר או קישור URL."));
+            return;
+          }
+          resolve(dataUrl);
+        };
+        img.onerror = () => {
+          URL.revokeObjectURL(objectUrl);
+          reject(new Error("לא ניתן לקרוא את קובץ התמונה"));
+        };
+        img.src = objectUrl;
+      });
+    }
+
+    async function resolveCreativeImageUrl(campaignId, creativeId, imageFile, imageUrlInput) {
+      if (imageUrlInput) return imageUrlInput;
+      if (!imageFile) return "";
+
+      if (imageFile.size > 5 * 1024 * 1024) {
+        throw new Error("גודל מקסימלי לתמונה: 5MB");
+      }
+
+      try {
+        const safeName = imageFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+        const path = "ads/" + campaignId + "/" + creativeId + "_" + safeName;
+        const uploaded = await uploadBytes(storageRef(storage, path), imageFile);
+        return await getDownloadURL(uploaded.ref);
+      } catch (storageError) {
+        console.warn("Storage upload failed, using compressed embedded image", storageError);
+        showStatus(
+          els.adminStatus,
+          "Storage לא זמין — שומרים תמונה דחוסה ישירות במודעה.",
+          true
+        );
+        return compressImageToDataUrl(imageFile);
+      }
     }
 
     function bindTabs() {
@@ -624,15 +696,11 @@
       if (!selectedCampaignId) return;
 
       const id = document.getElementById("creativeId").value || uid("ad");
-      let imageUrl = document.getElementById("creativeImageUrl").value.trim();
       const imageFile = document.getElementById("creativeImage").files[0];
+      let imageUrl = document.getElementById("creativeImageUrl").value.trim();
 
       try {
-        if (imageFile) {
-          const path = "ads/" + selectedCampaignId + "/" + id + "_" + imageFile.name;
-          const uploaded = await uploadBytes(storageRef(storage, path), imageFile);
-          imageUrl = await getDownloadURL(uploaded.ref);
-        }
+        imageUrl = await resolveCreativeImageUrl(selectedCampaignId, id, imageFile, imageUrl);
 
         const payload = {
           id,
@@ -654,7 +722,11 @@
         if (!adsData.creatives[id]) payload.createdAt = new Date().toISOString();
 
         await set(ref(db, "ads/creatives/" + id), payload);
-        showStatus(els.adminStatus, "המודעה נשמרה", true);
+        showStatus(
+          els.adminStatus,
+          "המודעה נשמרה! תופיע בתחתית האתר (רענון קשיח בדפדפן).",
+          true
+        );
         selectCreative(id);
       } catch (error) {
         showStatus(els.adminStatus, error.message, false);

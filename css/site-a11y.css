@@ -1,0 +1,167 @@
+/* Accessibility + readability on all body.app pages */
+
+html {
+  font-size: 100%;
+}
+
+body.app.high-contrast,
+body.app.high-contrast .app-shell,
+body.app.high-contrast .container,
+body.app.high-contrast .wrap,
+body.app.high-contrast .wrap .card,
+body.app.high-contrast .legal-page,
+body.app.high-contrast .about-page,
+body.app.high-contrast .advertise-page {
+  background: #000 !important;
+  color: #fff !important;
+}
+
+body.app.high-contrast .summary-section,
+body.app.high-contrast .insights-section,
+body.app.high-contrast .insight-card,
+body.app.high-contrast .summary-item,
+body.app.high-contrast .pattern-card,
+body.app.high-contrast .chart-card,
+body.app.high-contrast .explanation-section,
+body.app.high-contrast .numbers-section,
+body.app.high-contrast .winning-combinations,
+body.app.high-contrast .generator-section,
+body.app.high-contrast section.content,
+body.app.high-contrast .site-header,
+body.app.high-contrast .lottogun-ad-card {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #fff !important;
+}
+
+body.app.high-contrast .summary-value,
+body.app.high-contrast .insight-type,
+body.app.high-contrast .combination-numbers,
+body.app.high-contrast .page-hero h1,
+body.app.high-contrast h1,
+body.app.high-contrast h2,
+body.app.high-contrast h3,
+body.app.high-contrast strong {
+  color: #fff !important;
+}
+
+body.app.high-contrast .summary-label,
+body.app.high-contrast .combination-count,
+body.app.high-contrast p,
+body.app.high-contrast li,
+body.app.high-contrast .muted,
+body.app.high-contrast .page-hero p {
+  color: #f3f4f6 !important;
+}
+
+body.app.high-contrast a,
+body.app.high-contrast .nav-btn,
+body.app.high-contrast .site-nav a {
+  color: #ffff00 !important;
+  text-decoration: underline !important;
+}
+
+body.app.high-contrast .nav-btn,
+body.app.high-contrast button,
+body.app.high-contrast .btn,
+body.app.high-contrast input,
+body.app.high-contrast select,
+body.app.high-contrast textarea {
+  background: #000 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+
+body.app.high-contrast .lottogun-advertise-banner {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+body.app.high-contrast .lottogun-advertise-cta {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid #000 !important;
+}
+
+body.app.highlight-links a {
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
+}
+
+body.app :focus-visible {
+  outline: 3px solid #4f46e5;
+  outline-offset: 2px;
+}
+
+body.app.high-contrast :focus-visible {
+  outline-color: #ffff00;
+}
+
+/* Legal / policy pages — light unified theme over legacy dark inline CSS */
+body.app .wrap {
+  width: min(900px, calc(100% - 32px));
+  margin: 24px auto 48px;
+  padding: 0;
+}
+
+body.app .wrap .card {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow-sm) !important;
+  backdrop-filter: none !important;
+}
+
+body.app .wrap .btn {
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+}
+
+body.app .wrap .btn[aria-pressed="true"] {
+  background: var(--primary-soft) !important;
+  border-color: var(--primary) !important;
+  color: var(--primary-dark) !important;
+}
+
+body.app .wrap a {
+  color: var(--primary) !important;
+}
+
+body.app .wrap .muted,
+body.app .wrap p {
+  color: var(--text-muted) !important;
+}
+
+body.app .wrap h1,
+body.app .wrap h2,
+body.app .wrap h3 {
+  color: var(--text) !important;
+}
+
+/* Kill legacy white text on light cards */
+body.app .insight-card,
+body.app .summary-item,
+body.app .pattern-card,
+body.app .stat-card,
+body.app .loading,
+body.app #loadingMessage {
+  color: var(--text) !important;
+}
+
+body.app .combination-item {
+  color: var(--text) !important;
+}
+
+body.app .combination-numbers {
+  color: var(--text) !important;
+}
+
+body.app .logo,
+body.app .subtitle {
+  color: var(--text) !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
