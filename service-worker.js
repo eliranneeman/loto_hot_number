@@ -1,9 +1,10 @@
 // service-worker.js
-const CACHE_NAME = 'lottogun-v17';
+const CACHE_NAME = 'lottogun-v18';
 const STATIC_ASSETS = [
   '/js/lottery-data.js',
   '/js/ads.js',
   '/js/ticket-check.js',
+  '/js/wheel-system.js',
   '/js/site-footer.js',
   '/css/app.css',
   '/css/pages.css',
@@ -11,6 +12,7 @@ const STATIC_ASSETS = [
   '/css/ads.css',
   '/css/home.css',
   '/css/check-ticket.css',
+  '/css/reduced-system.css',
   '/manifest.json',
   '/image.png'
 ];

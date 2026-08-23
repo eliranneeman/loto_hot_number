@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>שיטה מצומצמת | LottoGun</title>
+  <meta name="description" content="שיטה מצומצמת ללוטו: בחרו 7–12 מספרים וקבלו מערכת טפסים עם כיסוי חכם וחיסכון מול מערכת מלאה.">
+  <meta name="theme-color" content="#0b1f33">
+  <link rel="icon" type="image/png" href="/image.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&family=Rubik:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/common.css">
+  <link rel="stylesheet" href="/css/app.css">
+  <link rel="stylesheet" href="/css/pages.css">
+  <link rel="stylesheet" href="/css/reduced-system.css">
+  <script src="/js/wheel-system.js"></script>
+</head>
+<body class="app reduced-page">
+  <div id="site-header"></div>
+  <script src="/common.js" defer></script>
+
+  <main class="app-shell reduced-shell">
+    <header class="reduced-intro">
+      <p class="reduced-kicker">כלי חדש ב-LottoGun</p>
+      <h1>שיטה מצומצמת</h1>
+      <p class="reduced-lead">
+        בוחרים יותר מ־6 מספרים, ומקבלים מערכת טפסים חכמה שנותנת
+        <strong>כיסוי מובנה</strong> במקום לקנות את כל הצירופים האפשריים.
+      </p>
+    </header>
+
+    <section class="panel reduced-why">
+      <h2 class="section-title">למה להשתמש בשיטה מצומצמת?</h2>
+      <ul class="reduced-benefits">
+        <li>
+          <strong>חוסכים כסף מול מערכת מלאה</strong>
+          <span>במקום עשרות או מאות טפסים — מקבלים מערכת קטנה יותר שעדיין מכסה את המספרים שבחרתם בצורה מסודרת.</span>
+        </li>
+        <li>
+          <strong>כיסוי חכם במקום ניחוש</strong>
+          <span>הטפסים נבנים כך שיכסו כמה שיותר צירופי משנה (זוגות) מתוך הקבוצה שלכם — לא סתם רשימה אקראית.</span>
+        </li>
+        <li>
+          <strong>הבטחה מתמטית מינימלית</strong>
+          <span>המערכת מחשבת: אם X מהמספרים שלכם עולים בהגרלה — מה המינימום המובטח בטופס הכי טוב. זה שקיפות, לא הבטחת זכייה.</span>
+        </li>
+        <li>
+          <strong>שליטה בתקציב</strong>
+          <span>אפשר לבחור מערכת חסכונית / מאוזנת / רחבה — לפי כמה טפסים אתם מוכנים למלא.</span>
+        </li>
+      </ul>
+      <p class="reduced-note">
+        חשוב לדעת: שיטה מצומצמת <u>לא מגדילה</u> את סיכוי הזכייה של טופס בודד מעבר למתמטיקה של הלוטו.
+        היתרון הוא ארגון, חיסכון מול מערכת מלאה, וכיסוי מבוקר של קבוצת המספרים שבחרתם.
+      </p>
+    </section>
+
+    <section class="panel reduced-form-panel">
+      <h2 class="section-title">בנו את המערכת</h2>
+      <p class="section-subtitle">בחרו 7–12 מספרים רגילים (1–37) ומספר חזק אחד לכל הטפסים</p>
+
+      <div class="reduced-pick-block">
+        <div class="reduced-pick-head">
+          <span>מספרים רגילים</span>
+          <span id="pool-count" class="reduced-pill">0 / 7–12</span>
+        </div>
+        <div id="pool-grid" class="reduced-number-grid" role="group" aria-label="בחירת מספרים"></div>
+      </div>
+
+      <div class="reduced-pick-block">
+        <div class="reduced-pick-head">
+          <span>מספר חזק (לכל הטפסים)</span>
+          <span id="strong-label" class="reduced-pill">לא נבחר</span>
+        </div>
+        <div id="strong-grid" class="reduced-number-grid reduced-strong-grid" role="group" aria-label="מספר חזק"></div>
+      </div>
+
+      <div class="reduced-options">
+        <label class="reduced-option">
+          <span>סוג מערכת</span>
+          <select id="system-mode">
+            <option value="reduced" selected>מצומצמת (מומלץ)</option>
+            <option value="full">מלאה (כל הצירופים)</option>
+          </select>
+        </label>
+        <label class="reduced-option" id="density-wrap">
+          <span>רוחב המערכת המצומצמת</span>
+          <select id="system-density">
+            <option value="economy">חסכונית — פחות טפסים</option>
+            <option value="balanced" selected>מאוזנת — מומלץ</option>
+            <option value="wide">רחבה — יותר כיסוי</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="reduced-selected" id="selected-preview">עדיין לא נבחרו מספרים</div>
+
+      <div class="reduced-actions">
+        <button type="button" class="btn btn-primary" id="build-btn" disabled>בנו מערכת</button>
+        <button type="button" class="btn btn-secondary" id="clear-btn">נקה</button>
+      </div>
+      <p id="wheel-error" class="reduced-error" hidden></p>
+    </section>
+
+    <section id="wheel-results" class="wheel-results" hidden>
+      <section class="panel">
+        <h2 class="section-title">סיכום המערכת</h2>
+        <div class="reduced-summary" id="summary-cards"></div>
+      </section>
+
+      <section class="panel">
+        <h2 class="section-title">מה מובטח במערכת הזו?</h2>
+        <p class="section-subtitle">מחושב על כל האפשרויות של המספרים שבחרתם (לא ניחוש)</p>
+        <ul class="reduced-guarantee-list" id="guarantee-list"></ul>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">הטפסים שלכם</h2>
+            <p class="section-subtitle">מוכנים להעתקה לטופס הלוטו</p>
+          </div>
+          <button type="button" class="btn btn-secondary" id="copy-all-btn">העתק הכל</button>
+        </div>
+        <div id="tickets-list" class="reduced-tickets"></div>
+      </section>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+
+  <script>
+    (function () {
+      const pool = new Set();
+      let strong = null;
+
+      const poolGrid = document.getElementById("pool-grid");
+      const strongGrid = document.getElementById("strong-grid");
+      const buildBtn = document.getElementById("build-btn");
+      const clearBtn = document.getElementById("clear-btn");
+      const errorEl = document.getElementById("wheel-error");
+      const resultsEl = document.getElementById("wheel-results");
+      const modeSelect = document.getElementById("system-mode");
+      const densityWrap = document.getElementById("density-wrap");
+      const densitySelect = document.getElementById("system-density");
+
+      function showError(msg) {
+        errorEl.hidden = false;
+        errorEl.textContent = msg;
+      }
+      function hideError() {
+        errorEl.hidden = true;
+        errorEl.textContent = "";
+      }
+
+      function buildGrids() {
+        poolGrid.innerHTML = "";
+        for (let i = 1; i <= 37; i += 1) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "reduced-ball";
+          btn.textContent = String(i);
+          btn.dataset.value = String(i);
+          btn.addEventListener("click", () => togglePool(i));
+          poolGrid.appendChild(btn);
+        }
+        strongGrid.innerHTML = "";
+        for (let i = 1; i <= 7; i += 1) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "reduced-ball is-strong";
+          btn.textContent = String(i);
+          btn.dataset.value = String(i);
+          btn.addEventListener("click", () => {
+            strong = strong === i ? null : i;
+            hideError();
+            syncUI();
+          });
+          strongGrid.appendChild(btn);
+        }
+      }
+
+      function togglePool(value) {
+        hideError();
+        if (pool.has(value)) {
+          pool.delete(value);
+        } else if (pool.size >= 12) {
+          showError("ניתן לבחור עד 12 מספרים בשיטה מצומצמת.");
+          return;
+        } else {
+          pool.add(value);
+        }
+        syncUI();
+      }
+
+      function miniBalls(nums, strongNum) {
+        return (
+          nums.map((n) => '<span class="reduced-mini">' + n + "</span>").join("") +
+          (strongNum
+            ? '<span class="reduced-mini is-strong">' + strongNum + "</span>"
+            : "")
+        );
+      }
+
+      function syncUI() {
+        const nums = [...pool].sort((a, b) => a - b);
+        document.getElementById("pool-count").textContent = nums.length + " / 7–12";
+        document.getElementById("strong-label").textContent = strong ? String(strong) : "לא נבחר";
+
+        poolGrid.querySelectorAll(".reduced-ball").forEach((btn) => {
+          const v = Number(btn.dataset.value);
+          btn.classList.toggle("is-selected", pool.has(v));
+        });
+        strongGrid.querySelectorAll(".reduced-ball").forEach((btn) => {
+          const v = Number(btn.dataset.value);
+          btn.classList.toggle("is-selected", strong === v);
+        });
+
+        const preview = document.getElementById("selected-preview");
+        if (!nums.length && !strong) {
+          preview.textContent = "עדיין לא נבחרו מספרים";
+        } else {
+          preview.innerHTML = miniBalls(nums, strong);
+        }
+
+        densityWrap.style.opacity = modeSelect.value === "reduced" ? "1" : "0.45";
+        densitySelect.disabled = modeSelect.value !== "reduced";
+
+        buildBtn.disabled = !(nums.length >= 7 && nums.length <= 12 && strong);
+      }
+
+      function ticketText(ticket, strongNum, index) {
+        return (
+          "טופס " +
+          (index + 1) +
+          ": " +
+          ticket.join(", ") +
+          " + חזק " +
+          strongNum
+        );
+      }
+
+      function renderSystem(system) {
+        resultsEl.hidden = false;
+
+        const densityLabel = {
+          economy: "חסכונית",
+          balanced: "מאוזנת",
+          wide: "רחבה",
+        };
+
+        document.getElementById("summary-cards").innerHTML =
+          '<article class="reduced-card accent"><strong>' +
+          system.ticketCount +
+          "</strong><span>טפסים במערכת</span></article>" +
+          '<article class="reduced-card"><strong>' +
+          system.fullCount.toLocaleString("he-IL") +
+          "</strong><span>במערכת מלאה</span></article>" +
+          '<article class="reduced-card"><strong>' +
+          (system.savedTickets
+            ? system.savePercent + "%"
+            : "—") +
+          "</strong><span>" +
+          (system.mode === "reduced"
+            ? "חיסכון מול מלאה (" + system.savedTickets + " טפסים)"
+            : "מערכת מלאה") +
+          "</span></article>" +
+          '<article class="reduced-card"><strong>' +
+          system.numbers.length +
+          "</strong><span>מספרים בקבוצה · חזק " +
+          system.strong +
+          (system.density ? " · " + densityLabel[system.density] : "") +
+          "</span></article>";
+
+        document.getElementById("guarantee-list").innerHTML = system.guarantees
+          .map(function (g) {
+            return (
+              "<li><strong>אם עולים " +
+              g.ifHit +
+              " מהמספרים שלכם</strong> — מובטח לפחות טופס אחד עם <em>" +
+              g.guaranteed +
+              "</em> מספרים נכונים" +
+              "<small>נבדק על " +
+              g.scenarios.toLocaleString("he-IL") +
+              " תרחישים</small></li>"
+            );
+          })
+          .join("");
+
+        const list = document.getElementById("tickets-list");
+        list.innerHTML = system.tickets
+          .map(function (ticket, index) {
+            return (
+              '<article class="reduced-ticket">' +
+              '<div class="reduced-ticket-head"><span>טופס ' +
+              (index + 1) +
+              '</span><button type="button" class="btn btn-ghost copy-one" data-index="' +
+              index +
+              '">העתק</button></div>' +
+              '<div class="reduced-ticket-nums">' +
+              miniBalls(ticket, system.strong) +
+              "</div></article>"
+            );
+          })
+          .join("");
+
+        list.querySelectorAll(".copy-one").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            const i = Number(btn.dataset.index);
+            const text = ticketText(system.tickets[i], system.strong, i);
+            copyText(text, btn);
+          });
+        });
+
+        document.getElementById("copy-all-btn").onclick = function () {
+          const all = system.tickets
+            .map(function (t, i) {
+              return ticketText(t, system.strong, i);
+            })
+            .join("\n");
+          copyText(all, document.getElementById("copy-all-btn"));
+        };
+
+        resultsEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function copyText(text, btn) {
+        const done = function () {
+          if (!btn) return;
+          const prev = btn.textContent;
+          btn.textContent = "הועתק";
+          setTimeout(function () {
+            btn.textContent = prev;
+          }, 1200);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function () {
+            window.prompt("העתיקו:", text);
+          });
+        } else {
+          window.prompt("העתיקו:", text);
+        }
+      }
+
+      buildBtn.addEventListener("click", function () {
+        hideError();
+        try {
+          const system = WheelSystem.buildSystem({
+            numbers: [...pool],
+            strong: strong,
+            mode: modeSelect.value,
+            density: densitySelect.value,
+          });
+          renderSystem(system);
+        } catch (err) {
+          showError(err.message || "שגיאה בבניית המערכת");
+        }
+      });
+
+      clearBtn.addEventListener("click", function () {
+        pool.clear();
+        strong = null;
+        resultsEl.hidden = true;
+        hideError();
+        syncUI();
+      });
+
+      modeSelect.addEventListener("change", syncUI);
+
+      buildGrids();
+      syncUI();
+    })();
+  </script>
+</body>
+</html>
