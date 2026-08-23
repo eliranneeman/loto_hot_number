@@ -86,30 +86,6 @@ def compute_stats(draws: list[dict]) -> dict:
     }
 
 
-def write_xlsx(draws: list[dict], path: Path) -> None:
-    try:
-        from openpyxl import Workbook
-        from openpyxl.styles import Font, Alignment
-    except ImportError:
-        print("openpyxl missing - skipped Lotto.xlsx")
-        return
-
-    workbook = Workbook()
-    sheet = workbook.active
-    sheet.title = "Sheet1"
-    headers = ["תאריך", 1, 2, 3, 4, 5, 6, "המספר החזק", "הגרלה"]
-    sheet.append(headers)
-    for cell in sheet[1]:
-        cell.font = Font(bold=True)
-        cell.alignment = Alignment(horizontal="center")
-
-    for draw in draws:
-        sheet.append([draw["dateDisplay"], *draw["numbers"], draw["strong"], draw["id"]])
-
-    workbook.save(path)
-    print(f"wrote {path.name} ({len(draws)} rows)")
-
-
 def main() -> int:
     print("Downloading official Pais Lotto archive...")
     csv_text = download_csv()
@@ -136,7 +112,6 @@ def main() -> int:
     stats_path = ROOT / "lottery_stats.json"
     results_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
-    write_xlsx(current, ROOT / "Lotto.xlsx")
 
     print(f"current-method draws: {len(current)}")
     print(f"latest: #{current[0]['id']} {current[0]['dateDisplay']} {current[0]['numbers']} + {current[0]['strong']}")

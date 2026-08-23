@@ -325,7 +325,6 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="/js/lottery-data.js"></script>
     <script>
         // נתונים גלובליים
@@ -354,8 +353,8 @@
                 statsSection.style.display = 'none';
                 strategiesSection.style.display = 'none';
                 
-                const archive = await LottoData.load();
-                const data = LottoData.toHeaderRows(archive.results);
+                await LottoData.load();
+                const data = LottoData.getHeaderRows();
 
                 
                 // עיבוד הנתונים

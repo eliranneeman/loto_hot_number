@@ -503,7 +503,6 @@
     </div>
 </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="/js/lottery-data.js"></script>
     <script>
         let allResults = [];
@@ -513,10 +512,8 @@
         // טעינת הנתונים וחישוב הסטטיסטיקות
         async function loadAndCalculateStats() {
             try {
-                const archive = await LottoData.load();
-                const jsonData = LottoData.toLegacyRows(archive.results);
-                
-                allResults = jsonData;
+                await LottoData.load();
+                allResults = LottoData.getLegacyRows();
                 calculateCombinations();
                 displayStatistics();
                 
@@ -737,28 +734,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // פורמט תאריך
         function formatDate(dateValue) {
-            if (!dateValue) return '';
-            
-            if (typeof dateValue === 'number') {
-                const date = XLSX.SSF.parse_date_code(dateValue);
-                return `${date.d.toString().padStart(2, '0')}/${date.m.toString().padStart(2, '0')}/${date.y}`;
-            }
-            
-            return dateValue.toString();
+            return LottoData.formatDate(dateValue);
         }
 
         // טעינה כשהדף נטען
         window.addEventListener('load', loadAndCalculateStats);
     </script>
-    <div id="footer"></div>
+  <div id="footer"></div>
 
-<script>
-  fetch("footer.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("footer").innerHTML = data;
-    });
-</script>
 </body>
 </html>
             

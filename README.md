@@ -2,27 +2,70 @@
 
 אתר הצעות צירופים ללוטו הישראלי, על בסיס כל הגרלות השיטה הנוכחית (6 מתוך 37 + מספר חזק 1-7, מאז מאי 2011).
 
-## איך זה עובד
+## מקורות הנתונים
 
-1. הארכיון הרשמי יורד מאתר מפעל הפיס: `https://www.pais.co.il/Lotto/lotto_resultsDownload.aspx`
-2. נשמרות רק הגרלות השיטה הנוכחית ב-`lottery_results.json`
-3. האתר מציג הצעות צירופים, סטטיסטיקות ואת כל התוצאות
-4. Firebase Function רצה כל יום בחצות שעון ישראל, בודקת אם יצאה הגרלה חדשה ומעדכנת את Realtime Database
+| מקור | מתי מתעדכן | שימוש |
+|------|------------|--------|
+| **Firebase Realtime Database** (`/lotto`) | כל לילה ב-00:00 + הרצה ידנית | מקור ראשי |
+| **`lottery_results.json`** ב-GitHub | ידני | גיבוי |
 
-## עדכון מקומי
+### חיסכון במכסת Firebase (חינם)
+
+האתר טוען את ארכיון ההגרלות **פעם אחת לכל ביקור** (טאב בדפדפן):
+- הורדה ראשונה מ-Firebase או מ-JSON מקומי
+- שמירה ב-`sessionStorage`
+- כל שאר הדפים (סטטיסטיקות, תוצאות, צירופים) משתמשים ** באותה קריאה** — בלי הורדה חוזרת
+
+> **Excel (`Lotto.xlsx`) בוטל** — האתר לא משתמש יותר בקבצי Excel.
+
+## עדכון מקומי של JSON (גיבוי)
 
 ```bash
 python3 scripts/sync_pais_results.py
 ```
 
-## פריסת פונקציית Firebase
+## פריסת Firebase Function
 
 ```bash
-npm install -g firebase-tools
-firebase login
-cd functions && npm install && cd ..
-firebase deploy --only functions,database
+firebase deploy --only functions,database --force
 ```
 
-הפונקציה `checkLotteryResults` רצה כל לילה ב-00:00 לפי `Asia/Jerusalem`.
-אפשר גם להריץ ידנית דרך `checkLotteryNow`.
+הרצה ידנית לבדיקה:
+```
+https://europe-west1-loto-hot.cloudfunctions.net/checkLotteryNow
+```
+
+## מערכת פרסומות (AdMob מותאם)
+
+מערכת פרסום native משלך — קמפיינים, תמונות, קישורים ובאנר "פרסמו אצלנו".
+
+### ממשק ניהול
+
+```
+/admin/ads.html
+```
+
+1. ב-Firebase Console → **Authentication** → הפעל **Email/Password** → צור משתמש `eliran.neeman@gmail.com`
+2. פרוס כללים + Storage:
+   ```bash
+   firebase deploy --only database,storage
+   ```
+3. היכנס ל-`/admin/ads.html` עם המייל המורשה בלבד
+4. צור קמפיין → הוסף מודעה (תמונה + תיאור + קישור)
+
+> גישה לפאנל ולכתיבה ב-Firebase מוגבלת ל-**eliran.neeman@gmail.com** (גם בכללי האבטחה).
+
+### מבנה נתונים (`/ads`)
+
+| נתיב | תוכן |
+|------|------|
+| `campaigns/{id}` | שם, תאריכים, עדיפות, פעיל/מושהה |
+| `creatives/{id}` | תמונה, כותרת, תיאור, קישור, מיקום |
+| `settings/advertiseBanner` | טקסט באנר "פרסמו אצלנו" |
+| `stats/impressions`, `stats/clicks` | סטטיסטיקות |
+
+### תצוגה באתר
+
+- **מודעה בתחתית** — נבחרת מקמפיין פעיל (רוטציה לפי משקל)
+- **באנר לעסקים** — מעודד פרסום, מוביל ל-`/contact.html?topic=advertise`
+- נתוני פרסומות נטענים **פעם אחת לביקור** (`sessionStorage`) — חיסכון במכסת Firebase

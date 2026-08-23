@@ -7,6 +7,31 @@
     "lotto": {
       ".read": true,
       ".write": false
+    },
+    "ads": {
+      ".read": true,
+      "campaigns": {
+        ".write": "auth != null && auth.token.email === 'eliran.neeman@gmail.com'"
+      },
+      "creatives": {
+        ".write": "auth != null && auth.token.email === 'eliran.neeman@gmail.com'"
+      },
+      "settings": {
+        ".write": "auth != null && auth.token.email === 'eliran.neeman@gmail.com'"
+      },
+      "stats": {
+        ".read": true,
+        "impressions": {
+          "$adId": {
+            ".write": true
+          }
+        },
+        "clicks": {
+          "$adId": {
+            ".write": true
+          }
+        }
+      }
     }
   }
 }

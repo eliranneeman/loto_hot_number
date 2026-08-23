@@ -6,13 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
       <link rel="stylesheet" href="/common.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+
     <script src="/js/lottery-data.js"></script>
  	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2154227955978159"
      crossorigin="anonymous"></script>
 
     <meta name="google-adsense-account" content="ca-pub-2154227955978159">
     <title>LottoGun - ניתוח צירופים נפוצים</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -446,9 +450,10 @@ header {
     }
     </style>
 </head>
-<body>
+<body class="app">
+<div id="site-header"></div>
     <script src="/common.js" defer></script>
-    <div class="container">
+    <div class="app-shell">
         <header>
             <div class="logo">🔢 LottoGun</div>
             <div class="subtitle">ניתוח צירופים נפוצים והסתברותיים</div>
@@ -590,10 +595,8 @@ header {
         // טעינת הנתונים
         async function loadAndCalculateStats() {
             try {
-                const archive = await LottoData.load();
-                const jsonData = LottoData.toLegacyRows(archive.results);
-                
-                allResults = jsonData;
+                await LottoData.load();
+                allResults = LottoData.getLegacyRows();
                 calculateCombinations();
                 displaySummaryStats();
                 showCombination('pairs');
@@ -831,19 +834,6 @@ function displaySummaryStats() {
         // הפעלת הטעינה כשהדף נטען
         window.addEventListener('DOMContentLoaded', loadAndCalculateStats);
     </script>
-    <script>
-  fetch("footer.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("footer").innerHTML = data;
-    });
-</script>
-        <script>
-  fetch("footer.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("footer").innerHTML = data;
-    });
-</script>
+    <div id="footer"></div>
 </body>
 </html>

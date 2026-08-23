@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>ניהול פרסומות | LottoGun</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/ads.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body class="admin-app">
+  <div class="admin-shell">
+    <div class="admin-header">
+      <div>
+        <h1>📣 ניהול פרסומות LottoGun</h1>
+        <p>קמפיינים, באנרים, סטטיסטיקות ופרסום לעסקים</p>
+      </div>
+      <div class="admin-actions">
+        <a class="admin-btn admin-btn-secondary" href="/">← חזרה לאתר</a>
+        <button type="button" class="admin-btn admin-btn-secondary admin-hidden" id="logoutBtn">התנתקות</button>
+      </div>
+    </div>
+
+    <section class="admin-card admin-login" id="loginPanel">
+      <h2 class="admin-panel-title">כניסת מנהל</h2>
+      <form class="admin-form" id="loginForm">
+        <label>אימייל<input type="email" id="loginEmail" required autocomplete="username" value="eliran.neeman@gmail.com"></label>
+        <label>סיסמה<input type="password" id="loginPassword" required autocomplete="current-password"></label>
+        <div class="admin-actions">
+          <button type="submit" class="admin-btn admin-btn-primary">התחברות</button>
+        </div>
+      </form>
+      <div id="loginStatus"></div>
+    </section>
+
+    <section class="admin-hidden" id="adminPanel">
+      <div class="admin-tabs">
+        <button type="button" class="admin-tab active" data-tab="campaigns">קמפיינים</button>
+        <button type="button" class="admin-tab" data-tab="settings">באנר "פרסמו אצלנו"</button>
+        <button type="button" class="admin-tab" data-tab="stats">סטטיסטיקות</button>
+      </div>
+
+      <div id="tab-campaigns">
+        <div class="admin-grid">
+          <div class="admin-card">
+            <div class="admin-actions" style="margin-bottom: 14px;">
+              <h2 class="admin-panel-title" style="flex:1; margin:0;">קמפיינים</h2>
+              <button type="button" class="admin-btn admin-btn-primary" id="newCampaignBtn">+ קמפיין</button>
+            </div>
+            <div class="admin-list" id="campaignList"></div>
+          </div>
+
+          <div class="admin-card">
+            <h2 class="admin-panel-title" id="editorTitle">בחר קמפיין</h2>
+            <div id="campaignEditor" class="admin-hidden">
+              <form class="admin-form" id="campaignForm">
+                <input type="hidden" id="campaignId">
+                <label>שם הקמפיין<input type="text" id="campaignName" required></label>
+                <label>תיאור פנימי<textarea id="campaignNotes"></textarea></label>
+                <div class="admin-row">
+                  <label>עדיפות (גבוה = יותר סיכוי)<input type="number" id="campaignPriority" min="1" max="100" value="10"></label>
+                  <label>סטטוס
+                    <select id="campaignActive">
+                      <option value="true">פעיל</option>
+                      <option value="false">מושהה</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="admin-row">
+                  <label>תאריך התחלה (אופציונלי)<input type="datetime-local" id="campaignStart"></label>
+                  <label>תאריך סיום (אופציונלי)<input type="datetime-local" id="campaignEnd"></label>
+                </div>
+                <div class="admin-actions">
+                  <button type="submit" class="admin-btn admin-btn-primary">שמירת קמפיין</button>
+                  <button type="button" class="admin-btn admin-btn-danger" id="deleteCampaignBtn">מחיקת קמפיין</button>
+                </div>
+              </form>
+
+              <hr style="border-color: var(--admin-border); margin: 24px 0;">
+
+              <div class="admin-actions" style="margin-bottom: 12px;">
+                <h3 class="admin-panel-title" style="flex:1; margin:0;">מודעות בקמפיין</h3>
+                <button type="button" class="admin-btn admin-btn-primary" id="newCreativeBtn">+ מודעה</button>
+              </div>
+              <div class="admin-list" id="creativeList"></div>
+
+              <form class="admin-form admin-hidden" id="creativeForm" style="margin-top: 18px;">
+                <input type="hidden" id="creativeId">
+                <label>כותרת<input type="text" id="creativeTitle" required></label>
+                <label>תיאור<textarea id="creativeDescription"></textarea></label>
+                <label>קישור (URL)<input type="url" id="creativeLink" required placeholder="https://"></label>
+                <div class="admin-row">
+                  <label>מיקום
+                    <select id="creativePlacement">
+                      <option value="footer">תחתית האתר</option>
+                      <option value="inline">בתוך התוכן</option>
+                    </select>
+                  </label>
+                  <label>משקל (רוטציה)<input type="number" id="creativeWeight" min="1" max="100" value="1"></label>
+                </div>
+                <label>סטטוס
+                  <select id="creativeActive">
+                    <option value="true">פעיל</option>
+                    <option value="false">מושהה</option>
+                  </select>
+                </label>
+                <label>תמונה
+                  <input type="file" id="creativeImage" accept="image/*">
+                </label>
+                <img id="creativeImagePreview" class="admin-image-preview admin-hidden" alt="">
+                <label>או קישור לתמונה<input type="url" id="creativeImageUrl" placeholder="https://"></label>
+                <div class="admin-actions">
+                  <button type="submit" class="admin-btn admin-btn-primary">שמירת מודעה</button>
+                  <button type="button" class="admin-btn admin-btn-danger" id="deleteCreativeBtn">מחיקת מודעה</button>
+                </div>
+              </form>
+
+              <div class="admin-preview admin-hidden" id="creativePreview"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-card admin-hidden" id="tab-settings">
+        <h2 class="admin-panel-title">באנר "פרסמו אצלנו" בתחתית האתר</h2>
+        <form class="admin-form" id="settingsForm">
+          <label>כותרת<input type="text" id="bannerTitle"></label>
+          <label>תת-כותרת<textarea id="bannerSubtitle"></textarea></label>
+          <label>טקסט כפתור<input type="text" id="bannerCtaText"></label>
+          <label>קישור כפתור<input type="text" id="bannerCtaLink"></label>
+          <label>הצגה
+            <select id="bannerEnabled">
+              <option value="true">מוצג</option>
+              <option value="false">מוסתר</option>
+            </select>
+          </label>
+          <button type="submit" class="admin-btn admin-btn-primary">שמירת הגדרות</button>
+        </form>
+        <div class="admin-preview" id="bannerPreview"></div>
+      </div>
+
+      <div class="admin-card admin-hidden" id="tab-stats">
+        <h2 class="admin-panel-title">ביצועי מודעות</h2>
+        <div class="admin-stats-grid" id="statsGrid"></div>
+      </div>
+
+      <div id="adminStatus"></div>
+    </section>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged,
+    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import {
+      getDatabase,
+      ref,
+      onValue,
+      set,
+      update,
+      remove,
+      ref,
+    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+    import {
+      getStorage,
+      ref as storageRef,
+      uploadBytes,
+      getDownloadURL,
+    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
+    import { firebaseConfig } from "/js/firebase-config.js";
+
+    const ADMIN_EMAIL = "eliran.neeman@gmail.com";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+    const storage = getStorage(app);
+
+    let adsData = { campaigns: {}, creatives: {}, settings: {}, stats: {} };
+    let selectedCampaignId = null;
+    let selectedCreativeId = null;
+
+    const els = {
+      loginPanel: document.getElementById("loginPanel"),
+      adminPanel: document.getElementById("adminPanel"),
+      logoutBtn: document.getElementById("logoutBtn"),
+      loginForm: document.getElementById("loginForm"),
+      loginStatus: document.getElementById("loginStatus"),
+      campaignList: document.getElementById("campaignList"),
+      creativeList: document.getElementById("creativeList"),
+      campaignEditor: document.getElementById("campaignEditor"),
+      editorTitle: document.getElementById("editorTitle"),
+      creativeForm: document.getElementById("creativeForm"),
+      creativePreview: document.getElementById("creativePreview"),
+      adminStatus: document.getElementById("adminStatus"),
+      statsGrid: document.getElementById("statsGrid"),
+      bannerPreview: document.getElementById("bannerPreview"),
+    };
+
+    function uid(prefix) {
+      return prefix + "_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    }
+
+    function showStatus(target, message, ok) {
+      target.innerHTML = '<div class="admin-status ' + (ok ? "ok" : "error") + '">' + message + "</div>";
+    }
+
+    function toLocalInputValue(iso) {
+      if (!iso) return "";
+      const date = new Date(iso);
+      const pad = (n) => String(n).padStart(2, "0");
+      return (
+        date.getFullYear() +
+        "-" +
+        pad(date.getMonth() + 1) +
+        "-" +
+        pad(date.getDate()) +
+        "T" +
+        pad(date.getHours()) +
+        ":" +
+        pad(date.getMinutes())
+      );
+    }
+
+    function fromLocalInputValue(value) {
+      return value ? new Date(value).toISOString() : null;
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function isAdminUser(user) {
+      if (!user || !user.email) return false;
+      return user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+    }
+
+    function bindTabs() {
+      document.querySelectorAll(".admin-tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document.querySelectorAll(".admin-tab").forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
+          ["campaigns", "settings", "stats"].forEach((name) => {
+            const panel = document.getElementById("tab-" + name);
+            if (panel) panel.classList.toggle("admin-hidden", tab.dataset.tab !== name);
+          });
+        });
+      });
+    }
+
+    function renderCampaignList() {
+      const campaigns = Object.values(adsData.campaigns || {}).sort(
+        (a, b) => (b.priority || 0) - (a.priority || 0)
+      );
+      els.campaignList.innerHTML = campaigns.length
+        ? campaigns
+            .map(
+              (campaign) =>
+                '<button type="button" class="admin-list-item' +
+                (campaign.id === selectedCampaignId ? " active" : "") +
+                '" data-id="' +
+                campaign.id +
+                '">' +
+                escapeHtml(campaign.name) +
+                "<small>" +
+                (campaign.active ? "פעיל" : "מושהה") +
+                " · עדיפות " +
+                (campaign.priority || 1) +
+                "</small></button>"
+            )
+            .join("")
+        : '<p style="color:var(--admin-muted)">אין קמפיינים עדיין</p>';
+
+      els.campaignList.querySelectorAll("[data-id]").forEach((btn) => {
+        btn.addEventListener("click", () => selectCampaign(btn.dataset.id));
+      });
+    }
+
+    function renderCreativeList() {
+      if (!selectedCampaignId) {
+        els.creativeList.innerHTML = "";
+        return;
+      }
+      const creatives = Object.values(adsData.creatives || {}).filter(
+        (item) => item.campaignId === selectedCampaignId
+      );
+      els.creativeList.innerHTML = creatives.length
+        ? creatives
+            .map(
+              (creative) =>
+                '<button type="button" class="admin-list-item' +
+                (creative.id === selectedCreativeId ? " active" : "") +
+                '" data-id="' +
+                creative.id +
+                '">' +
+                escapeHtml(creative.title) +
+                "<small>" +
+                creative.placement +
+                " · משקל " +
+                (creative.weight || 1) +
+                (creative.active ? " · פעיל" : " · מושהה") +
+                "</small></button>"
+            )
+            .join("")
+        : '<p style="color:var(--admin-muted)">אין מודעות בקמפיין זה</p>';
+
+      els.creativeList.querySelectorAll("[data-id]").forEach((btn) => {
+        btn.addEventListener("click", () => selectCreative(btn.dataset.id));
+      });
+    }
+
+    function selectCampaign(campaignId) {
+      selectedCampaignId = campaignId;
+      selectedCreativeId = null;
+      const campaign = adsData.campaigns[campaignId];
+      if (!campaign) return;
+
+      els.campaignEditor.classList.remove("admin-hidden");
+      els.editorTitle.textContent = "עריכת קמפיין: " + campaign.name;
+      document.getElementById("campaignId").value = campaign.id;
+      document.getElementById("campaignName").value = campaign.name || "";
+      document.getElementById("campaignNotes").value = campaign.notes || "";
+      document.getElementById("campaignPriority").value = campaign.priority || 10;
+      document.getElementById("campaignActive").value = String(campaign.active !== false);
+      document.getElementById("campaignStart").value = toLocalInputValue(campaign.startAt);
+      document.getElementById("campaignEnd").value = toLocalInputValue(campaign.endAt);
+      els.creativeForm.classList.add("admin-hidden");
+      els.creativePreview.classList.add("admin-hidden");
+      renderCampaignList();
+      renderCreativeList();
+    }
+
+    function selectCreative(creativeId) {
+      selectedCreativeId = creativeId;
+      const creative = adsData.creatives[creativeId];
+      if (!creative) return;
+
+      els.creativeForm.classList.remove("admin-hidden");
+      document.getElementById("creativeId").value = creative.id;
+      document.getElementById("creativeTitle").value = creative.title || "";
+      document.getElementById("creativeDescription").value = creative.description || "";
+      document.getElementById("creativeLink").value = creative.linkUrl || "";
+      document.getElementById("creativePlacement").value = creative.placement || "footer";
+      document.getElementById("creativeWeight").value = creative.weight || 1;
+      document.getElementById("creativeActive").value = String(creative.active !== false);
+      document.getElementById("creativeImageUrl").value = creative.imageUrl || "";
+      document.getElementById("creativeImage").value = "";
+
+      const previewImg = document.getElementById("creativeImagePreview");
+      if (creative.imageUrl) {
+        previewImg.src = creative.imageUrl;
+        previewImg.classList.remove("admin-hidden");
+      } else {
+        previewImg.classList.add("admin-hidden");
+      }
+
+      renderCreativePreview(creative);
+      renderCreativeList();
+    }
+
+    function renderCreativePreview(creative) {
+      els.creativePreview.classList.remove("admin-hidden");
+      els.creativePreview.innerHTML =
+        '<div class="lottogun-ad-slot">' +
+        '<a class="lottogun-ad-card" href="#">' +
+        '<span class="lottogun-ad-badge">מודעה</span>' +
+        (creative.imageUrl
+          ? '<img class="lottogun-ad-image" src="' + escapeHtml(creative.imageUrl) + '" alt="">'
+          : "") +
+        '<div class="lottogun-ad-copy">' +
+        "<strong class=\"lottogun-ad-title\">" +
+        escapeHtml(creative.title) +
+        "</strong>" +
+        (creative.description
+          ? '<p class="lottogun-ad-desc">' + escapeHtml(creative.description) + "</p>"
+          : "") +
+        '<span class="lottogun-ad-cta">למידע נוסף ←</span>' +
+        "</div></a></div>";
+    }
+
+    function renderSettingsForm() {
+      const banner = (adsData.settings && adsData.settings.advertiseBanner) || {};
+      document.getElementById("bannerTitle").value = banner.title || "";
+      document.getElementById("bannerSubtitle").value = banner.subtitle || "";
+      document.getElementById("bannerCtaText").value = banner.ctaText || "";
+      document.getElementById("bannerCtaLink").value = banner.ctaLink || "/contact.html?topic=advertise";
+      document.getElementById("bannerEnabled").value = String(banner.enabled !== false);
+      els.bannerPreview.innerHTML =
+        '<aside class="lottogun-advertise-banner">' +
+        '<div class="lottogun-advertise-copy"><strong>' +
+        escapeHtml(banner.title) +
+        "</strong><p>" +
+        escapeHtml(banner.subtitle) +
+        '</p></div><span class="lottogun-advertise-cta">' +
+        escapeHtml(banner.ctaText) +
+        "</span></aside>";
+    }
+
+    function renderStats() {
+      const impressions = (adsData.stats && adsData.stats.impressions) || {};
+      const clicks = (adsData.stats && adsData.stats.clicks) || {};
+      const creatives = Object.values(adsData.creatives || {});
+
+      els.statsGrid.innerHTML = creatives.length
+        ? creatives
+            .map((creative) => {
+              const imp = impressions[creative.id] || 0;
+              const clk = clicks[creative.id] || 0;
+              const ctr = imp ? ((clk / imp) * 100).toFixed(1) : "0.0";
+              return (
+                '<div class="admin-stat"><strong>' +
+                clk +
+                " / " +
+                imp +
+                '</strong><span>' +
+                escapeHtml(creative.title) +
+                " · CTR " +
+                ctr +
+                "%</span></div>"
+              );
+            })
+            .join("")
+        : '<p style="color:var(--admin-muted)">אין נתונים עדיין</p>';
+    }
+
+    function subscribeAds() {
+      onValue(ref(db, "ads"), (snapshot) => {
+        const raw = snapshot.val() || {};
+        adsData = {
+          campaigns: raw.campaigns || {},
+          creatives: raw.creatives || {},
+          settings: raw.settings || {},
+          stats: raw.stats || {},
+        };
+        renderCampaignList();
+        renderCreativeList();
+        renderSettingsForm();
+        renderStats();
+        if (selectedCampaignId && adsData.campaigns[selectedCampaignId]) {
+          selectCampaign(selectedCampaignId);
+          if (selectedCreativeId && adsData.creatives[selectedCreativeId]) {
+            selectCreative(selectedCreativeId);
+          }
+        }
+      });
+    }
+
+    els.loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+
+      if (email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+        showStatus(els.loginStatus, "גישה מותרת רק למנהל המורשה.", false);
+        return;
+      }
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        showStatus(els.loginStatus, error.message, false);
+      }
+    });
+
+    els.logoutBtn.addEventListener("click", () => signOut(auth));
+
+    document.getElementById("newCampaignBtn").addEventListener("click", () => {
+      const id = uid("camp");
+      selectedCampaignId = id;
+      selectedCreativeId = null;
+      els.campaignEditor.classList.remove("admin-hidden");
+      els.editorTitle.textContent = "קמפיין חדש";
+      document.getElementById("campaignId").value = id;
+      document.getElementById("campaignName").value = "";
+      document.getElementById("campaignNotes").value = "";
+      document.getElementById("campaignPriority").value = 10;
+      document.getElementById("campaignActive").value = "true";
+      document.getElementById("campaignStart").value = "";
+      document.getElementById("campaignEnd").value = "";
+      els.creativeForm.classList.add("admin-hidden");
+      renderCampaignList();
+      renderCreativeList();
+    });
+
+    document.getElementById("campaignForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const id = document.getElementById("campaignId").value;
+      const payload = {
+        id,
+        name: document.getElementById("campaignName").value.trim(),
+        notes: document.getElementById("campaignNotes").value.trim(),
+        priority: Number(document.getElementById("campaignPriority").value) || 1,
+        active: document.getElementById("campaignActive").value === "true",
+        startAt: fromLocalInputValue(document.getElementById("campaignStart").value),
+        endAt: fromLocalInputValue(document.getElementById("campaignEnd").value),
+        updatedAt: new Date().toISOString(),
+      };
+      if (!payload.name) return;
+      if (!adsData.campaigns[id]) payload.createdAt = new Date().toISOString();
+      try {
+        await set(ref(db, "ads/campaigns/" + id), payload);
+        showStatus(els.adminStatus, "הקמפיין נשמר", true);
+        selectCampaign(id);
+      } catch (error) {
+        showStatus(els.adminStatus, error.message, false);
+      }
+    });
+
+    document.getElementById("deleteCampaignBtn").addEventListener("click", async () => {
+      if (!selectedCampaignId || !confirm("למחוק את הקמפיין וכל המודעות שלו?")) return;
+      const creatives = Object.values(adsData.creatives || {}).filter(
+        (item) => item.campaignId === selectedCampaignId
+      );
+      try {
+        await remove(ref(db, "ads/campaigns/" + selectedCampaignId));
+        for (const creative of creatives) {
+          await remove(ref(db, "ads/creatives/" + creative.id));
+        }
+        selectedCampaignId = null;
+        selectedCreativeId = null;
+        els.campaignEditor.classList.add("admin-hidden");
+        showStatus(els.adminStatus, "הקמפיין נמחק", true);
+      } catch (error) {
+        showStatus(els.adminStatus, error.message, false);
+      }
+    });
+
+    document.getElementById("newCreativeBtn").addEventListener("click", () => {
+      if (!selectedCampaignId) return;
+      selectedCreativeId = uid("ad");
+      els.creativeForm.classList.remove("admin-hidden");
+      document.getElementById("creativeId").value = selectedCreativeId;
+      document.getElementById("creativeTitle").value = "";
+      document.getElementById("creativeDescription").value = "";
+      document.getElementById("creativeLink").value = "";
+      document.getElementById("creativePlacement").value = "footer";
+      document.getElementById("creativeWeight").value = 1;
+      document.getElementById("creativeActive").value = "true";
+      document.getElementById("creativeImageUrl").value = "";
+      document.getElementById("creativeImage").value = "";
+      document.getElementById("creativeImagePreview").classList.add("admin-hidden");
+      els.creativePreview.classList.add("admin-hidden");
+      renderCreativeList();
+    });
+
+    document.getElementById("creativeImage").addEventListener("change", (event) => {
+      const file = event.target.files && event.target.files[0];
+      const preview = document.getElementById("creativeImagePreview");
+      if (!file) return;
+      preview.src = URL.createObjectURL(file);
+      preview.classList.remove("admin-hidden");
+    });
+
+    document.getElementById("creativeForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!selectedCampaignId) return;
+
+      const id = document.getElementById("creativeId").value || uid("ad");
+      let imageUrl = document.getElementById("creativeImageUrl").value.trim();
+      const imageFile = document.getElementById("creativeImage").files[0];
+
+      try {
+        if (imageFile) {
+          const path = "ads/" + selectedCampaignId + "/" + id + "_" + imageFile.name;
+          const uploaded = await uploadBytes(storageRef(storage, path), imageFile);
+          imageUrl = await getDownloadURL(uploaded.ref);
+        }
+
+        const payload = {
+          id,
+          campaignId: selectedCampaignId,
+          title: document.getElementById("creativeTitle").value.trim(),
+          description: document.getElementById("creativeDescription").value.trim(),
+          linkUrl: document.getElementById("creativeLink").value.trim(),
+          placement: document.getElementById("creativePlacement").value,
+          weight: Number(document.getElementById("creativeWeight").value) || 1,
+          active: document.getElementById("creativeActive").value === "true",
+          imageUrl,
+          updatedAt: new Date().toISOString(),
+        };
+
+        if (!payload.title || !payload.linkUrl) {
+          showStatus(els.adminStatus, "חובה כותרת וקישור", false);
+          return;
+        }
+        if (!adsData.creatives[id]) payload.createdAt = new Date().toISOString();
+
+        await set(ref(db, "ads/creatives/" + id), payload);
+        showStatus(els.adminStatus, "המודעה נשמרה", true);
+        selectCreative(id);
+      } catch (error) {
+        showStatus(els.adminStatus, error.message, false);
+      }
+    });
+
+    document.getElementById("deleteCreativeBtn").addEventListener("click", async () => {
+      if (!selectedCreativeId || !confirm("למחוק את המודעה?")) return;
+      try {
+        await remove(ref(db, "ads/creatives/" + selectedCreativeId));
+        selectedCreativeId = null;
+        els.creativeForm.classList.add("admin-hidden");
+        els.creativePreview.classList.add("admin-hidden");
+        showStatus(els.adminStatus, "המודעה נמחקה", true);
+      } catch (error) {
+        showStatus(els.adminStatus, error.message, false);
+      }
+    });
+
+    document.getElementById("settingsForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const payload = {
+        advertiseBanner: {
+          title: document.getElementById("bannerTitle").value.trim(),
+          subtitle: document.getElementById("bannerSubtitle").value.trim(),
+          ctaText: document.getElementById("bannerCtaText").value.trim(),
+          ctaLink: document.getElementById("bannerCtaLink").value.trim(),
+          enabled: document.getElementById("bannerEnabled").value === "true",
+        },
+      };
+      try {
+        await update(ref(db, "ads/settings"), payload);
+        showStatus(els.adminStatus, "הגדרות הבאנר נשמרו", true);
+      } catch (error) {
+        showStatus(els.adminStatus, error.message, false);
+      }
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user && !isAdminUser(user)) {
+        await signOut(auth);
+        els.loginPanel.classList.remove("admin-hidden");
+        els.logoutBtn.classList.add("admin-hidden");
+        els.adminPanel.classList.add("admin-hidden");
+        showStatus(els.loginStatus, "גישה מותרת רק למנהל המורשה.", false);
+        return;
+      }
+
+      els.loginPanel.classList.toggle("admin-hidden", Boolean(user));
+      els.logoutBtn.classList.toggle("admin-hidden", !user);
+
+      if (!user) {
+        els.adminPanel.classList.add("admin-hidden");
+        return;
+      }
+
+      els.adminPanel.classList.remove("admin-hidden");
+      subscribeAds();
+    });
+
+    bindTabs();
+  </script>
+</body>
+</html>

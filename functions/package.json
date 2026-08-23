@@ -2,7 +2,7 @@
   "name": "lottogun-functions",
   "description": "Daily Pais lottery sync for LottoGun",
   "engines": {
-    "node": "20"
+    "node": "22"
   },
   "main": "index.js",
   "private": true,

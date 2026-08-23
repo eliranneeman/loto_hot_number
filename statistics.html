@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
         <link rel="stylesheet" href="/common.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2154227955978159"
      crossorigin="anonymous"></script>
@@ -505,9 +510,10 @@
         }
     </style>
 </head>
-<body>
+<body class="app">
+<div id="site-header"></div>
       <script src="/common.js" defer></script>
-    <div class="container">
+    <div class="app-shell">
         <header>
             <div class="logo">📊 LottoGun</div>
             <div class="subtitle">סטטיסטיקות ומספרים חמים</div>
@@ -670,7 +676,6 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="/js/lottery-data.js"></script>
     <script>
         let allResults = [];
@@ -680,10 +685,8 @@
         // טעינת הנתונים וחישוב הסטטיסטיקות
         async function loadAndCalculateStats() {
             try {
-                const archive = await LottoData.load();
-                const jsonData = LottoData.toLegacyRows(archive.results);
-                
-                allResults = jsonData;
+                await LottoData.load();
+                allResults = LottoData.getLegacyRows();
                 calculateStatistics();
                 calculateCombinations();
                 displayStatistics();
@@ -1040,27 +1043,13 @@
 
         // פורמט תאריך
         function formatDate(dateValue) {
-            if (!dateValue) return '';
-            
-            if (typeof dateValue === 'number') {
-                const date = XLSX.SSF.parse_date_code(dateValue);
-                return `${date.d.toString().padStart(2, '0')}/${date.m.toString().padStart(2, '0')}/${date.y}`;
-            }
-            
-            return dateValue.toString();
+            return LottoData.formatDate(dateValue);
         }
 
         // טעינה כשהדף נטען
         window.addEventListener('load', loadAndCalculateStats);
     </script>
-    <div id="footer"></div>
+  <div id="footer"></div>
 
-<script>
-  fetch("footer.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("footer").innerHTML = data;
-    });
-</script>
 </body>
 </html>

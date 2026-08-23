@@ -1,3 +1,21 @@
+// ===== טוען כותרת עליונה =====
+fetch("/header.html")
+  .then(res => res.text())
+  .then(html => {
+    const mount = document.getElementById("site-header");
+    if (mount) {
+      mount.innerHTML = html;
+      const current = window.location.pathname.replace(/\/$/, "") || "/";
+      mount.querySelectorAll(".site-nav a").forEach((link) => {
+        const href = link.getAttribute("href").replace(/\/$/, "") || "/";
+        if (href === current || (current.endsWith("index.html") && href === "/")) {
+          link.classList.add("active");
+        }
+      });
+    }
+  })
+  .catch(err => console.error("שגיאה בטעינת הכותרת:", err));
+
 // ===== טוען תפריט צדדי =====
 fetch("/menu.html")
   .then(res => res.text())
@@ -188,6 +206,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.style.fontSize = savedSize + "%";
   }
 });
+
+// ===== footer + פרסומות =====
+(function loadFooterScript() {
+  const script = document.createElement("script");
+  script.src = "/js/site-footer.js";
+  script.defer = true;
+  document.head.appendChild(script);
+})();
 
 
 /*

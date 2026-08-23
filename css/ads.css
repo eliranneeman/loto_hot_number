@@ -1,0 +1,140 @@
+/* LottoGun — native ads */
+.lottogun-ad-slot {
+  margin: 24px auto 0;
+  max-width: 720px;
+}
+
+.lottogun-ad-card {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border-radius: var(--radius, 16px);
+  border: 1px solid var(--border, #e2e8f0);
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(15, 23, 42, 0.06));
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  position: relative;
+}
+
+.lottogun-ad-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow, 0 10px 30px rgba(15, 23, 42, 0.08));
+  border-color: rgba(79, 70, 229, 0.35);
+}
+
+.lottogun-ad-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #64748b;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.lottogun-ad-image {
+  width: 120px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #eef2ff;
+}
+
+.lottogun-ad-copy {
+  min-width: 0;
+}
+
+.lottogun-ad-title {
+  display: block;
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
+
+.lottogun-ad-desc {
+  margin: 0 0 8px;
+  color: var(--text-muted, #64748b);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.lottogun-ad-cta {
+  display: inline-flex;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--primary, #4f46e5);
+}
+
+.lottogun-advertise-banner {
+  margin-top: 28px;
+  padding: 20px 22px;
+  border-radius: var(--radius, 16px);
+  background: linear-gradient(135deg, #312e81 0%, #4f46e5 55%, #6366f1 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: 0 16px 40px rgba(79, 70, 229, 0.25);
+}
+
+.lottogun-advertise-copy strong {
+  display: block;
+  font-size: 1.15rem;
+  margin-bottom: 4px;
+}
+
+.lottogun-advertise-copy p {
+  margin: 0;
+  opacity: 0.92;
+  font-size: 0.95rem;
+}
+
+.lottogun-advertise-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: #fff;
+  color: #312e81;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lottogun-advertise-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+}
+
+@media (max-width: 640px) {
+  .lottogun-ad-card {
+    grid-template-columns: 1fr;
+  }
+
+  .lottogun-ad-image {
+    width: 100%;
+    height: 160px;
+  }
+
+  .lottogun-advertise-banner {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .lottogun-advertise-cta {
+    width: 100%;
+  }
+}

@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>תוצאות הגרלות - LottoGun</title>
   <link rel="stylesheet" href="/common.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+
     <script src="/js/lottery-data.js"></script>
     
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2154227955978159"
@@ -358,9 +363,10 @@ header {
 
     </style>
 </head>
-<body>
+<body class="app">
+<div id="site-header"></div>
     <script src="/common.js" defer></script>
-    <div class="container">
+    <div class="app-shell">
         <header>
             <div class="logo">🎯 LottoGun</div>
             <div class="subtitle">כל תוצאות הלוטו בשיטה הנוכחית, מעודכנות כל לילה מאתר הפיס</div>
@@ -450,14 +456,14 @@ header {
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
         let allResults = [];
 
-        async function loadExcelData() {
+        async function loadLotteryData() {
             try {
-                const archive = await LottoData.load();
-                allResults = LottoData.toLegacyRows(archive.results);
+                await LottoData.load();
+                allResults = LottoData.getLegacyRows();
+                const archive = LottoData.getArchive();
                 const summary = document.getElementById('archiveSummary');
                 if (summary && archive.lastDraw) {
                     summary.innerHTML = `ארכיון מעודכן: <strong>${archive.totalDraws.toLocaleString('he-IL')}</strong> הגרלות · אחרונה #${archive.lastDraw.id} ב-${archive.lastDraw.dateDisplay}`;
@@ -605,29 +611,13 @@ header {
 
         // פורמט תאריך
         function formatDate(dateValue) {
-            if (!dateValue) return '';
-            
-            // אם זה תאריך של אקסל (מספר)
-            if (typeof dateValue === 'number') {
-                const date = XLSX.SSF.parse_date_code(dateValue);
-                return `${date.d.toString().padStart(2, '0')}/${date.m.toString().padStart(2, '0')}/${date.y}`;
-            }
-            
-            // אם זה כבר מחרוזת
-            return dateValue.toString();
+            return LottoData.formatDate(dateValue);
         }
 
         // טעינת הנתונים כשהדף נטען
-        window.addEventListener('load', loadExcelData);
+        window.addEventListener('load', loadLotteryData);
     </script>
-    <div id="footer"></div>
+  <div id="footer"></div>
 
-<script>
-  fetch("footer.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("footer").innerHTML = data;
-    });
-</script>
 </body>
 </html>

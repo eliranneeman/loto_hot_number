@@ -1,82 +1,14 @@
-<footer>
-  <p style="text-align:center; font-size:14px; color:#777;">
+<footer class="site-footer">
+  <div id="lottogun-ad-footer" class="lottogun-ad-slot" hidden></div>
+  <div id="lottogun-advertise-banner"></div>
+
+  <p class="site-footer-note">
     💰 יותר מנשמח לשמוע אם זכיתם בזכותינו 💰
   </p>
 
-  <div style="text-align:center; margin-top:15px;">
-    <button id="installBtn" style="display:none; background:linear-gradient(45deg, #4CAF50, #45a049); color:white; border:none; padding:10px 20px; border-radius:25px; cursor:pointer; font-size:14px; font-weight:bold; box-shadow:0 2px 8px rgba(0,0,0,0.2); transition:all 0.3s ease;">
+  <div class="site-footer-install">
+    <button id="installBtn" type="button" hidden>
       📲 התקן את האפליקציה
     </button>
   </div>
 </footer>
-
-<!-- Firebase Analytics -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDewHgup8jkCbRJOKfcE8qJn96lO5ZPo_I",
-    authDomain: "loto-hot.firebaseapp.com",
-    databaseURL: "https://loto-hot-default-rtdb.firebaseio.com",
-    projectId: "loto-hot",
-    storageBucket: "loto-hot.firebasestorage.app",
-    messagingSenderId: "1078323335501",
-    appId: "1:1078323335501:web:77f214ff257f14d17d2704",
-    measurementId: "G-FR83RCV8Z8"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-
-<!-- Service Worker + PWA Install -->
-<script>
-  // Service Worker Registration
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/service-worker.js")
-      .then(() => console.log("Service Worker Registered"))
-      .catch(err => console.error("Service Worker registration failed:", err));
-  }
-
-   // מחכה שה־DOM יטען
-  document.addEventListener("DOMContentLoaded", function() {
-    const btn = document.getElementById("installBtn");
-    if (!btn) return;
-
-    // הופך את הכפתור לגלוי
-    btn.style.display = "block";
-
-    let deferredPrompt;
-
-    // תפיסת beforeinstallprompt אם קיים
-    window.addEventListener("beforeinstallprompt", function(e) {
-      e.preventDefault();
-      deferredPrompt = e;
-      btn.style.background = "#4CAF50"; // ירוק = מוכן להתקנה
-    });
-
-    // לחיצה על הכפתור
-    btn.addEventListener("click", async function() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const choice = await deferredPrompt.userChoice;
-        if (choice.outcome === "accepted") btn.style.display = "none";
-        deferredPrompt = null;
-      } else {
-        // הוראות ידניות
-        const ua = navigator.userAgent.toLowerCase();
-        let message = "להתקנת האפליקציה:\n- חפש בתפריט הדפדפן 'Install' או 'Add to Home Screen'";
-        if (ua.includes("safari") && !ua.includes("chrome")) message = "Safari:\n1. לחץ על ⬆️ Share\n2. Add to Home Screen";
-        else if (ua.includes("chrome") || ua.includes("edge") || ua.includes("brave")) message = "Chrome/Edge:\n1. לחץ על ⋮ Menu\n2. Install App";
-        else if (ua.includes("firefox")) message = "Firefox:\n1. לחץ על ☰ Menu\n2. Install";
-        alert(message);
-      }
-    });
-
-    // אחרי התקנה
-    window.addEventListener("appinstalled", function() {
-      btn.style.display = "none";
-    });
-  });
-</script>

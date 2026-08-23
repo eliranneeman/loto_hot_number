@@ -3,442 +3,26 @@
 <head>
     <meta charset="UTF-8">
 	<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#1976d2">
+<meta name="theme-color" content="#4f46e5">
 	<link rel="icon" type="image/png" href="/image.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LottoGun | הצעות צירופים ללוטו הישראלי</title>
      <link rel="stylesheet" href="/common.css">
  	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2154227955978159"
      crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="/js/lottery-data.js"></script>
 
 <meta name="google-adsense-account" content="ca-pub-2154227955978159">
 	
 
     
-    <style>
-		 
-		body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            color: #333;
-        }
+    
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+<meta name="description" content="LottoGun - הצעות צירופים ללוטו הישראלי על בסיס כל ההגרלות בשיטה הנוכחית. מהיר, פשוט ונוח.">
 
-		.logo-container {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.logo {
-    max-width: 200px; /* או כל גודל שתרצה */
-    height: auto;
-}
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 30px;
-            backdrop-filter: blur(10px);
-        }
-        
-        h1 {
-            text-align: center;
-            color: #4a5568;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .counters {
-            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            text-align: center;
-        }
-
-        .counter {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .counter-number {
-            font-size: 2em;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 5px;
-        }
-
-        .counter-label {
-            color: #4a5568;
-            font-size: 0.9em;
-        }
-
-
-        /* ניווט משופר אבל פשוט - גרסה מצומצמת */
-        .nav-buttons {
-            text-align: center;
-            margin-bottom: 20px;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,1);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-            padding: 8px;
-        }
-
-        .nav-btn {
-            display: inline-block;
-            padding: 8px 16px;
-            margin: 3px 5px;
-            background: rgba(255,255,255,0.25);
-            color: black;
-            text-decoration: none;
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,1);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            font-weight: 600;
-            font-size: 14px;
-            text-shadow: 1px 1px 2px rgba(135,206,235,1);
-        }
-
-        .nav-btn:hover {
-            background: rgba(255,255,255,0.4);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-		}
-
-        .file-upload {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .file-upload-area {
-            border: 2px dashed #667eea;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            background: white;
-            transition: all 0.3s ease;
-        }
-
-        .file-upload-area:hover {
-            border-color: #f5576c;
-            background: #fafafa;
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .file-upload-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .file-upload-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        #download-sample-btn {
-            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
-            font-weight: bold;
-        }
-
-        #download-sample-btn:hover {
-            background: linear-gradient(135deg, #00a085 0%, #008f7a 100%);
-        }
-
-        .file-status {
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            display: none;
-        }
-
-        .file-status.success {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-        }
-
-        .file-status.error {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-        }
-
-        .history-filter {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .history-filter label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        .history-filter input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-        }
-        
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        label {
-            font-weight: bold;
-            color: #2d3748;
-        }
-        
-        select, input {
-            padding: 10px 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 16px;
-            background: white;
-            transition: all 0.3s ease;
-        }
-        
-        select:focus, input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .generate-btn {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        
-        .generate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-        }
-        
-        .results {
-            margin-top: 30px;
-        }
-        
-        .combination {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            margin: 15px 0;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .combination.winner {
-            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
-            border: 3px solid #e17055;
-        }
-
-        .combination.new {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-        }
-        
-        .numbers {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .number {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 16px;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-        }
-        
-        .regular {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-        
-        .strong {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        }
-        
-        .stats {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .stats-title {
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #2d3748;
-            font-size: 1.2em;
-        }
-        
-        .hot-numbers {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        
-        .hot-category {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .hot-category h4 {
-            margin: 0 0 10px 0;
-            color: #4a5568;
-        }
-        
-        .hot-list {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        
-        .hot-number {
-            background: #667eea;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .winner-badge {
-            background: #e17055;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .new-badge {
-            background: #00b894;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        
-        /* CSS לאנימציות פרסומות */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-        @keyframes slideIn {
-            from { 
-                transform: scale(0.7) translateY(-50px);
-                opacity: 0;
-            }
-            to { 
-                transform: scale(1) translateY(0);
-                opacity: 1;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-            
-            h1 {
-                font-size: 2em;
-            }
-            
-            .controls {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .combination {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .counters {
-                grid-template-columns: 1fr;
-            }
-
-            .history-filter {
-                flex-direction: column;
-                align-items: stretch;
-            }
-        }
-    </style>
 
 <!-- חיבור לפיירבייס -->
 <script type="module">
@@ -521,186 +105,170 @@
 	
 
 </head>
-<body>
+<body class="app">
 <script src="/common.js" defer></script>
+<div id="site-header"></div>
 
-    <div class="container">
+<main class="app-shell">
+    <div id="loading-banner" class="loading-banner show">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>טוען את ארכיון ההגרלות...</span>
+    </div>
 
-		    <!-- הוספת הלוגו -->
-            <div class="logo-container">
-                <img src="image.png" alt="LottoGun Logo" class="logo">
-			</div>
-
-		        <header>
-        <div class="nav-buttons">
-            <a href="results.html" class="nav-btn">📋 תוצאות הגרלות</a>
-            <a href="statistics.html" class="nav-btn">📊 סטטיסטיקות</a>
-            <a href="season-analistics.html" class="nav-btn">📅 ניתוח עונתיות מספרים</a>
-            <a href="combinations.html" class="nav-btn">🔢 ניתוח צירופים</a>
-			<a href="lotto-article.html" class="nav-btn">📝 מאמר בנושא</a>
-
-        </div>
-
-        </header>
-
-		
-        <section class="content">
-  <h1>המקום לקבל הצעות צירופים ללוטו</h1>
-  <p>
-    LottoGun מנתח את כל הגרלות הלוטו בשיטה הנוכחית — 6 מספרים מתוך 37 ומספר חזק מ-1 עד 7 —
-    ומציע צירופים על בסיס המספרים החמים, הקרים והדפוסים שחוזרים לאורך השנים.
-  </p>
-  <div id="latest-draw-card" class="stats" style="display:none; margin-top: 16px;">
-    <div class="stats-title">ההגרלה האחרונה במפעל הפיס</div>
-    <div id="latest-draw-body"></div>
-  </div>
-  <h2>מה יש כאן?</h2>
-  <ul>
-    <li>הצעות צירופים לפי אסטרטגיה: חם, מאוזן, קר או אקראי</li>
-    <li>ארכיון מלא של כל התוצאות מאז תחילת השיטה הנוכחית במאי 2011</li>
-    <li>עדכון אוטומטי בכל לילה מאתר מפעל הפיס</li>
-    <li>סטטיסטיקות, זוגות נפוצים ובדיקה אם צירוף שלכם כבר יצא</li>
-  </ul>
-  <p>
-    האתר מיועד לניתוח סטטיסטי ולשעשוע בלבד. הגרלת הלוטו אקראית, ואין כאן הבטחת זכייה.
-  </p>
-		</section>
-
-		
-        
-    
-
-
-
-        
-        
-        <div class="stats">
-            <div class="stats-title">📊 המספרים החמים ביותר</div>
-            <div class="hot-numbers">
-                <div class="hot-category">
-                    <h4>טופ 9 המספרים החמים:</h4>
-                    <div class="hot-list" id="hot-regular-list">
-                        </div>
-                </div>
-                <div class="hot-category">
-                    <h4>טופ 3 המספרים החזקים החמים:</h4>
-                    <div class="hot-list" id="hot-strong-list">
-                        </div>
-                </div>
+    <section class="hero">
+        <div class="hero-card">
+            <div class="hero-badge">מעודכן מדי לילה מאתר מפעל הפיס</div>
+            <h1>קבלו צירופי לוטו חכמים בלחיצה אחת</h1>
+            <p class="hero-lead">
+                LottoGun מנתח אלפי הגרלות בשיטה הנוכחית ומציע צירופים
+                על בסיס מספרים חמים, מאוזנים או קרים — בלי Excel, בלי התעסקות.
+            </p>
+            <div class="hero-actions">
+                <button class="btn btn-primary" type="button" onclick="quickGenerate('hot')">🎯 צור לי צירופים עכשיו</button>
+                <a class="btn btn-secondary" href="/results.html">כל התוצאות</a>
             </div>
-
-			<button class="file-upload-btn" onclick="toggleUploadSection()">📂 הצג / הסתר אפשרות העלאת קובץ</button>
-
-			
-
-			<!-- אזור ההעלאה (סגור כברירת מחדל) -->
-<div id="upload-section" style="display: none; margin-top: 15px;">
-
-    <div class="stats-title">📊 העלאת קובץ תוצאות הגרלות</div>
-    
-    <!-- כפתור הורדה -->
-    <div style="text-align: center; margin-bottom: 20px;">
-        <a href="#" id="download-sample-btn" class="file-upload-btn" onclick="downloadSampleFile()" style="text-decoration: none; display: inline-block;">
-          הורדת קובץ עם כל תוצאות השיטה הנוכחית
-        </a>
-        <div style="font-size: 12px; color: #666; margin-top: 5px;">
-            האתר טוען אוטומטית את כל הגרלות הלוטו מאז מאי 2011, כולל עדכון יומי מאתר הפיס.<br>
-            אם יש לכם קובץ אחר שתרצו להפיק ממנו צירופים, אפשר לטעון אותו כאן.
-        </div>
-    </div>
-    
-    <!-- אזור העלאה -->
-    <div class="file-upload-area" onclick="document.getElementById('excel-file').click()">
-        <div>📁 לחץ כאן להעלאת קובץ Excel עם תוצאות הגרלות קודמות</div>
-        <button type="button" class="file-upload-btn">בחר קובץ מהמחשב</button>
-        <div style="font-size: 12px; color: #666; margin-top: 10px;">
-            קובץ Excel צריך לכלול עמודות: תאריך, מספר1, מספר2, מספר3, מספר4, מספר5, מספר6, מספר_חזק
-        </div>
-    </div>
-    <input type="file" id="excel-file" class="file-input" accept=".xlsx,.xls" onchange="handleExcelUpload(event)">
-    <div id="file-status" class="file-status"></div>
-</div>
-			
+            <p class="disclaimer">האתר לניתוח סטטיסטי ושעשוע בלבד. אין הבטחת זכייה.</p>
         </div>
 
-		<!-- מסנן היסטוריה -->
-        <div class="history-filter" id="history-filter" style="display: none;">
-            <div class="stats-title">🎯 בחירת אופן יצירת הצירופים:</div>
-            <label>
-                <input type="checkbox" id="allow-winners" checked>
-                אפשר צירופים שזכו בעבר
-            </label>
-            <label>
-                <input type="checkbox" id="allow-new" checked>
-                אפשר צירופים חדשים
-             </label>
-             <label>
-                <input type="checkbox" 
-id="no-two-sequences"> בלי רצפים של 2 מספרים עוקבים (צימצום של 61% מהאפשרויות)
-            </label>
-            <label>
-  <input type="checkbox"
-id="no-sequences"> בלי רצפים של 3 מספרים עוקבים ומעלה (צימצום 8.2% אחוז מכלל האפשרויות)       </label>
-		</div>
-        
-        <div class="controls">
-            <div class="control-group">
-                <label for="strategy">בחירת אופן שילוב הצירופים:</label>
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="history-counter">—</div>
+                <div class="stat-label">הגרלות בניתוח</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="comboCount">0</div>
+                <div class="stat-label">צירופים שנוצרו</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="visitCount">0</div>
+                <div class="stat-label">ביקורים באתר</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="latest-draw-card" class="latest-draw-card panel" style="display:none;">
+        <div class="section-head">
+            <div>
+                <h2 class="section-title">ההגרלה האחרונה</h2>
+                <p class="section-subtitle">התוצאה העדכנית ממפעל הפיס</p>
+            </div>
+        </div>
+        <div id="latest-draw-body"></div>
+    </section>
+
+    <section class="generator-panel panel">
+        <div class="section-head">
+            <div>
+                <h2 class="section-title">בחרו אסטרטגיה</h2>
+                <p class="section-subtitle">לחצו על סוג הצירוף ואז על "צור צירופים"</p>
+            </div>
+        </div>
+
+        <div class="strategy-grid" role="group" aria-label="בחירת אסטרטגיה">
+            <button type="button" class="strategy-chip active" data-strategy="hot" onclick="selectStrategy('hot')">
+                <span class="chip-icon">🔥</span>
+                <span class="chip-title">חם</span>
+                <span class="chip-desc">מספרים שעלו הרבה</span>
+            </button>
+            <button type="button" class="strategy-chip" data-strategy="balanced" onclick="selectStrategy('balanced')">
+                <span class="chip-icon">⚖️</span>
+                <span class="chip-title">מאוזן</span>
+                <span class="chip-desc">שילוב חם וקר</span>
+            </button>
+            <button type="button" class="strategy-chip" data-strategy="cold" onclick="selectStrategy('cold')">
+                <span class="chip-icon">❄️</span>
+                <span class="chip-title">קר</span>
+                <span class="chip-desc">מספרים שעלו מעט</span>
+            </button>
+            <button type="button" class="strategy-chip" data-strategy="random" onclick="selectStrategy('random')">
+                <span class="chip-icon">🎲</span>
+                <span class="chip-title">אקראי</span>
+                <span class="chip-desc">ללא משקל סטטיסטי</span>
+            </button>
+        </div>
+
+        <div class="controls-grid">
+            <div class="field">
+                <label for="strategy">אסטרטגיה</label>
                 <select id="strategy">
-                    <option value="hot">מספרים חמים (הופיעו הרבה)</option>
-                    <option value="balanced">מאוזן (חמים + קרים)</option>
-                    <option value="cold">מספרים קרים (הופיעו מעט)</option>
-                    <option value="random">אקראי לחלוטין</option>
+                    <option value="hot">מספרים חמים</option>
+                    <option value="balanced">מאוזן</option>
+                    <option value="cold">מספרים קרים</option>
+                    <option value="random">אקראי</option>
                 </select>
             </div>
-            
-            <div class="control-group">
-                <label for="combinations">מספר צירופים:</label>
+            <div class="field">
+                <label for="combinations">כמה צירופים?</label>
                 <select id="combinations">
-                    <option value="2" selected>2</option>
-                    <option value="4">4</option>
-                    <option value="6">6</option>
-                    <option value="8">8</option>
-                    <option value="10">10</option>
-                    <option value="12">12</option>
-                    <option value="14">14</option>
+                    <option value="2" selected>2 צירופים</option>
+                    <option value="4">4 צירופים</option>
+                    <option value="6">6 צירופים</option>
+                    <option value="8">8 צירופים</option>
+                    <option value="10">10 צירופים</option>
                 </select>
             </div>
-            
-            <div class="control-group">
-                <label for="hotWeight">משקל המספרים החמים בצירופים שיווצרו:</label>
-                <input type="range" id="hotWeight" min="0" max="100" value="70">
-                <span id="hotWeightValue">70%</span>
+            <div class="field">
+                <label for="hotWeight">משקל מספרים חמים</label>
+                <div class="range-row">
+                    <input type="range" id="hotWeight" min="0" max="100" value="70">
+                    <span class="range-value" id="hotWeightValue">70%</span>
+                </div>
             </div>
         </div>
-        
-        <div style="text-align: center;">
-            <button class="generate-btn" onclick="generateNumbers()">🎯 צור צירופים</button>
+
+        <div class="generate-row">
+            <button class="btn btn-primary generate-btn" type="button" onclick="generateNumbers()">🚀 צור צירופים</button>
+            <span class="generate-hint">טיפ: "חם" מתאים למי שרוצה ללכת עם הסטטיסטיקה</span>
         </div>
-        
-        <div id="results" class="results"></div>
+        <div id="file-status" class="file-status"></div>
+    </section>
 
-<!-- מונים -->
-        <div class="counters">
-            <div class="counter">
-                <div class="counter-number" id="visitCount">0</div>
-                <div class="counter-label">ביקורים באתר</div>
+    <section class="results-panel">
+        <div class="section-head">
+            <div>
+                <h2 class="section-title">הצירופים שלכם</h2>
+                <p class="section-subtitle">מוכנים להעתקה ולמילוי בטופס</p>
             </div>
-            <div class="counter">
-                <div class="counter-number" id="comboCount">0</div>
-                <div class="counter-label">צירופים שנוצרו</div>
+        </div>
+        <div id="results" class="results-grid">
+            <div class="empty-results" id="empty-results">לחצו על "צור צירופים" כדי לקבל הצעות מותאמות</div>
+        </div>
+    </section>
+
+    <section class="hot-panel panel">
+        <div class="section-head">
+            <div>
+                <h2 class="section-title">מספרים חמים כרגע</h2>
+                <p class="section-subtitle">על בסיס כל ההגרלות בשיטה הנוכחית</p>
             </div>
-            <div class="counter">
-                <div class="counter-number" id="history-counter">0</div>
-                <div class="counter-label">הגרלות בשיטה הנוכחית מאז 2011</div>
+        </div>
+        <div class="hot-columns">
+            <div class="hot-column">
+                <h4>טופ 9 מספרים רגילים</h4>
+                <div class="hot-list" id="hot-regular-list"></div>
             </div>
-		</div>
-		
-    </div>
+            <div class="hot-column">
+                <h4>טופ 3 מספרים חזקים</h4>
+                <div class="hot-list" id="hot-strong-list"></div>
+            </div>
+        </div>
+    </section>
 
-
-
-	
+    <details class="advanced-panel panel" id="history-filter" style="display:none;">
+        <summary>הגדרות מתקדמות</summary>
+        <div class="advanced-body">
+            <div class="filter-grid">
+                <label><input type="checkbox" id="allow-winners" checked> אפשר צירופים שזכו בעבר</label>
+                <label><input type="checkbox" id="allow-new" checked> אפשר צירופים חדשים</label>
+                <label><input type="checkbox" id="no-two-sequences"> בלי רצפים של 2 מספרים עוקבים</label>
+                <label><input type="checkbox" id="no-sequences"> בלי רצפים של 3 מספרים ומעלה</label>
+            </div>
+            <div style="margin-top:16px;">
+                <a href="/lottery_results.json" class="btn btn-ghost" download="lottery_results.json">⬇️ הורדת ארכיון JSON</a>
+            </div>
+        </div>
+    </details>
+</main>
 
 
 <script>
@@ -763,120 +331,6 @@ id="no-sequences"> בלי רצפים של 3 מספרים עוקבים ומעלה
         function isCombinationWinner(regularNumbers, strongNumber) {
             const combination = [...regularNumbers].sort((a, b) => a - b).join(',') + '|' + strongNumber;
             return winningCombinations.has(combination);
-        }
-
-        // פונקציה להורדת קובץ הדוגמה
-        function downloadSampleFile() {
-            // כאן תוכל להחליף את הקישור לקישור האמיתי שלך ב-GitHub
-            const githubUrl = '/lottery_results.json';
-            
-            // יצירת אלמנט a זמני להורדה
-            const link = document.createElement('a');
-            link.href = githubUrl;
-            link.download = 'lottery_results.xlsx';
-            link.target = '_blank';
-            
-            // הצגת הודעה למשתמש
-            const status = document.getElementById('file-status');
-            status.style.display = 'block';
-            status.className = 'file-status';
-            status.innerHTML = '🔄 מפנה להורדת הקובץ מ-GitHub...';
-            
-            // ניסיון לפתוח את הקישור
-            try {
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                
-                setTimeout(() => {
-                    status.className = 'file-status success';
-                    status.innerHTML = '✅ הקישור נפתח! אם ההורדה לא החלה, נסה שוב או פנה ישירות לקישור GitHub.';
-                }, 1000);
-                
-            } catch (error) {
-                status.className = 'file-status error';
-                status.innerHTML = `❌ שגיאה בפתיחת הקישור. נסה לגשת ישירות: <a href="${githubUrl}" target="_blank" style="color: #721c24;">לחץ כאן</a>`;
-            }
-        }
-
-        // פונקציה לטיפול בהעלאת קובץ Excel
-        function handleExcelUpload(event) {
-            const file = event.target.files[0];
-            const status = document.getElementById('file-status');
-            
-            if (!file) return;
-            
-            status.style.display = 'block';
-            status.className = 'file-status';
-            status.textContent = 'טוען קובץ...';
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = e.target.result;
-                    const workbook = XLSX.read(data, { type: 'binary' });
-                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-                    
-                    processLotteryData(jsonData);
-                    
-                    status.className = 'file-status success';
-                    status.textContent = `✅ הקובץ נטען בהצלחה! נטענו ${lotteryHistory.length} הגרלות`;
-                    
-                     // הוסף את השורה הזו:
-                    document.getElementById('history-counter').textContent = lotteryHistory.length;
-            
-                     
-                    document.getElementById('history-filter').style.display = 'flex';
-                    
-                } catch (error) {
-                    status.className = 'file-status error';
-                    status.textContent = '❌ שגיאה בטעינת הקובץ. אנא וודא שהקובץ בפורמט הנכון';
-                    console.error('Error processing Excel file:', error);
-                }
-            };
-            
-            reader.readAsBinaryString(file);
-        }
-
-        // פונקציה לעיבוד נתוני ההגרלות
-        function processLotteryData(data) {
-            lotteryHistory = [];
-            
-            data.forEach(row => {
-                try {
-                    // ניסיון לזהות עמודות באופן אוטומטי
-                    const keys = Object.keys(row);
-                    const dateKey = keys.find(k => k.includes('תאריך') || k.toLowerCase().includes('date'));
-                    const strongKey = keys.find(k => k.includes('חזק') || k.toLowerCase().includes('strong'));
-                    
-                    // מציאת עמודות המספרים
-                    const numberKeys = keys.filter(k => 
-                        k.includes('מספר') || 
-                        /^[1-6]$/.test(k) || 
-                        k.toLowerCase().includes('number')
-                    ).slice(0, 6);
-                    
-                    if (numberKeys.length >= 6 && strongKey) {
-                        const numbers = numberKeys.map(k => parseInt(row[k])).filter(n => !isNaN(n) && n >= 1 && n <= 37);
-                        const strong = parseInt(row[strongKey]);
-                        
-                        if (numbers.length === 6 && strong >= 1 && strong <= 8) {
-                            lotteryHistory.push({
-                                date: row[dateKey] || 'לא ידוע',
-                                numbers: numbers,
-                                strong: strong
-                            });
-                        }
-                    }
-                } catch (error) {
-                    console.warn('Error processing row:', row, error);
-                }
-            });
-            
-            buildWinningCombinations();
-            
-            
         }
 
         // פונקציה להצגת פרסומת מסך מלא
@@ -1039,15 +493,37 @@ id="no-sequences"> בלי רצפים של 3 מספרים עוקבים ומעלה
             if (!card || !body || !draw) return;
             const balls = (draw.numbers || []).map((num) => `<span class="number regular">${num}</span>`).join('');
             body.innerHTML = `
-                <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
-                    <div class="numbers">${balls}<span class="number strong">${draw.strong}</span></div>
-                    <div>
-                        <div><strong>הגרלה ${draw.id || ''}</strong></div>
-                        <div>${draw.dateDisplay || draw.date || ''}</div>
-                    </div>
+                <div class="numbers">${balls}<span class="number strong">${draw.strong}</span></div>
+                <div class="combo-meta">
+                    <strong>הגרלה ${draw.id || ''}</strong>
+                    <span>${draw.dateDisplay || draw.date || ''}</span>
                 </div>
             `;
             card.style.display = 'block';
+        }
+
+        function selectStrategy(value) {
+            const select = document.getElementById('strategy');
+            if (select) select.value = value;
+            document.querySelectorAll('.strategy-chip').forEach((chip) => {
+                chip.classList.toggle('active', chip.dataset.strategy === value);
+            });
+        }
+
+        function quickGenerate(value) {
+            selectStrategy(value || 'hot');
+            generateNumbers();
+            const results = document.getElementById('results');
+            if (results) results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function copyCombinationText(regularNumbers, strongNumber) {
+            const text = `${regularNumbers.join(', ')} + חזק ${strongNumber}`;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text);
+                return;
+            }
+            window.prompt('העתיקו את הצירוף:', text);
         }
 
         async function loadStatistics() {
@@ -1152,9 +628,12 @@ id="no-sequences"> בלי רצפים של 3 מספרים עוקבים ומעלה
             }
         }
 
-        // עדכון תצוגת משקל
+        // עדכון תצוגת משקל + סנכרון אסטרטגיה
         document.getElementById('hotWeight').addEventListener('input', function() {
             document.getElementById('hotWeightValue').textContent = this.value + '%';
+        });
+        document.getElementById('strategy').addEventListener('change', function() {
+            selectStrategy(this.value);
         });
         
         // פונקציה ליצירת צירוף זוכה מהיסטוריה (אם קיים)
@@ -1268,7 +747,7 @@ if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
                 const hasHistory = lotteryHistory.length > 0;
 
                 if (!hasHistory && !allowNew) {
-                    errorMessage = '⚠️ לא הועלה קובץ היסטוריה ולא נבחרה אפשרות "צירופים חדשים". אנא העלה קובץ Excel או אפשר צירופים חדשים.';
+                    errorMessage = '⚠️ אין עדיין נתוני הגרלות. נסו לרענן את העמוד.';
                 } else if (hasHistory && !allowWinners && !allowNew) {
                     errorMessage = '⚠️ לא נבחרה אף אפשרות ליצירת צירופים. אנא בחר "צירופים שזכו בעבר" או "צירופים חדשים".';
                 } else if (hasHistory && allowWinners && !allowNew) {
@@ -1397,11 +876,13 @@ if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
         }
         
         function generateRandomStrongNumber() {
-            return Math.floor(Math.random() * 8) + 1;
+            return Math.floor(Math.random() * 7) + 1;
         }
         
         function displayCombination(regularNumbers, strongNumber, index, isWinner = false) {
             const results = document.getElementById('results');
+            const empty = document.getElementById('empty-results');
+            if (empty) empty.remove();
             
             const combinationDiv = document.createElement('div');
             combinationDiv.className = isWinner ? 'combination winner' : 'combination new';
@@ -1409,7 +890,6 @@ if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
             const numbersDiv = document.createElement('div');
             numbersDiv.className = 'numbers';
             
-            // תצוגת המספרים הרגילים
             regularNumbers.forEach(num => {
                 const numberSpan = document.createElement('span');
                 numberSpan.className = 'number regular';
@@ -1417,23 +897,25 @@ if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
                 numbersDiv.appendChild(numberSpan);
             });
             
-            // תצוגת המספר החזק
             const strongSpan = document.createElement('span');
             strongSpan.className = 'number strong';
             strongSpan.textContent = strongNumber;
             numbersDiv.appendChild(strongSpan);
             
             const infoDiv = document.createElement('div');
+            infoDiv.className = 'combo-meta';
             const statusBadge = isWinner ? 
-                '<span class="winner-badge">🏆 זכה בעבר</span>' : 
+                '<span class="winner-badge">🏆 יצא בעבר</span>' : 
                 '<span class="new-badge">🆕 צירוף חדש</span>';
             
             infoDiv.innerHTML = `
                 ${statusBadge}
-                <strong>צירוף מספר ${index}</strong><br>
-                <small>מספר חזק: ${strongNumber}</small><br>
-                <small style="color: #666;">✓ כל המספרים ייחודיים</small>
+                <strong>צירוף ${index}</strong>
+                <button type="button" class="copy-btn">📋 העתק</button>
             `;
+            infoDiv.querySelector('.copy-btn').addEventListener('click', () => {
+                copyCombinationText(regularNumbers, strongNumber);
+            });
             
             combinationDiv.appendChild(numbersDiv);
             combinationDiv.appendChild(infoDiv);
@@ -1465,55 +947,49 @@ function hasSequenceOfTwo(numbers) {
     return false;
 }
 
-    async function loadExcelFromSite() {
+    async function loadLotteryArchive() {
     const status = document.getElementById('file-status');
-    status.style.display = 'block';
-    status.className = 'file-status';
-    status.textContent = '🔄 טוען את כל תוצאות השיטה הנוכחית...';
+    if (status) {
+        status.style.display = 'block';
+        status.className = 'file-status';
+        status.textContent = LottoData.isCached()
+            ? '🔄 טוען נתונים מהזיכרון המקומי...'
+            : '🔄 טוען את ארכיון ההגרלות (פעם אחת לביקור)...';
+    }
 
     try {
-        const archive = await LottoData.load();
-        lotteryHistory = LottoData.toHistory(archive.results);
+        await LottoData.load();
+        lotteryHistory = LottoData.getHistory();
         buildWinningCombinations();
-        applyArchiveStats(archive.stats || computeStatsFromHistory(lotteryHistory));
-        renderLatestDraw(archive.lastDraw || lotteryHistory[0]);
+        applyArchiveStats(LottoData.getStats());
+        renderLatestDraw(LottoData.getArchive().lastDraw || lotteryHistory[0]);
 
-        status.className = 'file-status success';
-        status.textContent = `✅ נטענו ${lotteryHistory.length} הגרלות מהשיטה הנוכחית`;
+        if (status) {
+            status.className = 'file-status success';
+            status.textContent = `✅ נטענו ${lotteryHistory.length.toLocaleString('he-IL')} הגרלות (${LottoData.getSource()})`;
+        }
         document.getElementById('history-counter').textContent = lotteryHistory.length.toLocaleString('he-IL');
-        document.getElementById('history-filter').style.display = 'flex';
+        document.getElementById('history-filter').style.display = 'block';
+        const loadingBanner = document.getElementById('loading-banner');
+        if (loadingBanner) loadingBanner.classList.remove('show');
     } catch (error) {
-        status.className = 'file-status error';
-        status.textContent = '❌ שגיאה בטעינת ארכיון התוצאות';
+        if (status) {
+            status.className = 'file-status error';
+            status.textContent = '❌ שגיאה בטעינת ארכיון התוצאות';
+        }
         console.error("Error loading lottery archive:", error);
+        const loadingBanner = document.getElementById('loading-banner');
+        if (loadingBanner) loadingBanner.classList.remove('show');
     }
 }
 
 
 
-function toggleUploadSection() {
-    const section = document.getElementById("upload-section");
-    section.style.display = section.style.display === "none" ? "block" : "none";
-}
-
-
-
-
-// אתחול האתר
 document.addEventListener('DOMContentLoaded', async function() {
-    await loadExcelFromSite();
-    await loadStatistics();
-    generateNumbers();
+    await loadLotteryArchive();
 });
     </script>
-	<div id="footer"></div>
+  <div id="footer"></div>
 
-<script>
-  fetch("footer.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("footer").innerHTML = data;
-    });
-</script>
 </body>
 </html>

@@ -21,3 +21,6 @@ Gemfile.lock
 functions/node_modules/
 functions/.env
 .venv/
+
+# Legacy Excel archive (no longer used)
+Lotto.xlsx

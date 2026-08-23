@@ -326,8 +326,9 @@
         }
     </style>
 </head>
-<body>
-    <div class="container">
+<body class="app">
+<div id="site-header"></div>
+    <div class="app-shell">
         <header>
             <div class="logo">🏆 LottoGun</div>
             <div class="subtitle">צירופים מנצחים וחכמים</div>
@@ -433,7 +434,6 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
         let allResults = [];
         let regularStats = {};
@@ -441,13 +441,11 @@
         let pairStats = {};
         let tripleStats = {};
 
-        // טעינת הנתונים מקובץ האקסל
+        // טעינת הנתונים מהארכיון
         async function loadAndAnalyzeData() {
             try {
-                const archive = await LottoData.load();
-                const jsonData = LottoData.toLegacyRows(archive.results);
-                
-                allResults = jsonData;
+                await LottoData.load();
+                allResults = LottoData.getLegacyRows();
                 calculateStatistics();
                 calculateCombinations();
                 updateSummary();

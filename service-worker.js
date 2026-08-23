@@ -1,10 +1,21 @@
 // service-worker.js
-const CACHE_NAME = 'loto-hot-v2';
+const CACHE_NAME = 'lottogun-v5';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/manifest.json'
+  '/manifest.json',
+  '/js/lottery-data.js',
+  '/js/ads.js',
+  '/js/site-footer.js',
+  '/css/app.css',
+  '/css/ads.css'
 ];
+
+function isLiveDataRequest(url) {
+  return url.includes('firebaseio.com/lotto') ||
+    url.includes('firebaseio.com/ads') ||
+    url.includes('cloudfunctions.net/checkLotteryNow');
+}
 
 // התקנת Service Worker
 self.addEventListener('install', event => {
@@ -20,10 +31,14 @@ self.addEventListener('install', event => {
 
 // הפעלת Service Worker
 self.addEventListener('fetch', event => {
+  if (isLiveDataRequest(event.request.url)) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // החזר מה-cache אם קיים, אחרת fetch מהרשת
         return response || fetch(event.request);
       })
   );

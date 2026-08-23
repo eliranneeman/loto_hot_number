@@ -12,7 +12,6 @@
     <meta name="google-adsense-account" content="ca-pub-2154227955978159">
     
     <title>LottoGun - ניתוח עונתיות מספרים</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="/js/lottery-data.js"></script>
     <style>
         * {
@@ -401,10 +400,8 @@ header {
         // טעינת הנתונים
         async function loadAndCalculateStats() {
             try {
-                const archive = await LottoData.load();
-                const jsonData = LottoData.toLegacyRows(archive.results);
-                
-                allResults = jsonData;
+                await LottoData.load();
+                allResults = LottoData.getLegacyRows();
                 calculateSeasonalAnalysis();
                 displayResults();
                 
@@ -626,12 +623,6 @@ header {
         // הפעלת הטעינה כשהדף נטען
         window.addEventListener('DOMContentLoaded', loadAndCalculateStats);
     </script>
-    <script>
-  fetch("footer.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("footer").innerHTML = data;
-    });
-</script>
+    <div id="footer"></div>
 </body>
 </html>

@@ -2,20 +2,20 @@
 <html lang="he" dir="rtl">
 <head>
   <link rel="stylesheet" href="/common.css">
-  
+  <link rel="stylesheet" href="/css/app.css">
   <meta charset="UTF-8">
   <title>צור קשר - LottoGun</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: "Heebo", Arial, sans-serif;
       background: #f5f5f5;
       margin: 0;
       padding: 0;
       direction: rtl;
     }
     .container {
-      max-width: 600px;
+      max-width: 640px;
       margin: auto;
       padding: 30px;
       background: white;
@@ -31,17 +31,27 @@
       text-align: center;
       color: #444;
     }
+    .advertise-note {
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      text-align: right;
+      color: #312e81;
+    }
     form {
       display: flex;
       flex-direction: column;
       gap: 15px;
       margin-top: 20px;
     }
-    input, textarea {
+    input, textarea, select {
       padding: 12px;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 1em;
+      font-family: inherit;
     }
     button {
       padding: 12px;
@@ -51,49 +61,78 @@
       border-radius: 8px;
       cursor: pointer;
       font-size: 1em;
+      font-weight: 700;
     }
     button:hover {
       background: #556cd6;
     }
   </style>
 </head>
-<body>
+<body class="app">
   <script src="/common.js" defer></script>
 
   <div class="container">
-    <h1>צור קשר</h1>
-    <p>נשמח לשמוע מכם! מלאו את הטופס ונחזור אליכם בהקדם.</p>
-    
+    <h1 id="pageTitle">צור קשר</h1>
+    <p id="pageIntro">נשמח לשמוע מכם! מלאו את הטופס ונחזור אליכם בהקדם.</p>
+    <div class="advertise-note" id="advertiseNote" hidden>
+      מעוניינים לפרסם ב-LottoGun? ספרו לנו על העסק, קהל היעד והתקציב — ונחזור עם חבילות פרסום מותאמות.
+    </div>
+
     <form id="contactForm">
+      <select id="topic">
+        <option value="general">פנייה כללית</option>
+        <option value="advertise">פרסום באתר</option>
+        <option value="support">תמיכה טכנית</option>
+        <option value="feedback">משוב והצעות</option>
+      </select>
       <input type="text" id="name" placeholder="שם מלא" required>
       <input type="email" id="email" placeholder="אימייל" required>
+      <input type="text" id="business" placeholder="שם העסק (לפרסום)" hidden>
       <textarea id="message" rows="6" placeholder="ההודעה שלך..." required></textarea>
       <button type="submit">שלח</button>
     </form>
   </div>
 
   <script>
+    const params = new URLSearchParams(window.location.search);
+    const topic = params.get("topic");
+    const topicSelect = document.getElementById("topic");
+      const businessField = document.getElementById("business");
+
+    function syncAdvertiseMode() {
+      const isAdvertise = topicSelect.value === "advertise";
+      businessField.hidden = !isAdvertise;
+      advertiseNote.hidden = !isAdvertise;
+      if (isAdvertise) {
+        document.getElementById("pageTitle").textContent = "פרסום ב-LottoGun";
+        document.getElementById("pageIntro").textContent = "השאירו פרטים ונחזור אליכם עם הצעת פרסום.";
+        document.getElementById("message").placeholder = "ספרו על העסק, קהל היעד, תקציב משוער ומשך קמפיין...";
+      }
+    }
+
+    if (topic) {
+      topicSelect.value = topic;
+    }
+    topicSelect.addEventListener("change", syncAdvertiseMode);
+    syncAdvertiseMode();
+
     document.getElementById("contactForm").addEventListener("submit", function(e) {
       e.preventDefault();
 
       const name = encodeURIComponent(document.getElementById("name").value);
       const email = encodeURIComponent(document.getElementById("email").value);
       const message = encodeURIComponent(document.getElementById("message").value);
+      const selectedTopic = topicSelect.options[topicSelect.selectedIndex].text;
+      const business = encodeURIComponent(businessField.value || "");
 
-      const subject = encodeURIComponent("פנייה מאתר LottoGun");
-      const body = `שם: ${name}%0Aאימייל: ${email}%0Aהודעה: ${message}`;
+      const subject = encodeURIComponent("פנייה מאתר LottoGun - " + selectedTopic);
+      let body = "נושא: " + selectedTopic + "%0Aשם: " + name + "%0Aאימייל: " + email;
+      if (businessField.value) body += "%0Aעסק: " + business;
+      body += "%0Aהודעה: " + message;
 
-      window.location.href = `mailto:lottogun.office@gmail.com?subject=${subject}&body=${body}`;
+      window.location.href = "mailto:lottogun.office@gmail.com?subject=" + subject + "&body=" + body;
     });
   </script>
   <div id="footer"></div>
-
-<script>
-  fetch("footer.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("footer").innerHTML = data;
-    });
-</script>
 </body>
 </html>

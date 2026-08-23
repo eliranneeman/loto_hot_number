@@ -1,4 +1,1 @@
-requests==2.*
-pandas==2.*
-openpyxl==3.*
-beautifulsoup4==4.*
+# sync_pais_results.py uses Python standard library only.
