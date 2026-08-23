@@ -45,15 +45,15 @@ https://europe-west1-loto-hot.cloudfunctions.net/checkLotteryNow
 /admin/ads.html
 ```
 
-1. ב-Firebase Console → **Authentication** → הפעל **Email/Password** → צור משתמש `eliran.neeman@gmail.com`
-2. פרוס כללים + Storage:
+1. ב-Firebase Console → **Authentication** → הפעל **Google** (ו/או Email/Password)
+2. ודא/י ש-**lottogun.com** מופיע ב-**Authentication → Settings → Authorized domains**
+3. פרוס כללים (+ Storage אם הופעל):
    ```bash
    firebase deploy --only database,storage
    ```
-3. היכנס ל-`/admin/ads.html` עם המייל המורשה בלבד
-4. צור קמפיין → הוסף מודעה (תמונה + תיאור + קישור)
+4. היכנס ל-`/admin/ads.html` עם **Google** (`eliran.neeman@gmail.com`) או אימייל/סיסמה
 
-> גישה לפאנל ולכתיבה ב-Firebase מוגבלת ל-**eliran.neeman@gmail.com** (גם בכללי האבטחה).
+> גישה לפאנל ולכתיבה ב-Firebase מוגבלת ל-**eliran.neeman@gmail.com** בלבד — גם בכללי האבטחה וגם בקוד.
 
 ### מבנה נתונים (`/ads`)
 

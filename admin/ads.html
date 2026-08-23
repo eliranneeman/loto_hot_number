@@ -26,6 +26,18 @@
 
     <section class="admin-card admin-login" id="loginPanel">
       <h2 class="admin-panel-title">כניסת מנהל</h2>
+      <p style="margin:0 0 16px;color:var(--admin-muted);font-size:0.92rem;">
+        גישה מותרת רק ל-<strong>eliran.neeman@gmail.com</strong>
+      </p>
+
+      <div class="admin-actions" style="margin-bottom: 16px;">
+        <button type="button" class="admin-btn admin-btn-google" id="googleLoginBtn">
+          <span aria-hidden="true">G</span> התחברות עם Google
+        </button>
+      </div>
+
+      <p class="admin-login-divider">או עם אימייל וסיסמה</p>
+
       <form class="admin-form" id="loginForm">
         <label>אימייל<input type="email" id="loginEmail" required autocomplete="username" value="eliran.neeman@gmail.com"></label>
         <label>סיסמה<input type="password" id="loginPassword" required autocomplete="current-password"></label>
@@ -156,6 +168,8 @@
     import {
       getAuth,
       signInWithEmailAndPassword,
+      signInWithPopup,
+      GoogleAuthProvider,
       signOut,
       onAuthStateChanged,
     } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
@@ -166,7 +180,6 @@
       set,
       update,
       remove,
-      ref,
     } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
     import {
       getStorage,
@@ -180,6 +193,8 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+    googleProvider.setCustomParameters({ prompt: "select_account" });
     const db = getDatabase(app);
     const storage = getStorage(app);
 
@@ -212,6 +227,24 @@
       target.innerHTML = '<div class="admin-status ' + (ok ? "ok" : "error") + '">' + message + "</div>";
     }
 
+    function translateAuthError(error) {
+      const code = error && error.code ? error.code : "";
+      const messages = {
+        "auth/invalid-credential": "אימייל או סיסמה שגויים. ודא/י שהמשתמש נוצר ב-Firebase Console → Authentication → Users.",
+        "auth/user-not-found": "משתמש לא קיים. צור/י את eliran.neeman@gmail.com ב-Firebase Console → Authentication → Add user.",
+        "auth/wrong-password": "סיסמה שגויה.",
+        "auth/invalid-email": "כתובת אימייל לא תקינה.",
+        "auth/too-many-requests": "יותר מדי ניסיונות. נסה/י שוב בעוד כמה דקות.",
+        "auth/operation-not-allowed": "שיטת ההתחברות לא מופעלת ב-Firebase Console → Authentication → Sign-in method.",
+        "auth/popup-closed-by-user": "חלון ההתחברות נסגר. נסה/י שוב.",
+        "auth/popup-blocked": "הדפדפן חסם חלון קופץ. אפשר/י popups לדף זה.",
+        "auth/unauthorized-domain": "הדומיין לא מורשה. הוסף/י את lottogun.com ב-Firebase Console → Authentication → Settings → Authorized domains.",
+        "auth/account-exists-with-different-credential": "האימייל כבר רשום עם שיטת התחברות אחרת.",
+        "auth/network-request-failed": "בעיית רשת. בדוק/י חיבור לאינטרנט.",
+      };
+      return messages[code] || ((error && error.message) || "שגיאת התחברות");
+    }
+
     function toLocalInputValue(iso) {
       if (!iso) return "";
       const date = new Date(iso);
@@ -241,9 +274,21 @@
         .replace(/"/g, "&quot;");
     }
 
+    function getUserEmail(user) {
+      if (!user) return "";
+      if (user.email) return user.email;
+      const googleProfile = (user.providerData || []).find((p) => p.providerId === "google.com");
+      return googleProfile && googleProfile.email ? googleProfile.email : "";
+    }
+
     function isAdminUser(user) {
-      if (!user || !user.email) return false;
-      return user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+      const email = getUserEmail(user);
+      return email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+    }
+
+    function rejectUnauthorizedUser(user) {
+      const email = getUserEmail(user) || "לא ידוע";
+      return "גישה נדחתה. החשבון " + email + " אינו מורשה. רק " + ADMIN_EMAIL + ".";
     }
 
     function bindTabs() {
@@ -456,6 +501,16 @@
       });
     }
 
+    document.getElementById("googleLoginBtn").addEventListener("click", async () => {
+      try {
+        showStatus(els.loginStatus, "פותח התחברות Google...", true);
+        await signInWithPopup(auth, googleProvider);
+      } catch (error) {
+        console.error("Google login failed:", error);
+        showStatus(els.loginStatus, translateAuthError(error), false);
+      }
+    });
+
     els.loginForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const email = document.getElementById("loginEmail").value.trim();
@@ -468,8 +523,10 @@
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
+        showStatus(els.loginStatus, "מתחבר...", true);
       } catch (error) {
-        showStatus(els.loginStatus, error.message, false);
+        console.error("Admin login failed:", error);
+        showStatus(els.loginStatus, translateAuthError(error), false);
       }
     });
 
@@ -642,7 +699,7 @@
         els.loginPanel.classList.remove("admin-hidden");
         els.logoutBtn.classList.add("admin-hidden");
         els.adminPanel.classList.add("admin-hidden");
-        showStatus(els.loginStatus, "גישה מותרת רק למנהל המורשה.", false);
+        showStatus(els.loginStatus, rejectUnauthorizedUser(user), false);
         return;
       }
 
