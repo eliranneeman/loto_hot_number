@@ -18,13 +18,37 @@
     "rules": "storage.rules"
   },
   "hosting": {
+    "site": "loto-hot",
     "public": ".",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**",
       "functions/**",
-      "scripts/**"
+      "scripts/**",
+      "**/*.md",
+      "firebase-debug.log",
+      "firebase-debug.*.log"
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(js|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public,max-age=300"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(html)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public,max-age=60"
+          }
+        ]
+      }
     ]
   }
 }

@@ -79,6 +79,7 @@
   }
 
   function computeStatsFromResults(results) {
+    // Use string keys only (never 0) so Firebase/JSON never becomes a sparse array with null at index 0
     const regular = {};
     const strong = {};
     for (let i = 1; i <= 37; i += 1) regular[String(i)] = 0;
@@ -87,12 +88,14 @@
     (results || []).forEach((draw, index) => {
       const recencyBonus = index < 60 ? 2 : 1;
       (draw.numbers || []).forEach((num) => {
-        if (num >= 1 && num <= 37) {
-          regular[String(num)] += recencyBonus;
+        const n = Number(num);
+        if (n >= 1 && n <= 37) {
+          regular[String(n)] += recencyBonus;
         }
       });
-      if (draw.strong >= 1 && draw.strong <= 7) {
-        strong[String(draw.strong)] += recencyBonus;
+      const s = Number(draw.strong);
+      if (s >= 1 && s <= 7) {
+        strong[String(s)] += recencyBonus;
       }
     });
 

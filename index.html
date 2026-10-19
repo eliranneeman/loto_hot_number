@@ -455,34 +455,95 @@
         let regularStats = {};
         let strongStats = {};
         
-        // פונקציות לקבלת מספרים מסודרים לפי תדירות
+        function normalizeCountMap(raw, min, max) {
+            const out = {};
+            for (let i = min; i <= max; i += 1) out[i] = 0;
+            if (!raw) return out;
+
+            if (Array.isArray(raw)) {
+                raw.forEach((count, index) => {
+                    if (index >= min && index <= max) {
+                        out[index] = Number(count) || 0;
+                    }
+                });
+                return out;
+            }
+
+            Object.entries(raw).forEach(([key, count]) => {
+                const num = parseInt(key, 10);
+                if (Number.isInteger(num) && num >= min && num <= max) {
+                    out[num] = Number(count) || 0;
+                }
+            });
+            return out;
+        }
+
+        // פונקציות לקבלת מספרים מסודרים לפי תדירות (רק טווחים חוקיים)
         function getHotRegular() {
             return Object.entries(regularStats)
+                .filter(([num]) => {
+                    const n = parseInt(num, 10);
+                    return n >= 1 && n <= 37;
+                })
                 .sort((a, b) => b[1] - a[1])
-                .map(([num]) => parseInt(num));
+                .map(([num]) => parseInt(num, 10));
         }
         
         function getColdRegular() {
             return Object.entries(regularStats)
+                .filter(([num]) => {
+                    const n = parseInt(num, 10);
+                    return n >= 1 && n <= 37;
+                })
                 .sort((a, b) => a[1] - b[1])
-                .map(([num]) => parseInt(num));
+                .map(([num]) => parseInt(num, 10));
         }
         
         function getHotStrong() {
             return Object.entries(strongStats)
+                .filter(([num]) => {
+                    const n = parseInt(num, 10);
+                    return n >= 1 && n <= 7;
+                })
                 .sort((a, b) => b[1] - a[1])
-                .map(([num]) => parseInt(num));
+                .map(([num]) => parseInt(num, 10));
         }
         
         function getColdStrong() {
             return Object.entries(strongStats)
+                .filter(([num]) => {
+                    const n = parseInt(num, 10);
+                    return n >= 1 && n <= 7;
+                })
                 .sort((a, b) => a[1] - b[1])
-                .map(([num]) => parseInt(num));
+                .map(([num]) => parseInt(num, 10));
+        }
+
+        function pickValidStrong(pool) {
+            const valid = (pool || []).filter((n) => Number.isInteger(n) && n >= 1 && n <= 7);
+            if (!valid.length) return generateRandomStrongNumber();
+            return valid[Math.floor(Math.random() * valid.length)];
+        }
+
+        function sanitizeRegularNumbers(numbers) {
+            const unique = [...new Set((numbers || []).map(Number))]
+                .filter((n) => Number.isInteger(n) && n >= 1 && n <= 37);
+            while (unique.length < 6) {
+                const next = Math.floor(Math.random() * 37) + 1;
+                if (!unique.includes(next)) unique.push(next);
+            }
+            return unique.slice(0, 6).sort((a, b) => a - b);
+        }
+
+        function sanitizeStrongNumber(value) {
+            const n = Number(value);
+            if (Number.isInteger(n) && n >= 1 && n <= 7) return n;
+            return generateRandomStrongNumber();
         }
         
         function applyArchiveStats(stats) {
-            regularStats = stats.regular_stats || {};
-            strongStats = stats.strong_stats || {};
+            regularStats = normalizeCountMap(stats && stats.regular_stats, 1, 37);
+            strongStats = normalizeCountMap(stats && stats.strong_stats, 1, 7);
             updateHotNumbersDisplay();
         }
 
@@ -658,8 +719,8 @@
             
             const randomDraw = lotteryHistory[Math.floor(Math.random() * lotteryHistory.length)];
             return {
-                numbers: [...randomDraw.numbers].sort((a, b) => a - b),
-                strong: randomDraw.strong
+                numbers: sanitizeRegularNumbers(randomDraw.numbers || []),
+                strong: sanitizeStrongNumber(randomDraw.strong)
             };
         }
         function selectUniqueNumbers(sourceArray, count) {
@@ -728,6 +789,9 @@
 
                     isWinner = isCombinationWinner(regularNumbers, strongNumber);
                 }
+
+                regularNumbers = sanitizeRegularNumbers(regularNumbers);
+                strongNumber = sanitizeStrongNumber(strongNumber);
 
 const noSequences = document.getElementById('no-sequences').checked;
 
@@ -816,9 +880,9 @@ if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
         
         function generateHotStrongNumber(weight) {
             const hotStrong = getHotStrong();
-            return Math.random() < weight 
-                ? hotStrong[Math.floor(Math.random() * Math.min(3, hotStrong.length))]
-                : hotStrong[Math.floor(Math.random() * hotStrong.length)];
+            if (!hotStrong.length) return generateRandomStrongNumber();
+            const top = hotStrong.slice(0, Math.min(3, hotStrong.length));
+            return Math.random() < weight ? pickValidStrong(top) : pickValidStrong(hotStrong);
         }
         
         function generateBalancedNumbers() {
@@ -852,8 +916,7 @@ if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
         }
         
         function generateBalancedStrongNumber() {
-            const hotStrong = getHotStrong();
-            return hotStrong[Math.floor(Math.random() * hotStrong.length)];
+            return pickValidStrong(getHotStrong());
         }
         
         function generateColdNumbers() {
@@ -882,8 +945,8 @@ if (noTwoSequences && hasSequenceOfTwo(regularNumbers)) {
         }
         
         function generateColdStrongNumber() {
-            const coldStrong = getColdStrong();
-            return coldStrong[Math.floor(Math.random() * Math.min(3, coldStrong.length))];
+            const coldStrong = getColdStrong().slice(0, 3);
+            return pickValidStrong(coldStrong);
         }
         
         function generateRandomNumbers() {

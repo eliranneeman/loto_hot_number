@@ -1,5 +1,5 @@
 // service-worker.js
-const CACHE_NAME = 'lottogun-v20';
+const CACHE_NAME = 'lottogun-v21';
 const STATIC_ASSETS = [
   '/js/lottery-data.js',
   '/js/ads.js',

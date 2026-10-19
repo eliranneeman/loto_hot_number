@@ -129,10 +129,12 @@ function computeStats(draws) {
   for (let i = 1; i <= 37; i += 1) regular[String(i)] = 0;
   for (let i = 1; i <= 7; i += 1) strong[String(i)] = 0;
   for (const draw of draws) {
-    for (const number of draw.numbers) {
-      regular[String(number)] += 1;
+    for (const number of draw.numbers || []) {
+      const n = Number(number);
+      if (n >= 1 && n <= 37) regular[String(n)] += 1;
     }
-    strong[String(draw.strong)] += 1;
+    const s = Number(draw.strong);
+    if (s >= 1 && s <= 7) strong[String(s)] += 1;
   }
   return {
     regular_stats: regular,
